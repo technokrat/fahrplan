@@ -1,0 +1,89 @@
+html,
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+#container {
+   min-height:100%;
+   position:relative;
+   background:black;
+}
+
+#body {
+   padding:10px;
+   padding-bottom:100px;   /* Height of the footer */
+   background:black;
+   color:white;
+   
+}
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:100px;   /* Height of the footer */
+   background: black;
+
+}
+
+#station {
+	font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
+	font-weight: lighter;
+	color: white;
+	font-size: 4em;
+	margin-left: 15px;
+	margin-top:10px;
+	float: left;
+}
+
+#time {
+font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
+	font-weight: lighter;
+	color: white;
+	font-size: 4em;
+	float: right;
+	margin-top:10px;
+	margin-right:15px;
+
+
+}
+
+.numberCanvas {
+
+	height:80px;
+	width:80px;
+
+}
+
+.row {
+
+padding-left:140px;
+padding-right:30px;
+font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
+font-size: 3em;
+}
+.vehicleCell {
+  float:left;
+  width: 10%; 
+  height: 100%;
+  
+}
+.numberCell {
+  float:left;
+  width: 10%; 
+  height: 100%;
+}
+.destinationCell {
+  float:left;
+  width: 70%; 
+  height: 100%;
+}
+.countdownCell {
+  float:left;
+  width: 10%; 
+  height: 100%;
+}
+
+.clear {
+  clear: both;   
+}
