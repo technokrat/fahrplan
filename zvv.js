@@ -88,7 +88,12 @@ textcolortable[72] = 'black';
 });
 
 		$('<div/>', { class:'destinationCell', text:val.st}).appendTo('#row'+key);
+		if(val.rt.dlm > 0){
+		$('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#row'+key);
+		}
+		else {
 		$('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#row'+key);
+		}
 		$('<div/>', { class:'clear'}).appendTo('#row'+key);
 		});
 
