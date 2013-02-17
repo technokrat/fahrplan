@@ -7,13 +7,10 @@ $.get("http://fahrplan.mueslo.de/bin/stboard.exe/dn?L=vs_stbzvv",
     input: "8591169",
     boardType: "dep",
     productsFilter: "1:1111111111111111",
-	additionalTime: "0",
-	disableEquivs: "false",
-	maxJourneys: "10",
+	maxJourneys: "9",
 	start: "yes",
-	monitor: "1",
 	requestType: "0",
-	view: "preview"
+
 	
   },
   function(data) {
