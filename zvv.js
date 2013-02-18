@@ -36,7 +36,7 @@ $.get("http://fahrplan.mueslo.de/bin/stboard.exe/dn?L=vs_stbzvv",
   colortable[31] = '#98A2D1';
   colortable[32] = '#D6ADD6';
   colortable[33] = '#E4E19E';
-  colortable[34] = '#000000';
+  colortable[34] = '#FFFFFF';
   colortable[46] = '#B9D8A3';
   colortable[72] = '#D9AB9F';
   
