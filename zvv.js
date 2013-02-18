@@ -53,9 +53,25 @@ var journeyids = new Array;
 var updatedjourneyids = new Array;
 var maxjourneys = 9;
 
+function getURLParameter(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );
+}
+
+
+
+
+var ibnr = getURLParameter('ibnr');
+
+if (ibnr == "null" ) {
+      ibnr = "8591123";
+    }
+
+
 $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
 {
-  input: "8591123",
+  input: ibnr,
   boardType: "dep",
   productsFilter: "1:0000001011111111",
   maxJourneys: maxjourneys,
@@ -108,7 +124,7 @@ $(document).ready(function(){
 
       $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
       {
-          input: "8591123",
+          input: ibnr,
           boardType: "dep",
           productsFilter: "1:0000001011111111",
           maxJourneys: maxjourneys,
