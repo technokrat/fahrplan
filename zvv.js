@@ -108,7 +108,15 @@ function(data) {
       $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
     }
     else {
-      $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+
+      if (val.countdown_val >= 90) {
+        $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
+      }
+      else {
+        $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+      }
+
+      
     }
 
     $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
@@ -148,6 +156,13 @@ $(document).ready(function(){
               }
               else {
                 $journeyDiv.find('.countdownCell').html(val.countdown);
+
+                if (val.countdown_val >= 90) {
+                    $journeyDiv.find('.countdownCell').html(val.ti);
+                  }
+                  else {
+                   $journeyDiv.find('.countdownCell').html(val.countdown);
+                   }
               }
 
               $journeyDiv.data('has_updated', true);
@@ -176,7 +191,14 @@ $(document).ready(function(){
                   $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
                 }
                 else {
-                  $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+
+                  if (val.countdown_val >= 90) {
+                    $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
+                  }
+                  else {
+                   $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+                   }
+
                 }
 
                 $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
