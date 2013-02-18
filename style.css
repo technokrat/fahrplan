@@ -4,6 +4,7 @@ body {
    padding:0;
    height:100%;
    overflow: hidden;
+
 }
 #container {
    min-height:100%;
@@ -12,13 +13,13 @@ body {
 }
 
 #body {
-
-  padding:15px;
+  padding:100px;
   background:black;
   color:white;
 
   margin: 0px auto;
   width: 80%;
+  -webkit-transition: margin 0.5s;
 }
 
 #footer {

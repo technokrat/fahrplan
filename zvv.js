@@ -70,8 +70,7 @@ function(data) {
   var showTime = function(){ $('#time').removeClass('time-new'); };
   setTimeout(showTime, 100);
 
-
-  $.each(journeysObj.journey,function(key,val) {
+  $.each(journeysObj.journey.slice(0, numberOfConnectioncs),function(key,val) {
     $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
 
     if (typeof colortable[val.pr] === "undefined" ) {
@@ -123,7 +122,7 @@ $(document).ready(function(){
 
           var newRowDelay = 500;
 
-          $.each(journeysObj.journey,function(key,val) {
+          $.each(journeysObj.journey.slice(0,numberOfConnectioncs) ,function(key,val) {
             if($('#' + val.id).length)
             {
               var $journeyDiv = $('#' + val.id);
@@ -183,7 +182,7 @@ $(document).ready(function(){
 
           var slideUpDelay = 0;
 
-          $.each(journeyids,function(index,val) {
+          $.each(journeyids.slice(0,numberOfConnectioncs),function(index,val) {
             if ($.inArray(val,updatedjourneyids) == -1) {
               var hideOldRow = function(){ $('#' + val).slideUp(500, function(){ this.remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
@@ -193,4 +192,18 @@ $(document).ready(function(){
           });
       });
   }, 5000);
+});
+
+var numberOfConnectioncs = 9;
+
+function recalculateNumberOfConnections()
+{
+  numberOfConnectioncs = Math.floor(($(window).height() - $('#footer').height() - 100) / 90);
+  var bodyPadding = ($(window).height() - $('#footer').height() - numberOfConnectioncs * 90) / 2;
+  $('#body').css('padding', bodyPadding);
+}
+
+$(function(){
+  $(window).resize(recalculateNumberOfConnections);
+  recalculateNumberOfConnections();
 });
