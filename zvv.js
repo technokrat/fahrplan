@@ -65,18 +65,20 @@ $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
 function(data) {
   eval(data);
   $("#station").text(journeysObj.stationName);
+  var showStation = function(){ $('#station').removeClass('station-new'); };
+  setTimeout(showStation, 100);
+  var showTime = function(){ $('#time').removeClass('time-new'); };
+  setTimeout(showTime, 100);
+
+
   $.each(journeysObj.journey,function(key,val) {
     $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
-
-    $('<div/>', { id: 'numbercell'+key, class:'numberCell'}).appendTo('#' + val.id);
-    var numberCanvas = $('<canvas/>', {class:'numberCanvas', Height: '80px', Width: '80px'}).appendTo('#'+ val.id +' .numberCell');
 
     if (typeof colortable[val.pr] === "undefined" ) {
       var canvasColor = '#FFFFFF';
     }
     else {
       var canvasColor = colortable[val.pr];
-
     }
     if (typeof textcolortable[val.pr] === "undefined" ) {
       var canvasTextColor = 'black';
@@ -85,28 +87,18 @@ function(data) {
       var canvasTextColor = textcolortable[val.pr];
     }
 
-    numberCanvas.drawRect({
-      fillStyle: canvasColor,
-      x: 0, y: 0,
-      width: 80,
-      height: 80,
-      fromCenter: false
-    }).drawText({
-      fillStyle:canvasTextColor,
-      x: 40, y: 40,
-      font: "50px Helvetica, sans-serif",
-      text: val.pr
-    });
-
-    $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+    $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
+    
     if(val.rt.dlm > 0){
       $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
     }
     else {
       $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
     }
-    $('<div/>', { class:'clear'}).appendTo('#' + val.id);
-      journeyids.push(val.id);
+
+    $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+
+    journeyids.push(val.id);
   });
 });
 
@@ -129,6 +121,8 @@ $(document).ready(function(){
       function(data) {
           eval(data);
 
+          var newRowDelay = 500;
+
           $.each(journeysObj.journey,function(key,val) {
             if($('#' + val.id).length)
             {
@@ -146,48 +140,35 @@ $(document).ready(function(){
             else {
               if( $.inArray(val.id,journeyids) == -1) {
                 // Build and append new DIV
-                $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
-
-                $('<div/>', { class:'numberCell'}).appendTo('#' + val.id);
-                var numberCanvas = $('<canvas/>', {class:'numberCanvas', Height: '80px', Width: '80px'}).appendTo('#'+ val.id +' .numberCell');
+                $('<div/>', { id: val.id, class:'row row-new'}).appendTo('#body');
 
                 if (typeof colortable[val.pr] === "undefined" ) {
                   var canvasColor = '#FFFFFF';
                 }
                 else {
                   var canvasColor = colortable[val.pr];
-
                 }
                 if (typeof textcolortable[val.pr] === "undefined" ) {
                   var canvasTextColor = 'black';
                 }
                 else {
                   var canvasTextColor = textcolortable[val.pr];
-
                 }
 
-                numberCanvas.drawRect({
-                  fillStyle: canvasColor,
-                  x: 0, y: 0,
-                  width: 80,
-                  height: 80,
-                  fromCenter: false
-                }).drawText({
-                  fillStyle:canvasTextColor,
-                  x: 40, y: 40,
-                  font: "50px Helvetica, sans-serif",
-                  text: val.pr
-                });
+                $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
 
-                $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
                 if(val.rt.dlm > 0){
                   $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
                 }
                 else {
                   $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
                 }
+
+                $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
                 
-                $('<div/>', { class:'clear', style:'display:none;' }).appendTo('#' + val.id).slideDown(800);
+                var showNewRow =  function(){ $('#' + val.id).removeClass('row-new'); };
+                setTimeout(showNewRow, newRowDelay);
+                newRowDelay += 500;
 
                 journeyids.push(val.id);
               }
@@ -204,9 +185,10 @@ $(document).ready(function(){
 
           $.each(journeyids,function(index,val) {
             if ($.inArray(val,updatedjourneyids) == -1) {
-              $('#' + val).delay(slideUpDelay).slideUp(600, function(){ this.remove(); });
+              var hideOldRow = function(){ $('#' + val).slideUp(500, function(){ this.remove(); }); };
+              setTimeout(hideOldRow, slideUpDelay);
               delete journeyids[index];
-              slideUpDelay += 600;
+              slideUpDelay += 500;
             }
           });
       });
