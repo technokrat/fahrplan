@@ -1,17 +1,3 @@
-
-$.get("http://fahrplan.mueslo.de/bin/stboard.exe/dn?L=vs_stbzvv",
-{
-  input: "8591169",
-  boardType: "dep",
-  productsFilter: "1:1111111111111111",
-  maxJourneys: "9",
-  start: "yes",
-  requestType: "0",
-
-
-},
-function(data) {
-
   var colortable = new Object();
   colortable[2] = '#D8232A';
   colortable[3] = '#009F4A';
@@ -62,37 +48,167 @@ function(data) {
   textcolortable[46] = 'black';
   textcolortable[72] = 'black';
 
-  
-  
+
+var journeyids = new Array;
+var updatedjourneyids = new Array;
+var maxjourneys = 9;
+
+$.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
+{
+  input: "8591123",
+  boardType: "dep",
+  productsFilter: "1:0000001011111111",
+  maxJourneys: maxjourneys,
+  start: "yes",
+  requestType: "0",
+},
+function(data) {
   eval(data);
   $("#station").text(journeysObj.stationName);
   $.each(journeysObj.journey,function(key,val) {
-    $('<div/>', { id: 'row'+key, class:'row'}).appendTo('#body');
+    $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
 
-    $('<div/>', { id: 'numbercell'+key, class:'numberCell'}).appendTo('#row'+key);
-    var numberCanvas = $('<canvas/>', {class:'numberCanvas', Height: '80px', Width: '80px'}).appendTo('#numbercell'+key);
+    $('<div/>', { id: 'numbercell'+key, class:'numberCell'}).appendTo('#' + val.id);
+    var numberCanvas = $('<canvas/>', {class:'numberCanvas', Height: '80px', Width: '80px'}).appendTo('#'+ val.id +' .numberCell');
+
+    if (typeof colortable[val.pr] === "undefined" ) {
+      var canvasColor = '#FFFFFF';
+    }
+    else {
+      var canvasColor = colortable[val.pr];
+
+    }
+    if (typeof textcolortable[val.pr] === "undefined" ) {
+      var canvasTextColor = 'black';
+    }
+    else {
+      var canvasTextColor = textcolortable[val.pr];
+    }
+
     numberCanvas.drawRect({
-      fillStyle: colortable[val.pr],
+      fillStyle: canvasColor,
       x: 0, y: 0,
       width: 80,
       height: 80,
       fromCenter: false
     }).drawText({
-      fillStyle: textcolortable[val.pr],
+      fillStyle:canvasTextColor,
       x: 40, y: 40,
-      font: "36pt Verdana, sans-serif",
+      font: "50px Helvetica, sans-serif",
       text: val.pr
     });
 
-    $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#row'+key);
+    $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
     if(val.rt.dlm > 0){
-      $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#row'+key);
+      $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
     }
     else {
-      $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#row'+key);
+      $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
     }
-    $('<div/>', { class:'clear'}).appendTo('#row'+key);
+    $('<div/>', { class:'clear'}).appendTo('#' + val.id);
+      journeyids.push(val.id);
   });
+});
 
 
+$(document).ready(function(){
+
+  setInterval(function(){
+
+      $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
+      {
+          input: "8591123",
+          boardType: "dep",
+          productsFilter: "1:0000001011111111",
+          maxJourneys: maxjourneys,
+          start: "yes",
+          requestType: "0",
+
+
+      },
+      function(data) {
+          eval(data);
+
+          $.each(journeysObj.journey,function(key,val) {
+            if($('#' + val.id).length)
+            {
+              var $journeyDiv = $('#' + val.id);
+
+              if(val.rt.dlm > 0){
+                $journeyDiv.find('.countdownCell').html(val.countdown + ' +' + val.rt.dlm);
+              }
+              else {
+                $journeyDiv.find('.countdownCell').html(val.countdown);
+              }
+
+              $journeyDiv.data('has_updated', true);
+            }
+            else {
+              if( $.inArray(val.id,journeyids) == -1) {
+                // Build and append new DIV
+                $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
+
+                $('<div/>', { class:'numberCell'}).appendTo('#' + val.id);
+                var numberCanvas = $('<canvas/>', {class:'numberCanvas', Height: '80px', Width: '80px'}).appendTo('#'+ val.id +' .numberCell');
+
+                if (typeof colortable[val.pr] === "undefined" ) {
+                  var canvasColor = '#FFFFFF';
+                }
+                else {
+                  var canvasColor = colortable[val.pr];
+
+                }
+                if (typeof textcolortable[val.pr] === "undefined" ) {
+                  var canvasTextColor = 'black';
+                }
+                else {
+                  var canvasTextColor = textcolortable[val.pr];
+
+                }
+
+                numberCanvas.drawRect({
+                  fillStyle: canvasColor,
+                  x: 0, y: 0,
+                  width: 80,
+                  height: 80,
+                  fromCenter: false
+                }).drawText({
+                  fillStyle:canvasTextColor,
+                  x: 40, y: 40,
+                  font: "50px Helvetica, sans-serif",
+                  text: val.pr
+                });
+
+                $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+                if(val.rt.dlm > 0){
+                  $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
+                }
+                else {
+                  $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+                }
+                
+                $('<div/>', { class:'clear', style:'display:none;' }).appendTo('#' + val.id).slideDown(800);
+
+                journeyids.push(val.id);
+              }
+            }
+          });
+
+          updatedjourneyids = new Array;
+
+          $.each(journeysObj.journey,function(key,val) {
+            updatedjourneyids.push(val.id);
+          });
+
+          var slideUpDelay = 0;
+
+          $.each(journeyids,function(index,val) {
+            if ($.inArray(val,updatedjourneyids) == -1) {
+              $('#' + val).delay(slideUpDelay).slideUp(600, function(){ this.remove(); });
+              delete journeyids[index];
+              slideUpDelay += 600;
+            }
+          });
+      });
+  }, 5000);
 });

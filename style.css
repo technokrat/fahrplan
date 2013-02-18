@@ -18,12 +18,11 @@ body {
    
 }
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    width:100%;
    height:100px;   /* Height of the footer */
    background: black;
-
 }
 
 #station {
@@ -86,4 +85,8 @@ font-size: 3em;
 
 .clear {
   clear: both;   
+}
+
+::selection {
+  background: darkgray;
 }
