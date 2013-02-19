@@ -3,11 +3,20 @@ body {
    margin:0;
    padding:0;
    overflow: hidden;
+   background: black;
+   min-height: 100%;
+
+   cursor: none;
 }
+
+body {
+  font-family: 'Segoe UI Light', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-weight: 100;
+}
+
 #container {
    min-height:100%;
    position:relative;
-   background:black;
 }
 
 #body {
@@ -29,8 +38,6 @@ body {
 }
 
 #station {
-	font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
-	font-weight: lighter;
 	color: white;
 	font-size: 4em;
 	margin-left: 15px;
@@ -48,8 +55,6 @@ body {
 }
 
 #time {
-font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
-	font-weight: lighter;
 	color: white;
 	font-size: 4em;
 	float: right;
@@ -71,19 +76,23 @@ font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helv
 
 .row {
   width: 100%;
-  font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica;
   font-size: 3em;
   overflow: auto;
   margin-left: 0;
   margin-top: 0;
   opacity: 1;
+  height: 90px;
 
-  -webkit-transition: margin 0.5s, opacity 0.5s;
+  -webkit-transition: margin ease-out 0.5s, opacity 0.5s, height ease-in 0.5s;
 }
 
 .row-new {
   margin-left: 80%;
   opacity: 0;
+}
+
+.row-old {
+  height: 0px;
 }
 
 
@@ -101,7 +110,8 @@ font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helv
 
   margin-right: 80px;
   margin-bottom: 10px;
-  font-family: Helvetica;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
   font-size: 50px;
   padding-top: 15px;
   line-height: 50px;
@@ -110,12 +120,18 @@ font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helv
   text-align: center;
 }
 
+.line_number-long {
+  font-size: 40px;
+  padding-top: 20px;
+  line-height: 40px;
+}
+
 .destinationCell {
   height: 100%;
 }
 .countdownCell {
   float:right;
-  width: 10%; 
+  width: 10%;
   height: 100%;
   min-width: 120px;
 }

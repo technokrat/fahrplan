@@ -59,9 +59,6 @@ function getURLParameter(name) {
     );
 }
 
-
-
-
 var ibnr = getURLParameter('ibnr');
 
 if (ibnr == "null" ) {
@@ -69,59 +66,65 @@ if (ibnr == "null" ) {
     }
 
 
-$.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
-{
-  input: ibnr,
-  boardType: "dep",
-  productsFilter: "1:0000001011111111",
-  maxJourneys: maxjourneys,
-  start: "yes",
-  requestType: "0",
-},
-function(data) {
-  eval(data);
-  $("#station").text(journeysObj.stationName);
-  var showStation = function(){ $('#station').removeClass('station-new'); };
-  setTimeout(showStation, 100);
-  var showTime = function(){ $('#time').removeClass('time-new'); };
-  setTimeout(showTime, 100);
+$(function () {
+  $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
+  {
+    input: ibnr,
+    boardType: "dep",
+    productsFilter: "1:0000001011111111",
+    maxJourneys: maxjourneys,
+    start: "yes",
+    requestType: "0",
+  },
+  function(data) {
+    eval(data);
+    $("#station").text(journeysObj.stationName);
+    var showStation = function(){ $('#station').removeClass('station-new'); };
+    setTimeout(showStation, 100);
+    var showTime = function(){ $('#time').removeClass('time-new'); };
+    setTimeout(showTime, 100);
 
-  $.each(journeysObj.journey.slice(0, maxjourneys),function(key,val) {
-    $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
+    $.each(journeysObj.journey.slice(0, maxjourneys),function(key,val) {
+      $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
 
-    if (typeof colortable[val.pr] === "undefined" ) {
-      var canvasColor = '#FFFFFF';
-    }
-    else {
-      var canvasColor = colortable[val.pr];
-    }
-    if (typeof textcolortable[val.pr] === "undefined" ) {
-      var canvasTextColor = 'black';
-    }
-    else {
-      var canvasTextColor = textcolortable[val.pr];
-    }
-
-    $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
-    
-    if(val.rt.dlm > 0){
-      $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
-    }
-    else {
-
-      if (val.countdown_val >= 90) {
-        $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
+      if (typeof colortable[val.pr] === "undefined" ) {
+        var canvasColor = '#FFFFFF';
       }
       else {
-        $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
+        var canvasColor = colortable[val.pr];
+      }
+      if (typeof textcolortable[val.pr] === "undefined" ) {
+        var canvasTextColor = 'black';
+      }
+      else {
+        var canvasTextColor = textcolortable[val.pr];
       }
 
-      
-    }
+      if(val.pr.length < 3)
+        $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
+      else
+        $('<div/>', {class:'line_number line_number-long'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
 
-    $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+      /*
+      if(val.rt.dlm > 0){
+        $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
+      }
+      else {
+      */
+        if (val.countdown_val >= 90) {
+          $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
+        }
+        else {
+          $('<div/>', { class:'countdownCell', html:(val.countdown) }).appendTo('#' + val.id);
+        }
+      /*
+      }
+      */
 
-    journeyids.push(val.id);
+      $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+
+      journeyids.push(val.id);
+    });
   });
 });
 
@@ -138,8 +141,6 @@ $(document).ready(function(){
           maxJourneys: maxjourneys,
           start: "yes",
           requestType: "0",
-
-
       },
       function(data) {
           eval(data);
@@ -151,64 +152,67 @@ $(document).ready(function(){
             {
               var $journeyDiv = $('#' + val.id);
 
+              /*
               if(val.rt.dlm > 0){
                 $journeyDiv.find('.countdownCell').html(val.countdown + ' +' + val.rt.dlm);
               }
               else {
-                $journeyDiv.find('.countdownCell').html(val.countdown);
-
+              */
                 if (val.countdown_val >= 90) {
-                    $journeyDiv.find('.countdownCell').html(val.ti);
-                  }
-                  else {
-                   $journeyDiv.find('.countdownCell').html(val.countdown);
-                   }
+                  $journeyDiv.find('.countdownCell').html(val.ti);
+                }
+                else {
+                  $journeyDiv.find('.countdownCell').html(val.countdown);
+                }
+              /*
               }
-
-              $journeyDiv.data('has_updated', true);
+              */
             }
             else {
-              if( $.inArray(val.id,journeyids) == -1) {
-                // Build and append new DIV
-                $('<div/>', { id: val.id, class:'row row-new'}).appendTo('#body');
+              // Build and append new DIV
+              $('<div/>', { id: val.id, class:'row row-new'}).appendTo('#body');
 
-                if (typeof colortable[val.pr] === "undefined" ) {
-                  var canvasColor = '#FFFFFF';
-                }
-                else {
-                  var canvasColor = colortable[val.pr];
-                }
-                if (typeof textcolortable[val.pr] === "undefined" ) {
-                  var canvasTextColor = 'black';
-                }
-                else {
-                  var canvasTextColor = textcolortable[val.pr];
-                }
-
-                $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
-
-                if(val.rt.dlm > 0){
-                  $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
-                }
-                else {
-
-                  if (val.countdown_val >= 90) {
-                    $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
-                  }
-                  else {
-                   $('<div/>', { class:'countdownCell', html:val.countdown}).appendTo('#' + val.id);
-                   }
-
-                }
-
-                $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
-                
-                var showNewRow =  function(){ $('#' + val.id).removeClass('row-new'); };
-                setTimeout(showNewRow, newRowDelay);
-                newRowDelay += 500;
-
-                journeyids.push(val.id);
+              if (typeof colortable[val.pr] === "undefined" ) {
+                var canvasColor = '#FFFFFF';
               }
+              else {
+                var canvasColor = colortable[val.pr];
+              }
+              if (typeof textcolortable[val.pr] === "undefined" ) {
+                var canvasTextColor = 'black';
+              }
+              else {
+                var canvasTextColor = textcolortable[val.pr];
+              }
+
+              if(val.pr.length < 3)
+                $('<div/>', {class:'line_number'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
+              else
+                $('<div/>', {class:'line_number line_number-long'}).appendTo('#' + val.id).css('background-color', canvasColor).css('color', canvasTextColor).html(val.pr);
+              
+              /*
+              if(val.rt.dlm > 0){
+                $('<div/>', { class:'countdownCell', html:val.countdown + ' +' + val.rt.dlm }).appendTo('#' + val.id);
+              }
+              else {
+              */
+                if (val.countdown_val >= 90) {
+                  $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
+                }
+                else {
+                  $('<div/>', { class:'countdownCell', html:(val.countdown)}).appendTo('#' + val.id);
+                }
+              /*
+              }
+              */
+
+              $('<div/>', { class:'destinationCell', text:val.st}).appendTo('#' + val.id);
+              
+              var showNewRow =  function(){ $('#' + val.id).removeClass('row-new'); };
+              setTimeout(showNewRow, newRowDelay);
+              newRowDelay += 500;
+
+              journeyids.push(val.id);
             }
           });
 
@@ -220,9 +224,11 @@ $(document).ready(function(){
 
           var slideUpDelay = 0;
 
+          sortList(journeyids, updatedjourneyids.slice(0,maxjourneys));
+
           $.each(journeyids,function(index,val) {
             if ($.inArray(val,updatedjourneyids.slice(0,maxjourneys)) == -1) {
-              var hideOldRow = function(){ $('#' + val).slideUp(500, function(){ this.remove(); }); };
+              var hideOldRow = function(){ $('#' + val).addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
               delete journeyids[index];
               slideUpDelay += 500;
@@ -244,3 +250,39 @@ $(function(){
   $(window).resize(recalculateNumberOfConnections);
   recalculateNumberOfConnections();
 });
+
+function sortList(journeyids, updatedjourneyids){
+  var updateIndices = new Array();
+  var $body = $('#body');
+
+  $.each(journeyids,function(index,val) {
+    if ($.inArray(val, updatedjourneyids) != -1) {
+      updateIndices.push($('#' + val).index());
+    }
+  });
+
+  $.each(updatedjourneyids,function(index,val) {
+    $('#' + val).appendTo($body);
+  });
+
+  $.each(updateIndices,function(index, position) {
+    if (position == 0)
+      $body.prepend($('#' + updatedjourneyids[0]));
+    else
+      $body.children().eq(position - 1).after($('#' + updatedjourneyids[index]));
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
