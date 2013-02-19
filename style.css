@@ -117,6 +117,7 @@ font-family: 'Segoe UI Light', 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helv
   float:right;
   width: 10%; 
   height: 100%;
+  min-width: 120px;
 }
 
 .clear {
