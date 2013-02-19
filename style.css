@@ -77,7 +77,7 @@ body {
 .row {
   width: 100%;
   font-size: 3em;
-  overflow: auto;
+  overflow: hidden;
   margin-left: 0;
   margin-top: 0;
   opacity: 1;
