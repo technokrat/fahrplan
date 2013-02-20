@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  font-family: 'Segoe UI Light', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family: 'Segoe UI Light', 'Segoe UI', 'Helvetica Neue', 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
   font-weight: 100;
 }
 
@@ -26,7 +26,6 @@ body {
 
   margin: 0px auto;
   width: 80%;
-  -webkit-transition: margin 0.5s;
 }
 
 #footer {
@@ -47,6 +46,7 @@ body {
   opacity: 1;
 
   -webkit-transition: margin 0.5s, opacity 0.5s;
+  transition: margin 0.5s, opacity 0.5s;
 }
 
 .station-new {
@@ -55,7 +55,7 @@ body {
 }
 
 #time {
-	color: white;
+  color: white;
 	font-size: 4em;
 	float: right;
 	margin-top:10px;
@@ -67,6 +67,7 @@ body {
   opacity: 1;
 
   -webkit-transition: margin 0.5s, opacity 0.5s;
+  transition: margin 0.5s, opacity 0.5s;
 }
 
 .time-new {
@@ -84,6 +85,7 @@ body {
   height: 90px;
 
   -webkit-transition: margin ease-out 0.5s, opacity 0.5s, height ease-in 0.5s;
+  transition: margin ease-out 0.5s, opacity 0.5s, height ease-in 0.5s;
 }
 
 .row-new {
@@ -104,6 +106,7 @@ body {
 
 .line_number {
   float:left;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 80px; 
   height: 80px;
