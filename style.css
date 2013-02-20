@@ -60,12 +60,12 @@ body {
 
 #time {
   color: white;
-	font-size: 4em;
-	float: right;
-	margin-top:10px;
-	margin-right:15px;
+  font-size: 4em;
+  float: right;
+  margin-top:10px;
+  margin-right:15px;
 
-  min-width: 3.5em; /* Fix Raspberry Pi not rendering number spacing consistent */
+  min-width: 3.6em; /* Fix Raspberry Pi not rendering number spacing consistent */
 
   margin-left: 0;
   opacity: 1;
