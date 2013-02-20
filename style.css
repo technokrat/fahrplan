@@ -1,3 +1,7 @@
+@font-face {
+	font-family: SegoeLi; src: url(/segoeuil.ttf);
+}
+
 html,
 body {
    margin:0;
@@ -10,7 +14,7 @@ body {
 }
 
 body {
-  font-family: 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
   font-weight: 100;
 }
 
