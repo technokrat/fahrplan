@@ -226,8 +226,8 @@ $(document).ready(function(){
 
           sortList(journeyids, updatedjourneyids.slice(0,maxjourneys));
 
-          $.each(journeyids,function(index,val) {
-            if ($.inArray(val,updatedjourneyids.slice(0,maxjourneys)) == -1) {
+          $.each($('.row'),function(index,val) {
+            if ($.inArray(val.attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
               var hideOldRow = function(){ $('#' + val).addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
               delete journeyids[index];
