@@ -53,6 +53,17 @@ var journeyids = new Array;
 var updatedjourneyids = new Array;
 var maxjourneys = 9;
 
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
 function getURLParameter(name) {
     return decodeURI(
         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
@@ -226,11 +237,11 @@ $(document).ready(function(){
 
           sortList(journeyids, updatedjourneyids.slice(0,maxjourneys));
 
-          $.each($('.row'),function(index,val) {
-            if ($.inArray($(val).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
-              var hideOldRow = function(){ $('#' + val).addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
+          $('.row').each(function(index) {
+            if ($.inArray($(this).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
+              var hideOldRow = function(){ $(this).addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
-              delete journeyids[index];
+              journeyids.remove($(this).attr('id'));
               slideUpDelay += 500;
             }
           });
