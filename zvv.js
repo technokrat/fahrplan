@@ -73,8 +73,13 @@ function getURLParameter(name) {
 var ibnr = getURLParameter('ibnr');
 
 if (ibnr == "null" ) {
-      ibnr = "8591123";
-    }
+  ibnr = "8591123";
+}
+
+$(function(){
+  $(window).resize(recalculateNumberOfConnections);
+  recalculateNumberOfConnections();
+});
 
 
 $(function () {
@@ -239,9 +244,10 @@ $(document).ready(function(){
 
           $('.row').each(function(index) {
             if ($.inArray($(this).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
-              var hideOldRow = function(){ $(this).addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
+              var $element = $(this);
+              var hideOldRow = function(){ $element.addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
-              journeyids.remove($(this).attr('id'));
+              journeyids.remove($element.attr('id'));
               slideUpDelay += 500;
             }
           });
@@ -256,11 +262,6 @@ function recalculateNumberOfConnections()
   var bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 90) / 2;
   $('#body').css('padding', bodyPadding);
 }
-
-$(function(){
-  $(window).resize(recalculateNumberOfConnections);
-  recalculateNumberOfConnections();
-});
 
 function sortList(journeyids, updatedjourneyids){
   var updateIndices = new Array();
