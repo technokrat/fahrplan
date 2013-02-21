@@ -242,9 +242,9 @@ $(document).ready(function(){
 
           sortList(journeyids, updatedjourneyids.slice(0,maxjourneys));
 
-          $('.row').each(function(index) {
-            if ($.inArray($(this).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
-              var $element = $(this);
+          $('.row').each(function(index, val) {
+            if ($.inArray($(val).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
+              var $element = $(val);
               var hideOldRow = function(){ $element.addClass('row-old').bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ $(this).remove(); }); };
               setTimeout(hideOldRow, slideUpDelay);
               journeyids.remove($element.attr('id'));
