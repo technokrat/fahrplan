@@ -240,7 +240,7 @@ $(document).ready(function(){
 
           var slideUpDelay = 0;
 
-          sortList(journeyids, updatedjourneyids.slice(0,maxjourneys));
+          sortList(updatedjourneyids.slice(0,maxjourneys));
 
           $('.row').each(function(index) {
             if ($.inArray($(this).attr('id'),updatedjourneyids.slice(0,maxjourneys)) == -1) {
@@ -263,13 +263,13 @@ function recalculateNumberOfConnections()
   $('#body').css('padding', bodyPadding);
 }
 
-function sortList(journeyids, updatedjourneyids){
+function sortList(updatedjourneyids){
   var updateIndices = new Array();
   var $body = $('#body');
 
-  $.each(journeyids,function(index,val) {
-    if ($.inArray(val, updatedjourneyids) != -1) {
-      updateIndices.push($('#' + val).index());
+  $('.row').each(function(index,val){
+    if ($.inArray($(val).attr('id'), updatedjourneyids) != -1) {
+      updateIndices.push(index);
     }
   });
 
