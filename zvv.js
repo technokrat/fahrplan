@@ -22,6 +22,8 @@
   colortable[34] = '#FFFFFF';
   colortable[46] = '#B9D8A3';
   colortable[72] = '#D9AB9F';
+
+  colortable['N'] = '#FFEC00';
   
   
   var textcolortable = new Object();
@@ -47,6 +49,17 @@
   textcolortable[34] = 'black';
   textcolortable[46] = 'black';
   textcolortable[72] = 'black';
+
+  textcolortable['N'] = '#1A1817';
+
+function color_lookup(code)
+{
+  if (String(code).charAt(0) == 'N')
+    return {color: colortable['N'], textcolor: textcolortable['N']};
+
+  else
+    return {color: colortable[code], textcolor: textcolortable[code]};
+}
 
 
 var journeyids = new Array;
@@ -103,17 +116,17 @@ $(function () {
     $.each(journeysObj.journey.slice(0, maxjourneys),function(key,val) {
       $('<div/>', { id: val.id, class:'row'}).appendTo('#body');
 
-      if (typeof colortable[val.pr] === "undefined" ) {
+      if (typeof color_lookup(val.pr).color === "undefined" ) {
         var canvasColor = '#FFFFFF';
       }
       else {
-        var canvasColor = colortable[val.pr];
+        var canvasColor = color_lookup(val.pr);
       }
-      if (typeof textcolortable[val.pr] === "undefined" ) {
+      if (typeof color_lookup(val.pr).textcolor === "undefined" ) {
         var canvasTextColor = 'black';
       }
       else {
-        var canvasTextColor = textcolortable[val.pr];
+        var canvasTextColor = color_lookup(val.pr).textcolor;
       }
 
       if(val.pr.length < 3)
@@ -188,17 +201,17 @@ $(document).ready(function(){
               // Build and append new DIV
               $('<div/>', { id: val.id, class:'row row-new'}).appendTo('#body');
 
-              if (typeof colortable[val.pr] === "undefined" ) {
+              if (typeof color_lookup(val.pr).color === "undefined" ) {
                 var canvasColor = '#FFFFFF';
               }
               else {
-                var canvasColor = colortable[val.pr];
+                var canvasColor = color_lookup(val.pr);
               }
-              if (typeof textcolortable[val.pr] === "undefined" ) {
+              if (typeof color_lookup(val.pr).textcolor === "undefined" ) {
                 var canvasTextColor = 'black';
               }
               else {
-                var canvasTextColor = textcolortable[val.pr];
+                var canvasTextColor = color_lookup(val.pr).textcolor;
               }
 
               if(val.pr.length < 3)

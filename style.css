@@ -128,9 +128,9 @@ body {
 }
 
 .line_number-long {
-  font-size: 40px;
-  padding-top: 20px;
-  line-height: 40px;
+  font-size: 35px;
+  padding-top: 22px;
+  line-height: 35px;
 }
 
 .destinationCell {
