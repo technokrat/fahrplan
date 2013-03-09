@@ -23,7 +23,7 @@
   colortable[46] = '#B9D8A3';
   colortable[72] = '#D9AB9F';
 
-  colortable['N'] = '#FFEC00';
+  colortable['N'] = '#1A1817';
   
   
   var textcolortable = new Object();
@@ -50,7 +50,7 @@
   textcolortable[46] = 'black';
   textcolortable[72] = 'black';
 
-  textcolortable['N'] = '#1A1817';
+  textcolortable['N'] = '#FFEC00';
 
 function color_lookup(code)
 {
@@ -120,7 +120,7 @@ $(function () {
         var canvasColor = '#FFFFFF';
       }
       else {
-        var canvasColor = color_lookup(val.pr);
+        var canvasColor = color_lookup(val.pr).color;
       }
       if (typeof color_lookup(val.pr).textcolor === "undefined" ) {
         var canvasTextColor = 'black';
@@ -205,7 +205,7 @@ $(document).ready(function(){
                 var canvasColor = '#FFFFFF';
               }
               else {
-                var canvasColor = color_lookup(val.pr);
+                var canvasColor = color_lookup(val.pr).color;
               }
               if (typeof color_lookup(val.pr).textcolor === "undefined" ) {
                 var canvasTextColor = 'black';
