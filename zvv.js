@@ -108,6 +108,10 @@ $(function () {
   function(data) {
     eval(data);
     $("#station").text(journeysObj.stationName);
+
+    // Fly-in effects
+    var showBody = function(){ $('#body').removeClass('body-new'); };
+    setTimeout(showBody, 100);
     var showStation = function(){ $('#station').removeClass('station-new'); };
     setTimeout(showStation, 100);
     var showTime = function(){ $('#time').removeClass('time-new'); };

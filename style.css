@@ -30,6 +30,20 @@ body {
 
   margin: 0px auto;
   width: 80%;
+  opacity: 1;
+
+  -webkit-transform: scale(1);
+  transform: scale(1);
+
+  -webkit-transition: opacity 0.5s, -webkit-transform 0.5s;
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.body-new {
+  opacity: 0 !important;
+  -webkit-transform: scale(0.8);
+  transform: scale(0.8);
+
 }
 
 #footer {
