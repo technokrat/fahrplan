@@ -154,8 +154,8 @@ body {
   background: darkgray;
 }
 
-.body-new {
-  opacity: 0 !important;
-  -webkit-transform: scale(0.8) !important;
-  transform: scale(0.8) !important;
+.body-new {
+	opacity: 0 !important;
+	-webkit-transform: scale(0.8) !important;
+	transform: scale(0.8) !important;
 }
