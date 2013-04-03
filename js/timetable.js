@@ -1,56 +1,58 @@
-  var colortable = new Object();
-  colortable[2] = '#D8232A';
-  colortable[3] = '#009F4A';
-  colortable[4] = '#3E4085';
-  colortable[5] = '#855B37';
-  colortable[6] = '#DA9F4F';
-  colortable[7] = '#191919';
-  colortable[8] = '#86CD16';
-  colortable[9] = '#3E4085';
-  colortable[10] = '#DA3987';
-  colortable[11] = '#009F4A';
-  colortable[12] = '#7ACAD4';
-  colortable[13] = '#FBD01F';
-  colortable[14] = '#00A4DB';
-  colortable[15] = '#D8232A';
-  colortable[17] = '#CD6090';
-  
-  
-  colortable[31] = '#98A2D1';
-  colortable[32] = '#D6ADD6';
-  colortable[33] = '#E4E19E';
-  colortable[34] = '#FFFFFF';
-  colortable[46] = '#B9D8A3';
-  colortable[72] = '#D9AB9F';
+var colortable = new Object();
+colortable[2] = '#D8232A';
+colortable[3] = '#009F4A';
+colortable[4] = '#3E4085';
+colortable[5] = '#855B37';
+colortable[6] = '#DA9F4F';
+colortable[7] = '#191919';
+colortable[8] = '#86CD16';
+colortable[9] = '#3E4085';
+colortable[10] = '#DA3987';
+colortable[11] = '#009F4A';
+colortable[12] = '#7ACAD4';
+colortable[13] = '#FBD01F';
+colortable[14] = '#00A4DB';
+colortable[15] = '#D8232A';
+colortable[17] = '#CD6090';
 
-  colortable['N'] = '#1A1817';
-  
-  
-  var textcolortable = new Object();
-  textcolortable[2] = 'white';
-  textcolortable[3] = 'white';
-  textcolortable[4] = 'white';
-  textcolortable[5] = 'white';
-  textcolortable[6] = 'white';
-  textcolortable[7] = 'white';
-  textcolortable[8] = 'black';
-  textcolortable[9] = 'white';
-  textcolortable[10] = 'white';
-  textcolortable[11] = 'white';
-  textcolortable[12] = 'black';
-  textcolortable[13]= 'black';
-  textcolortable[14] = 'white';
-  textcolortable[15] = 'white';
-  textcolortable[17] = 'white';
-  
-  textcolortable[31] = 'white';
-  textcolortable[32] = 'black';
-  textcolortable[33] = 'black';
-  textcolortable[34] = 'black';
-  textcolortable[46] = 'black';
-  textcolortable[72] = 'black';
 
-  textcolortable['N'] = '#FFEC00';
+colortable[31] = '#98A2D1';
+colortable[32] = '#D6ADD6';
+colortable[33] = '#E4E19E';
+colortable[34] = '#FFFFFF';
+colortable[46] = '#B9D8A3';
+colortable[72] = '#D9AB9F';
+
+colortable['N'] = '#1A1817';
+
+
+var textcolortable = new Object();
+textcolortable[2] = 'white';
+textcolortable[3] = 'white';
+textcolortable[4] = 'white';
+textcolortable[5] = 'white';
+textcolortable[6] = 'white';
+textcolortable[7] = 'white';
+textcolortable[8] = 'black';
+textcolortable[9] = 'white';
+textcolortable[10] = 'white';
+textcolortable[11] = 'white';
+textcolortable[12] = 'black';
+textcolortable[13]= 'black';
+textcolortable[14] = 'white';
+textcolortable[15] = 'white';
+textcolortable[17] = 'white';
+
+textcolortable[31] = 'white';
+textcolortable[32] = 'black';
+textcolortable[33] = 'black';
+textcolortable[34] = 'black';
+textcolortable[46] = 'black';
+textcolortable[72] = 'black';
+
+textcolortable['N'] = '#FFEC00';
+
+
 
 function color_lookup(code)
 {
@@ -60,7 +62,6 @@ function color_lookup(code)
   else
     return {color: colortable[code], textcolor: textcolortable[code]};
 }
-
 
 var journeyids = new Array;
 var updatedjourneyids = new Array;
@@ -275,8 +276,37 @@ $(document).ready(function(){
 
 function recalculateNumberOfConnections()
 {
-  maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 100) / 90);
-  var bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 90) / 2;
+  //maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 100) / 90);
+  //var bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 90) / 2;
+  //
+
+  var bodyPadding;
+
+  if($(window).width() >= 1200)
+  {
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 108) / 96);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 96) / 2;
+  }
+  else if ($(window).width() < 1200 && $(window).width() >= 980) {
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 86);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 86) / 2;
+  }
+  else if ($(window).width() < 980 && $(window).width() >= 768) {
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 77);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 77) / 2;
+  }
+  else if ($(window).width() < 768 && $(window).width() > 480) {
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 29) / 85);
+    bodyPadding = "";
+  }
+  else if ($(window).width() <= 480) {
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 22) / 90);
+    bodyPadding = "";
+  }
+  else {
+    bodyPadding = "";
+  }
+
   $('#body').css('padding', bodyPadding);
 }
 
