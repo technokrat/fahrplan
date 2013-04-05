@@ -145,7 +145,7 @@ $(function () {
       }
       else {
       */
-        if (val.countdown_val >= 90) {
+        if (val.countdown_val > 60) {
           $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
         }
         else {
@@ -192,7 +192,7 @@ $(document).ready(function(){
               }
               else {
               */
-                if (val.countdown_val >= 90) {
+                if (val.countdown_val > 60) {
                   $journeyDiv.find('.countdownCell').html(val.ti);
                 }
                 else {
@@ -230,7 +230,7 @@ $(document).ready(function(){
               }
               else {
               */
-                if (val.countdown_val >= 90) {
+                if (val.countdown_val > 60) {
                   $('<div/>', { class:'countdownCell', html:val.ti}).appendTo('#' + val.id);
                 }
                 else {
@@ -284,23 +284,23 @@ function recalculateNumberOfConnections()
 
   if($(window).width() >= 1200)
   {
-    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 108) / 96);
-    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 96) / 2;
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 120) / 85);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 85) / 2;
   }
   else if ($(window).width() < 1200 && $(window).width() >= 980) {
-    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 86);
-    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 86) / 2;
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 77.75);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 77.75) / 2;
   }
   else if ($(window).width() < 980 && $(window).width() >= 768) {
-    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 77);
-    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 77) / 2;
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 96) / 69.25);
+    bodyPadding = ($(window).height() - $('#footer').height() - maxjourneys * 69.25) / 2;
   }
   else if ($(window).width() < 768 && $(window).width() > 480) {
-    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 29) / 85);
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 28) / 85);
     bodyPadding = "";
   }
   else if ($(window).width() <= 480) {
-    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 22) / 90);
+    maxjourneys = Math.floor(($(window).height() - $('#footer').height() - 20) / 75);
     bodyPadding = "";
   }
   else {
