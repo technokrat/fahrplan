@@ -97,7 +97,7 @@ $(function(){
 
 
 $(function () {
-  $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
+  $.get("http://fahrplan.chatz.li/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
   {
     input: ibnr,
     boardType: "dep",
@@ -167,7 +167,7 @@ $(document).ready(function(){
 
   setInterval(function(){
 
-      $.get("http://fahrplan.mueslo.de/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
+      $.get("http://fahrplan.chatz.li/proxy/bin/stboard.exe/dn?L=vs_stbzvv",
       {
           input: ibnr,
           boardType: "dep",
