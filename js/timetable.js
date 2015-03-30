@@ -107,6 +107,8 @@ $(function () {
     requestType: "0",
   },
   function(data) {
+    $('#disconnected_indicator').hide();
+    
     eval(data);
     $("#station").text(journeysObj.stationName);
 
@@ -159,6 +161,8 @@ $(function () {
 
       journeyids.push(val.id);
     });
+  }).fail(function(){
+    $('#disconnected_indicator').show();
   });
 });
 
@@ -177,6 +181,7 @@ $(document).ready(function(){
           requestType: "0",
       },
       function(data) {
+          $('#disconnected_indicator').hide();
           eval(data);
 
           var newRowDelay = 500;
@@ -269,6 +274,8 @@ $(document).ready(function(){
               slideUpDelay += 500;
             }
           });
+      }).fail(function(){
+        $('#disconnected_indicator').show();
       });
   }, 10000);
 });
