@@ -255,5 +255,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  text-align: center;
+  padding: 40% 20px 20px 20px;
 }
 
