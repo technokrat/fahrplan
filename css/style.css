@@ -247,7 +247,7 @@ body {
   }
 }
 
-#display_indicator {
+#disconnected_indicator {
   z-index:9001;
   background-color: rgba(0,0,0,0.95);
   width: 100%;
