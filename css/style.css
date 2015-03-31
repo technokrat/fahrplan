@@ -263,6 +263,7 @@ body {
 #disconnected_indicator img {
   height: 30%;
   margin-bottom: 30px;
+  margin-top: 20%;
 }
 
 #disconnected_indicator h1 {
