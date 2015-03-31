@@ -111,6 +111,8 @@ $(function () {
     
     eval(data);
     $("#station").text(journeysObj.stationName);
+    $("#station_indicator").text(journeysObj.stationName);
+
 
     // Fly-in effects
     var showBody = function(){ $('#body').removeClass('body-new'); };

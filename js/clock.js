@@ -9,6 +9,7 @@ UR_Start = function() {
   UR_Nu = new Date;
   UR_Indhold = showFilled(UR_Nu.getHours()) + ":" + showFilled(UR_Nu.getMinutes()) + ":" + showFilled(UR_Nu.getSeconds());
   document.getElementById("time").innerHTML = UR_Indhold;
+  $('#time_indicator').html(UR_Indhold);
   return setTimeout((function() {
     return UR_Start();
   }), 1000);

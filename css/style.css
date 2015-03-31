@@ -248,6 +248,7 @@ body {
 }
 
 #disconnected_indicator {
+  color: white;
   z-index:9001;
   background-color: rgba(0,0,0,0.95);
   width: 100%;
@@ -256,6 +257,15 @@ body {
   top: 0;
   left: 0;
   text-align: center;
-  padding: 40% 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
+}
+
+#disconnected_indicator img {
+  height: 30%;
+  margin-bottom: 30px;
+}
+
+#disconnected_indicator h1 {
+
 }
 
