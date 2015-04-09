@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Слой_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 100 100"
+   enable-background="new 0 0 100 100"
+   xml:space="preserve"
+   height="100px"
+   width="100px"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="disconnected.svg"><metadata
+   id="metadata3020"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs3018" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1137"
+   id="namedview3016"
+   showgrid="false"
+   inkscape:zoom="2.36"
+   inkscape:cx="50"
+   inkscape:cy="50"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Слой_1" />
+<path
+   d="M13.8,23.4c0,3.7,1.3,7.2,3.8,10V45c0,4.1,3.4,7.5,7.5,7.5h5.2C31.4,62.3,39.8,70,50,70s18.6-7.7,19.8-17.5H75  c1.4,0,2.5,1.1,2.5,2.5v11.5c-2.4,2.8-3.8,6.3-3.8,10V95h12.5V76.6c0-3.7-1.3-7.2-3.8-10V55c0-4.1-3.4-7.5-7.5-7.5h-5.2  C68.6,37.7,60.2,30,50,30s-18.6,7.7-19.8,17.5H25c-1.4,0-2.5-1.1-2.5-2.5V33.5c2.4-2.8,3.8-6.3,3.8-10V5H13.8V23.4z M78.8,76.6  c0-1.8,0.4-3.4,1.3-4.9c0.8,1.5,1.3,3.2,1.3,4.9v5.9h-2.5V76.6z M78.8,87.5h2.5V90h-2.5V87.5z M50,35c8.3,0,15,6.7,15,15  s-6.7,15-15,15s-15-6.7-15-15S41.7,35,50,35z M18.8,10h2.5v2.5h-2.5V10z M18.8,17.5h2.5v5.9c0,1.8-0.4,3.4-1.3,4.9  c-0.8-1.5-1.3-3.2-1.3-4.9V17.5z"
+   id="path3012"
+   style="fill:#ffffff" />
+<polygon
+   points="44.7,58.8 50,53.5 55.3,58.8 58.8,55.3 53.5,50 58.8,44.7 55.3,41.2 50,46.5 44.7,41.2 41.2,44.7 46.5,50   41.2,55.3 "
+   id="polygon3014"
+   style="fill:#ffffff" />
+</svg>

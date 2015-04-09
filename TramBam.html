@@ -8,18 +8,18 @@
 </head>
 
 <body>
-	{#if failure}
-		{> schedule}
-	{#else}
-		{> service_failure}
-	{/if}
+	{{#if failure}}
+		{{> service_failure}}
+	{{else}}
+		{{> schedule}}
+	{{/if}}
 </body>
 
 <template name="schedule">
 	<div id="schedule">
 		<div class="body new"></div>
 		<div class="footer">
-			<p class="station_name new">{station_name}</p>
+			<p class="station_name new">{{station_name}}</p>
 			<p class="time new"></p>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 		<img src="img/disconnected_white.svg" />
 		<h1>Bad connection</h1>
 		<br><br>
-		<h2 class="station_name">{station_name}</h2>
+		<h2 class="station_name">{{station_name}}</h2>
 		<h2 class="time"></h2>
 	</div>
 </template>
