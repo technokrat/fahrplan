@@ -1,17 +1,13 @@
+Stations = new Mongo.Collection("stations");
+
+
 if (Meteor.isClient) {
   // counter starts at 0
-  Session.setDefault('counter', 0);
+  Session.setDefault('station_name', "");
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.body.helpers({
+    station_name: function () {
+      return Session.get('station_name');
     }
   });
 }
@@ -19,5 +15,11 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+  });
+
+  Meteor.methods({
+    request_update: function(ibnr) {
+      return;
+    }
   });
 }

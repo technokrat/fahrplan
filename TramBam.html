@@ -1,14 +1,36 @@
 <head>
-  <title>TramBam</title>
+	<title>TramBam</title>
+
+	<meta name="google" content="notranslate" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+	{#if failure}
+		{> schedule}
+	{#else}
+		{> service_failure}
+	{/if}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="schedule">
+	<div id="schedule">
+		<div class="body new"></div>
+		<div class="footer">
+			<p class="station_name new">{station_name}</p>
+			<p class="time new"></p>
+		</div>
+	</div>
+</template>
+
+<template name="service_failure">
+	<div id="service_failure">
+		<img src="img/disconnected_white.svg" />
+		<h1>Bad connection</h1>
+		<br><br>
+		<h2 class="station_name">{station_name}</h2>
+		<h2 class="time"></h2>
+	</div>
 </template>
