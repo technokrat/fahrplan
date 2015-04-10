@@ -1,26 +1,46 @@
 UPDATE_PERIOD = 10000 // Update period of the Schedule API requests in milliseconds
 
 Stations = new Mongo.Collection("stations");
+Connections = new Mongo.Collection("connections");
 
 
 if (Meteor.isClient) {
-	// counter starts at 0
-	Session.setDefault('station_name', "");
-	Session.setDefault('station_ibnr', "");
+	//Session.setDefault('station_ibnr', "");
 	
 	Meteor.subscribe("stations");
+	Meteor.subscribe("connections");
+
+
+	Template.body.helpers({
+		station_name: function () {
+			if (Stations.findOne({ibnr: Session.get('station_ibnr')}))
+			{
+				Meteor.setTimeout(function(){ $('.new').removeClass('new'); }, 20); // Trigger all flying-in animations
+				return Stations.findOne({ibnr: Session.get('station_ibnr')}).name;
+			}
+			else
+				return "";
+		},
+		failure: function () {
+			return !(Meteor.status().connected);
+		},
+		connections: function() {
+			console.log(Connections.find({ibnr: Session.get('station_ibnr')}).fetch());
+			return Connections.find({ibnr: Session.get('station_ibnr')}).fetch();
+		}
+	});
+
 
 	Meteor.startup(function(){
-		Template.body.helpers({
-			station_name: function () {
-				return Session.get('station_name');
-			},
-			failure: function () {
-				return !Meteor.status().connected;
-			}
-		});
+		console.log(Session.get('station_ibnr'));
+		var station_ibnr = getQueryParams(document.location.search).ibnr;
+		if (!station_ibnr)
+			station_ibnr = "8591123";
 
-		Session.set('station_ibnr', getQueryParams(document.location.search).ibnr);
+		Session.set('station_ibnr', station_ibnr);
+
+		Meteor.setInterval(updateClock, 1000);
+		updateClock();
 
 		Meteor.setInterval(function(){ 
 			if (Session.get('station_ibnr'))
@@ -34,11 +54,9 @@ if (Meteor.isClient) {
 			Meteor.call('register_for_update', Session.get('station_ibnr'), true);
 		}
 	});
-
-	$(function() {
-		$('.new').removeClass('new'); // Trigger all flying-in animations
-	});
 }
+
+
 
 if (Meteor.isServer) {
 
@@ -82,8 +100,32 @@ if (Meteor.isServer) {
 	function updateStationSchedule(ibnr)
 	{
 		HAFASQuery['input'] = ibnr;
-		var response = HTTP.get(HAFAS_URL, {params: HAFASQuery}).data; // response of HAFAS parsed as JSON object
+		var response = HTTP.post(HAFAS_URL, {params: HAFASQuery}).data; // response of HAFAS parsed as JSON object
 
-		Stations.update({ibnr: ibnr}, {$set: {hafas_data: response}}, {upsert: true});
+		var HAFASParsed = parseHAFAS(response);
+		if (HAFASParsed)
+		{
+			Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: HAFASParsed.station_name}}, {upsert: true});
+
+			Connections.remove({ibnr: ibnr});
+
+			for (connection in HAFASParsed.connections)
+			{
+				Connections.insert({ibnr: ibnr, hafas_raw: response.connections[connection]});
+			}
+		}
+	}
+
+	function parseHAFAS(HAFASData)
+	{
+		if (HAFASData.station.name)
+		{
+			return  {
+				station_name: HAFASData.station.name,
+				connections: HAFASData.connections
+			};
+		}
+		else
+			return false;
 	}
 }

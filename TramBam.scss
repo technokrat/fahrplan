@@ -50,7 +50,7 @@ body {
 		transition: opacity 0.5s, transform 0.5s;
 
 
-		.row {
+		.connection {
 			z-index: 10;
 			width: 100%;
 			box-sizing: border-box;
@@ -76,7 +76,7 @@ body {
 				border: none;
 			}
 
-			.line_number {
+			.line {
 				float:left;
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
@@ -93,7 +93,7 @@ body {
 
 				text-align: center;
 
-				&.line_number-long {
+				&.long {
 					font-size: 0.6em;
 					line-height: 1em;
 
@@ -103,7 +103,7 @@ body {
 				}
 			}
 
-			.countdownCell {
+			.countdown {
 			  float:right;
 			  width: 2.5em;
 			}	
@@ -194,7 +194,7 @@ body {
 			padding: 0.5em;
 
 
-			.row {
+			.connection {
 				height: auto;
 				border-bottom: 1px solid rgba(255,255,255,0.2);
 				padding-top: 0.25em;
@@ -206,11 +206,11 @@ body {
 				}
 
 
-				.line_number {
+				.line {
 					font-size: 1.5em;
 					margin-right: 0.7em;
 
-					&.line_number-long {
+					&.long {
 						font-size: 0.9em;
 						padding-top: 0.833333333333333333em;
 						width: 2.66666666666667em; 
@@ -218,7 +218,7 @@ body {
 					}
 				}
 
-				.countdownCell {
+				.countdown {
 					margin-left: 0.8em;
 				}	
 			}
@@ -271,7 +271,7 @@ body {
 	img {
 		height: 30%;
 		margin-bottom: 30px;
-		margin-top: 20%;
+		margin-top: 10%;
 	}
 }
 
