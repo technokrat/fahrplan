@@ -35,7 +35,9 @@ if (Meteor.isClient) {
 		}
 	});
 
-
+	$(function() {
+		$('.new').removeClass('new'); // Trigger all flying-in animations
+	});
 }
 
 if (Meteor.isServer) {
