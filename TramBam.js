@@ -167,7 +167,6 @@ if (Meteor.isServer) {
 			}
 
 			Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
-			console.log(Connections.find().fetch());
 		}
 	}
 
