@@ -9,11 +9,6 @@ if (Meteor.isClient) {
 	Session.setDefault('initialized', false);
 	Session.setDefault('connection_count', 8);
 
-	
-	Meteor.subscribe("stations");
-	Meteor.subscribe("connections");
-
-
 	Template.body.helpers({
 		station_name: function () {
 			if (Stations.findOne({ibnr: Session.get('station_ibnr')}))
@@ -64,6 +59,13 @@ if (Meteor.isClient) {
 
 		Session.set('station_ibnr', station_ibnr);
 
+
+		Tracker.autorun(function(){
+			Meteor.subscribe("stations", Session.get('station_ibnr'));
+			Meteor.subscribe("connections", Session.get('station_ibnr'));
+		});
+
+
 		Meteor.setInterval(updateClock, 1000);
 		updateClock();
 
@@ -105,6 +107,15 @@ if (Meteor.isServer) {
 		start: "0", // required
 		tpl: "stbResult2json" // required
 	}
+
+	// server: publish the rooms collection, minus secret info.
+	Meteor.publish("stations", function (ibnr) {
+	  return Stations.find({ibnr: ibnr});
+	});
+	// server: publish the rooms collection, minus secret info.
+	Meteor.publish("connections", function (ibnr) {
+	  return Connections.find({ibnr: ibnr});
+	});
 
 	registeredIBNRs = {};
 
