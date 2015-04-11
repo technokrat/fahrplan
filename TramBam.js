@@ -83,6 +83,10 @@ if (Meteor.isClient) {
 		{
 			Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 		}
+
+		$(window).resize(function(){
+			Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
+		});
 	});
 }
 
@@ -134,41 +138,31 @@ if (Meteor.isServer) {
 	function updateStationSchedule(ibnr)
 	{
 		HAFASQuery['input'] = ibnr;
+		HAFASQuery['maxJourneys'] = registeredIBNRs[ibnr].connection_count;
+
+		var update_date = Date.now();
 		var response = HTTP.get(HAFAS_URL, {params: HAFASQuery, timeout: 1000}).data; // response of HAFAS parsed as JSON object
 
-		if (response)
+		if (response && response.station.name)
 		{
-			var HAFASParsed = parseHAFAS(response);
-			if (HAFASParsed)
+			Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: response.station.name}}, {upsert: true});
+
+			Connections.remove({ibnr: ibnr});
+
+			for (key in response.connections)
 			{
-				Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: HAFASParsed.station_name}}, {upsert: true});
-
-				Connections.remove({ibnr: ibnr});
-
-				for (connection in HAFASParsed.connections)
-				{
-
-					Connections.insert({ibnr: ibnr, hafas_raw: response.connections[connection]});
-				}
+				var hash = hashConnection(ibnr, response.connections[key]);
+				Connections.upsert({ibnr: ibnr, hash: hash}, {$set: {hafas_raw: response.connections[key], updated_at: update_date}});
 			}
+
+			Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
+			console.log(Connections.find().fetch());
 		}
 	}
 
-	function parseHAFAS(HAFASData)
+	function hashConnection(ibnr, HAFASConnection)
 	{
-		if (HAFASData.station.name)
-		{
-			return  {
-				station_name: HAFASData.station.name,
-				connections: HAFASData.connections
-			};
-		}
-		else
-			return false;
-	}
-
-	function hashHAFASConnection(HAFASConnection)
-	{
-		
+		var message = ibnr + HAFASConnection.product.line + HAFASConnection.product.direction + HAFASConnection.mainLocation.date + HAFASConnection.mainLocation.time;
+		return CryptoJS.SHA256(message).toString();
 	}
 }
