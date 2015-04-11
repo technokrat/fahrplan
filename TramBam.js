@@ -30,7 +30,7 @@ if (Meteor.isClient) {
 
 		},
 		connections: function() {
-			return Connections.find({ibnr: Session.get('station_ibnr')}, {limit : Session.get('connection_count')});
+			return Connections.find({ibnr: Session.get('station_ibnr')}, {sort: {countdown: 1}, limit : Session.get('connection_count')});
 		}
 	});
 
@@ -49,6 +49,12 @@ if (Meteor.isClient) {
 			else 
 				return false;
 		}
+	});
+
+	Template.connection.onRendered(function(){
+		Meteor.setTimeout(function(){
+			$('.new').removeClass('new');
+		}, 200);
 	});
 
 
@@ -75,11 +81,6 @@ if (Meteor.isClient) {
 				Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'));
 			}
 		}, UPDATE_PERIOD);
-
-		Meteor.setTimeout(function(){
-			$('.new').removeClass('new');
-			Session.set('initialized', true);
-		}, 1000);
 
 		if (Session.get('station_ibnr')) 
 		{
@@ -163,7 +164,15 @@ if (Meteor.isServer) {
 			for (key in response.connections)
 			{
 				var hash = hashConnection(ibnr, response.connections[key]);
-				Connections.upsert({ibnr: ibnr, hash: hash}, {$set: {hafas_raw: response.connections[key], updated_at: update_date}});
+
+				var countdown;
+
+				if (response.connections[key].mainLocation.realTime.countdown)
+					countdown = parseInt(response.connections[key].mainLocation.countdown);
+				else
+					countdown = parseInt(response.connections[key].mainLocation.countdown);
+
+				Connections.upsert({ibnr: ibnr, hash: hash}, {$set: {hafas_raw: response.connections[key], countdown: countdown, updated_at: update_date}});
 			}
 
 			Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
