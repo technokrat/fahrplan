@@ -17,7 +17,7 @@ body {
 	font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
 	font-weight: 100;
 
-  	&.new {
+	&.new {
 		opacity: 0 !important;
 		-webkit-transform: scale(0.8) !important;
 		transform: scale(0.8) !important;
@@ -26,6 +26,21 @@ body {
 
 ::selection {
   background-color: Magenta;
+}
+
+
+
+@-webkit-keyframes countdown-realtime {
+	0%   {opacity: 1;}
+	50%  {opacity: 0.3;}
+	100% {opacity: 1;}
+}
+
+
+@keyframes countdown-realtime {
+	0%   {opacity: 1;}
+	50%  {opacity: 0.3;}
+	100% {opacity: 1;}
 }
 
 
@@ -104,8 +119,18 @@ body {
 			}
 
 			.countdown {
-			  float:right;
-			  width: 2.5em;
+				float:right;
+				width: 2.5em;
+
+				.realtime {
+					-webkit-animation-iteration-count: infinite;
+					-webkit-animation-name: countdown-realtime;
+					-webkit-animation-duration: 2s;
+
+					animation-iteration-count: infinite;
+					animation-name: countdown-realtime;
+					animation-duration: 2s;
+				}
 			}	
 		}
 	}

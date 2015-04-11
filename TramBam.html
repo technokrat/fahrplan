@@ -33,14 +33,8 @@
 
 <template name="connection">
 	<div class="connection">
-		<style scoped>
-			.line {
-				color: {{hafas_raw.product.line.color.fg}};
-				background-color: {{hafas_raw.product.line.color.bg}};
-			}
-		</style>
-		<div class="line">{{hafas_raw.product.line}}</div>
-		<div class="countdown">{{hafas_raw.mainLocation.realTime.countdown}}</div>
+		<div class="line" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
+		<div class="countdown">{{#if hafas_raw.mainLocation.realTime.countdown}}{{hafas_raw.mainLocation.realTime.countdown}}{{#if hafas_raw.mainLocation.realTime.hasRealTime}}<span class="realtime">'</span>{{else}}'{{/if}}{{/if}}</div>
 		<div class="destination">{{{hafas_raw.product.direction}}}</div>
 	</div>
 </template>
