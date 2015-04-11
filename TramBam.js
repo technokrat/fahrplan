@@ -6,7 +6,9 @@ Status = new Mongo.Collection("status");
 
 
 if (Meteor.isClient) {
-	//Session.setDefault('station_ibnr', "");
+	Session.setDefault('initialized', false);
+	Session.setDefault('connection_count', 8);
+
 	
 	Meteor.subscribe("stations");
 	Meteor.subscribe("connections");
@@ -16,17 +18,41 @@ if (Meteor.isClient) {
 		station_name: function () {
 			if (Stations.findOne({ibnr: Session.get('station_ibnr')}))
 			{
-				Meteor.setTimeout(function(){ $('.new').removeClass('new'); }, 20); // Trigger all flying-in animations
 				return Stations.findOne({ibnr: Session.get('station_ibnr')}).name;
 			}
 			else
-				return "";
+				return "Unknow Station";
 		},
 		failure: function () {
-			return !(Meteor.status().connected);
+			if (!Session.get('initialized'))
+				return false;
+			else if (!Meteor.status().connected)
+				return "Bad connection";
+			else if (!Stations.findOne({ibnr: Session.get('station_ibnr')}))
+				return "IBNR does not exist"
+			else
+				return false;
+
 		},
 		connections: function() {
 			return Connections.find({ibnr: Session.get('station_ibnr')}).fetch();
+		}
+	});
+
+	Template.connection.helpers({
+		is_long_line: function(number)
+		{
+			if (number.length > 2)
+				return true;
+			else
+				return false;
+		},
+		is_scheduled_countdown_near: function(countdown)
+		{
+			if (parseInt(countdown) < 60)
+				return true;
+			else 
+				return false;
 		}
 	});
 
@@ -44,13 +70,18 @@ if (Meteor.isClient) {
 		Meteor.setInterval(function(){ 
 			if (Session.get('station_ibnr'))
 			{
-				Meteor.call('register_for_update', Session.get('station_ibnr'));
+				Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'));
 			}
 		}, UPDATE_PERIOD);
 
+		Meteor.setTimeout(function(){
+			$('.new').removeClass('new');
+			Session.set('initialized', true);
+		}, 1000);
+
 		if (Session.get('station_ibnr')) 
 		{
-			Meteor.call('register_for_update', Session.get('station_ibnr'), true);
+			Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 		}
 	});
 }
@@ -76,10 +107,14 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.methods({
-		register_for_update: function(ibnr, instant_update) {
+		register_for_update: function(ibnr, connection_count, instant_update) {
 			if (ibnr)
 			{
-				registeredIBNRs[ibnr] = Date.now();
+				if (!registeredIBNRs[ibnr])
+					registeredIBNRs[ibnr] = {date: Date.now(), connection_count: connection_count};
+				else if (registeredIBNRs[ibnr].connection_count < connection_count)
+					registeredIBNRs[ibnr] = {date: Date.now(), connection_count: connection_count};
+
 
 				if (instant_update == true)
 					updateStationSchedule(ibnr);
@@ -112,6 +147,7 @@ if (Meteor.isServer) {
 
 				for (connection in HAFASParsed.connections)
 				{
+
 					Connections.insert({ibnr: ibnr, hafas_raw: response.connections[connection]});
 				}
 			}
@@ -129,5 +165,10 @@ if (Meteor.isServer) {
 		}
 		else
 			return false;
+	}
+
+	function hashHAFASConnection(HAFASConnection)
+	{
+		
 	}
 }

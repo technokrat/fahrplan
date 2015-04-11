@@ -11,7 +11,7 @@
 	{{#if failure}}
 		<div id="service_failure">
 			<img src="img/disconnected_white.svg" />
-			<h1>Bad connection</h1>
+			<h1>{{failure}}</h1>
 			<br><br>
 			<h2 class="station_name">{{{station_name}}}</h2>
 			<h2 class="time"></h2>
@@ -33,8 +33,8 @@
 
 <template name="connection">
 	<div class="connection">
-		<div class="line" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
-		<div class="countdown">{{#if hafas_raw.mainLocation.realTime.countdown}}{{hafas_raw.mainLocation.realTime.countdown}}{{#if hafas_raw.mainLocation.realTime.hasRealTime}}<span class="realtime">'</span>{{else}}'{{/if}}{{/if}}</div>
+		{{#if hafas_raw.product.line}}<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>{{else}}<div class="line">⋅</div>{{/if}}
+		<div class="countdown">{{#if hafas_raw.mainLocation.realTime.hasRealTime}}{{hafas_raw.mainLocation.realTime.countdown}}<span class="realtime">'</span>{{else}}{{#if is_scheduled_countdown_near hafas_raw.mainLocation.countdown}}{{hafas_raw.mainLocation.countdown}}'{{else}}{{hafas_raw.mainLocation.time}}{{/if}}{{/if}}</div>
 		<div class="destination">{{{hafas_raw.product.direction}}}</div>
 	</div>
 </template>

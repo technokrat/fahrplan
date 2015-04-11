@@ -16,12 +16,6 @@ html, body {
 body {
 	font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
 	font-weight: 100;
-
-	&.new {
-		opacity: 0 !important;
-		-webkit-transform: scale(0.8) !important;
-		transform: scale(0.8) !important;
-	}
 }
 
 ::selection {
@@ -64,6 +58,11 @@ body {
 		-webkit-transition: opacity 0.5s, -webkit-transform 0.5s;
 		transition: opacity 0.5s, transform 0.5s;
 
+		&.new {
+			opacity: 0 !important;
+			-webkit-transform: scale(0.8) !important;
+			transform: scale(0.8) !important;
+		}
 
 		.connection {
 			z-index: 10;
