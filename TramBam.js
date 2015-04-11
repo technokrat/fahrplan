@@ -160,8 +160,6 @@ if (Meteor.isServer) {
 		{
 			Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: response.station.name}}, {upsert: true});
 
-			Connections.remove({ibnr: ibnr});
-
 			for (key in response.connections)
 			{
 				var hash = hashConnection(ibnr, response.connections[key]);
