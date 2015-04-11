@@ -32,14 +32,14 @@ body {
 
 @-webkit-keyframes countdown-realtime {
 	0%   {opacity: 1;}
-	50%  {opacity: 0.3;}
+	50%  {opacity: 0.5;}
 	100% {opacity: 1;}
 }
 
 
 @keyframes countdown-realtime {
 	0%   {opacity: 1;}
-	50%  {opacity: 0.3;}
+	50%  {opacity: 0.5;}
 	100% {opacity: 1;}
 }
 
@@ -125,11 +125,11 @@ body {
 				.realtime {
 					-webkit-animation-iteration-count: infinite;
 					-webkit-animation-name: countdown-realtime;
-					-webkit-animation-duration: 2s;
+					-webkit-animation-duration: 4s;
 
 					animation-iteration-count: infinite;
 					animation-name: countdown-realtime;
-					animation-duration: 2s;
+					animation-duration: 4s;
 				}
 			}	
 		}
