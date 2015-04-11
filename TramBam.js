@@ -2,6 +2,7 @@ UPDATE_PERIOD = 10000 // Update period of the Schedule API requests in milliseco
 
 Stations = new Mongo.Collection("stations");
 Connections = new Mongo.Collection("connections");
+Status = new Mongo.Collection("status");
 
 
 if (Meteor.isClient) {
@@ -25,14 +26,12 @@ if (Meteor.isClient) {
 			return !(Meteor.status().connected);
 		},
 		connections: function() {
-			console.log(Connections.find({ibnr: Session.get('station_ibnr')}).fetch());
 			return Connections.find({ibnr: Session.get('station_ibnr')}).fetch();
 		}
 	});
 
 
 	Meteor.startup(function(){
-		console.log(Session.get('station_ibnr'));
 		var station_ibnr = getQueryParams(document.location.search).ibnr;
 		if (!station_ibnr)
 			station_ibnr = "8591123";
@@ -83,7 +82,7 @@ if (Meteor.isServer) {
 				registeredIBNRs[ibnr] = Date.now();
 
 				if (instant_update == true)
-					updateStationSchedule();
+					updateStationSchedule(ibnr);
 			}
 		}
 	});
@@ -100,18 +99,21 @@ if (Meteor.isServer) {
 	function updateStationSchedule(ibnr)
 	{
 		HAFASQuery['input'] = ibnr;
-		var response = HTTP.post(HAFAS_URL, {params: HAFASQuery}).data; // response of HAFAS parsed as JSON object
+		var response = HTTP.get(HAFAS_URL, {params: HAFASQuery, timeout: 1000}).data; // response of HAFAS parsed as JSON object
 
-		var HAFASParsed = parseHAFAS(response);
-		if (HAFASParsed)
+		if (response)
 		{
-			Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: HAFASParsed.station_name}}, {upsert: true});
-
-			Connections.remove({ibnr: ibnr});
-
-			for (connection in HAFASParsed.connections)
+			var HAFASParsed = parseHAFAS(response);
+			if (HAFASParsed)
 			{
-				Connections.insert({ibnr: ibnr, hafas_raw: response.connections[connection]});
+				Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: HAFASParsed.station_name}}, {upsert: true});
+
+				Connections.remove({ibnr: ibnr});
+
+				for (connection in HAFASParsed.connections)
+				{
+					Connections.insert({ibnr: ibnr, hafas_raw: response.connections[connection]});
+				}
 			}
 		}
 	}
