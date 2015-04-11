@@ -35,7 +35,7 @@ if (Meteor.isClient) {
 
 		},
 		connections: function() {
-			return Connections.find({ibnr: Session.get('station_ibnr')}).fetch();
+			return Connections.find({ibnr: Session.get('station_ibnr')}, {limit : Session.get('connection_count')});
 		}
 	});
 
@@ -87,6 +87,8 @@ if (Meteor.isClient) {
 		$(window).resize(function(){
 			Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
 		});
+		
+		Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
 	});
 }
 
