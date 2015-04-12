@@ -9,6 +9,9 @@ if (Meteor.isClient) {
 	Session.setDefault('initialized', false);
 	Session.setDefault('connection_count', 8);
 
+	Meteor.subscribe("status");
+
+
 	Template.body.helpers({
 		station_name: function () {
 			if (Stations.findOne({ibnr: Session.get('station_ibnr')}))
@@ -65,6 +68,12 @@ if (Meteor.isClient) {
 
 		Session.set('station_ibnr', station_ibnr);
 
+		$(window).resize(function(){
+			Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
+		});
+		
+		Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
+
 
 		Tracker.autorun(function(){
 			Meteor.subscribe("stations", Session.get('station_ibnr'));
@@ -87,11 +96,7 @@ if (Meteor.isClient) {
 			Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 		}
 
-		$(window).resize(function(){
-			Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
-		});
-		
-		Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
+		Session.set('initialized', true);
 	});
 }
 
@@ -117,6 +122,9 @@ if (Meteor.isServer) {
 	Meteor.publish("connections", function (ibnr) {
 	  return Connections.find({ibnr: ibnr});
 	});
+	Meteor.publish("status", function() {
+	  return Connections.find();
+	});
 
 	registeredIBNRs = {};
 
@@ -135,8 +143,17 @@ if (Meteor.isServer) {
 
 
 				if (instant_update == true)
-					updateStationSchedule(ibnr);
+				{
+					if (updateStationSchedule(ibnr))
+						return true;
+					else
+						return false
+				}
+				else
+					return false;
 			}
+			else
+				return false;
 		}
 	});
 
@@ -167,7 +184,7 @@ if (Meteor.isServer) {
 
 				var countdown;
 
-				if (response.connections[key].mainLocation.realTime.countdown)
+				if (response.connections[key].mainLocation.realTime.hasRealTime)
 					countdown = parseInt(response.connections[key].mainLocation.countdown);
 				else
 					countdown = parseInt(response.connections[key].mainLocation.countdown);
@@ -176,7 +193,11 @@ if (Meteor.isServer) {
 			}
 
 			Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
+
+			return true;
 		}
+
+		return false;
 	}
 
 	function hashConnection(ibnr, HAFASConnection)

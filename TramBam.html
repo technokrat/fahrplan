@@ -33,8 +33,29 @@
 
 <template name="connection">
 	<div class="connection new {{hash}}">
-		{{#if hafas_raw.product.line}}<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>{{else}}<div class="line">⋅</div>{{/if}}
-		<div class="countdown">{{#if hafas_raw.mainLocation.realTime.hasRealTime}}{{hafas_raw.mainLocation.realTime.countdown}}<span class="realtime">'</span>{{else}}{{#if is_scheduled_countdown_near hafas_raw.mainLocation.countdown}}{{hafas_raw.mainLocation.countdown}}'{{else}}{{hafas_raw.mainLocation.time}}{{/if}}{{/if}}</div>
+		{{#if hafas_raw.product.line}}
+			<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
+		{{else}}
+			<div class="line">⋅</div>
+		{{/if}}
+		<div class="countdown">
+			{{#if hafas_raw.mainLocation.realTime.hasRealTime}}
+				{{#if is_scheduled_countdown_near hafas_raw.mainLocation.realTime.countdown}}
+					{{hafas_raw.mainLocation.realTime.countdown}}<span class="realtime">'</span>
+				{{else}}
+					<span class="realtime">{{hafas_raw.mainLocation.realTime.time}}</span>
+				{{/if}}
+			{{else}}
+				<span class="not-realtime">
+					{{#if is_scheduled_countdown_near hafas_raw.mainLocation.countdown}}
+						{{hafas_raw.mainLocation.countdown}}'
+					{{else}}
+						{{hafas_raw.mainLocation.time}}
+					{{/if}}
+					<img src="img/not_realtime_white.svg" />
+				</span>
+			{{/if}}
+		</div>
 		<div class="destination">{{{hafas_raw.product.direction}}}</div>
 	</div>
 </template>
