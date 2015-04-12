@@ -114,6 +114,10 @@ if (Meteor.isServer) {
 		tpl: "stbResult2json" // required
 	}
 
+	Stations.remove();
+	Connections.remove();
+	Status.remove();
+
 	// server: publish the rooms collection, minus secret info.
 	Meteor.publish("stations", function (ibnr) {
 	  return Stations.find({ibnr: ibnr});
