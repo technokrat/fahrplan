@@ -18,21 +18,21 @@
 		</div>
 	{{else}}
 		<div id="schedule">
-			<div class="body new">
+			<div class="body">
 				{{#each connections}}
 					{{> connection}}
 				{{/each}}
 			</div>
 			<div class="footer">
-				<p class="station_name new">{{{station_name}}}</p>
-				<p class="time new"></p>
+				<p class="station_name">{{{station_name}}}</p>
+				<p class="time"></p>
 			</div>
 		</div>
 	{{/if}}
 </body>
 
 <template name="connection">
-	<div class="connection new {{hash}}">
+	<div class="connection {{hash}}">
 		{{#if hafas_raw.product.line}}
 			<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
 		{{else}}

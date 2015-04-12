@@ -87,7 +87,9 @@ if (Meteor.isClient) {
 		Meteor.setInterval(function(){ 
 			if (Session.get('station_ibnr'))
 			{
-				Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'));
+				Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), function(isIBNRLegit){
+					return false;
+				});
 			}
 		}, UPDATE_PERIOD);
 
