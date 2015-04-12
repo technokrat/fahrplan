@@ -114,10 +114,6 @@ if (Meteor.isServer) {
 		tpl: "stbResult2json" // required
 	}
 
-	Stations.remove();
-	Connections.remove();
-	Status.remove();
-
 	// server: publish the rooms collection, minus secret info.
 	Meteor.publish("stations", function (ibnr) {
 	  return Stations.find({ibnr: ibnr});
@@ -133,6 +129,10 @@ if (Meteor.isServer) {
 	registeredIBNRs = {};
 
 	Meteor.startup(function () {
+		Stations.remove({});
+		Connections.remove({});
+		Status.remove({});
+
 		Meteor.setInterval( updateFullSchedule, UPDATE_PERIOD);
 	});
 
