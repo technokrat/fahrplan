@@ -34,7 +34,7 @@
 <template name="connection">
 	<div class="connection {{hash}}">
 		{{#if hafas_raw.product.line}}
-			<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
+			<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}} {{#if is_bg_black hafas_raw.product.color.bg}}black_bg{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
 		{{else}}
 			<div class="line">⋅</div>
 		{{/if}}

@@ -115,11 +115,15 @@ body {
 					width: 2.66666666666667em; 
 					height: 2.66666666666667em;
 				}
+
+				&.black_bg {
+					border: 1px solid white;
+				}
 			}
 
 			.countdown {
 				float:right;
-				width: 2.5em;
+				width: 3.2em;
 
 				.realtime {
 					/*-webkit-animation-iteration-count: infinite;
@@ -132,7 +136,7 @@ body {
 				}
 
 				.not-realtime {
-					font-size: 0.7em;
+					font-size: 1em;
 
 					img {
 						height: 1em;
