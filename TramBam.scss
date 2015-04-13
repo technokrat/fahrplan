@@ -262,14 +262,7 @@ body {
 			font-size: 1.1em;
 
 			.time {
-				opacity: 0.1;
-				-webkit-transform: rotate(90deg);
-				position: fixed;
-				margin: 0px;
-				font-size: 12em;
-				z-index: 0;
-				bottom: 0.8em;
-				right: -1.4em;
+				display: none;
 			}
 		}
 	}
