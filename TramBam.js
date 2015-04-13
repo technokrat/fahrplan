@@ -25,7 +25,9 @@ if (Meteor.isClient) {
 			if (!Session.get('initialized'))
 				return false;
 			else if (!Meteor.status().connected)
-				return "Bad connection";
+				return "Bad connection to webserver";
+			else if (!Status.findOne({status: "isHAFASOnline"}).value)
+				return "HAFAS is offline";
 			else if (!Stations.findOne({ibnr: Session.get('station_ibnr')}))
 				return "IBNR does not exist"
 			else
@@ -125,7 +127,7 @@ if (Meteor.isServer) {
 	  return Connections.find({ibnr: ibnr});
 	});
 	Meteor.publish("status", function() {
-	  return Connections.find();
+	  return Status.find();
 	});
 
 	registeredIBNRs = {};
@@ -134,6 +136,8 @@ if (Meteor.isServer) {
 		Stations.remove({});
 		Connections.remove({});
 		Status.remove({});
+
+		Status.upsert({status: "isHAFASOnline"}, {$set: {value: true}});
 
 		Meteor.setInterval( updateFullSchedule, UPDATE_PERIOD);
 	});
@@ -178,32 +182,49 @@ if (Meteor.isServer) {
 		HAFASQuery['maxJourneys'] = registeredIBNRs[ibnr].connection_count;
 
 		var update_date = Date.now();
-		var response = HTTP.get(HAFAS_URL, {params: HAFASQuery, timeout: 1000}).data; // response of HAFAS parsed as JSON object
 
-		if (response && response.station.name)
-		{
-			Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: response.station.name}}, {upsert: true});
+		try {
+			var response = HTTP.get(HAFAS_URL, {params: HAFASQuery, timeout: 1000}).data; // response of HAFAS parsed as JSON object
 
-			for (key in response.connections)
+			if (response)
 			{
-				var hash = hashConnection(ibnr, response.connections[key]);
+				if (response.station.name)
+				{
+					Stations.update({ibnr: ibnr}, {$set: {hafas_raw: response, name: response.station.name}}, {upsert: true});
 
-				var countdown;
+					for (key in response.connections)
+					{
+						var hash = hashConnection(ibnr, response.connections[key]);
 
-				if (response.connections[key].mainLocation.realTime.hasRealTime)
-					countdown = parseInt(response.connections[key].mainLocation.countdown);
+						var countdown;
+
+						if (response.connections[key].mainLocation.realTime.hasRealTime)
+							countdown = parseInt(response.connections[key].mainLocation.countdown);
+						else
+							countdown = parseInt(response.connections[key].mainLocation.countdown);
+
+						Connections.upsert({ibnr: ibnr, hash: hash}, {$set: {hafas_raw: response.connections[key], countdown: countdown, updated_at: update_date}});
+					}
+
+					Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
+
+					Status.upsert({status: "isHAFASOnline"}, {$set: {value: true}});
+
+					return true;
+				}
 				else
-					countdown = parseInt(response.connections[key].mainLocation.countdown);
-
-				Connections.upsert({ibnr: ibnr, hash: hash}, {$set: {hafas_raw: response.connections[key], countdown: countdown, updated_at: update_date}});
+					return false;
 			}
-
-			Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
-
-			return true;
+			else
+			{
+				Status.upsert({status: "isHAFASOnline"}, {$set: {value: false}});
+				return false;
+			}
 		}
-
-		return false;
+		catch (e) {
+			Status.upsert({status: "isHAFASOnline"}, {$set: {value: false}});
+			return false;
+		}
 	}
 
 	function hashConnection(ibnr, HAFASConnection)
