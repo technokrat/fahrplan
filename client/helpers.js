@@ -41,7 +41,7 @@ recalculateNumberOfConnectionsAndAdaptScreen = function()
     bodyPadding = ($(window).height() - $('#schedule .footer').height() - maxjourneys * 77.75) / 2;
   }
   else if ($(window).width() < 980 && $(window).width() >= 768) {
-    maxjourneys = Math.floor(($(window).height() - $('.footer').height() - 96) / 69.25);
+    maxjourneys = Math.floor(($(window).height() - $('#schedule .footer').height() - 96) / 69.25);
     bodyPadding = ($(window).height() - $('#schedule .footer').height() - maxjourneys * 69.25) / 2;
   }
   else if ($(window).width() < 768 && $(window).width() > 480) {
