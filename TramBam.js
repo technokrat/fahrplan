@@ -26,8 +26,8 @@ if (Meteor.isClient) {
 				return false;
 			else if (!Meteor.status().connected)
 				return "Bad connection to webserver";
-			else if (!Status.findOne({status: "isHAFASOnline"}).value)
-				return "HAFAS is offline";
+			else if (!Status.findOne({status: "lastHAFASOnline"}).date >= (Date.now() - 60000))
+				return "HAFAS is probably offline";
 			else if (!Stations.findOne({ibnr: Session.get('station_ibnr')}))
 				return "IBNR does not exist"
 			else
@@ -52,6 +52,13 @@ if (Meteor.isClient) {
 			if (parseInt(countdown) < 60)
 				return true;
 			else 
+				return false;
+		},
+		is_bg_black: function(color)
+		{
+			if (color == "000000")
+				return true;
+			else
 				return false;
 		}
 	});
@@ -83,7 +90,9 @@ if (Meteor.isClient) {
 
 		Tracker.autorun(function(){
 			Meteor.subscribe("stations", Session.get('station_ibnr'));
-			Meteor.subscribe("connections", Session.get('station_ibnr'));
+			Meteor.subscribe("connections", Session.get('station_ibnr'), function(){
+				Session.set('initialized', true);
+			});
 		});
 
 
@@ -91,20 +100,12 @@ if (Meteor.isClient) {
 		updateClock();
 
 		Meteor.setInterval(function(){ 
-			if (Session.get('station_ibnr'))
-			{
-				Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), function(isIBNRLegit){
-					return false;
-				});
-			}
+			Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), function(isIBNRLegit){
+				return false;
+			});
 		}, UPDATE_PERIOD);
 
-		if (Session.get('station_ibnr')) 
-		{
-			Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
-		}
-
-		Session.set('initialized', true);
+		Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 	});
 }
 
@@ -140,8 +141,6 @@ if (Meteor.isServer) {
 		Stations.remove({});
 		Connections.remove({});
 		Status.remove({});
-
-		Status.upsert({status: "isHAFASOnline"}, {$set: {value: true}});
 
 		Meteor.setInterval( updateFullSchedule, UPDATE_PERIOD);
 	});
@@ -212,7 +211,7 @@ if (Meteor.isServer) {
 
 					Connections.remove({ibnr: ibnr, updated_at: {$lt: update_date}});
 
-					Status.upsert({status: "isHAFASOnline"}, {$set: {value: true}});
+					Status.upsert({status: "lastHAFASOnline"}, {$set: {date: Date.now()}});
 
 					return true;
 				}
@@ -221,12 +220,10 @@ if (Meteor.isServer) {
 			}
 			else
 			{
-				Status.upsert({status: "isHAFASOnline"}, {$set: {value: false}});
 				return false;
 			}
 		}
 		catch (e) {
-			Status.upsert({status: "isHAFASOnline"}, {$set: {value: false}});
 			return false;
 		}
 	}
