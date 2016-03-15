@@ -2,6 +2,8 @@
   font-family: SegoeLi; src: url(/fonts/segoeuil.ttf);
 }
 
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 html, body {
   margin:0;
   padding:0;
@@ -98,11 +100,11 @@ body {
 				height: 1.6em;
 
 				margin-right: 6%;
-				font-family: Helvetica, sans-serif;
-				font-weight: 300;
-				font-size: 1em;
+				font-family: 'Open Sans', sans-serif;
+				font-size: 1.0em;
 				padding-top: 0.3em;
-				line-height: 1em;
+				line-height: 1.0em;
+				letter-spacing: -0.05em;
 				text-rendering: optimizeLegibility;
 
 				text-align: center;
