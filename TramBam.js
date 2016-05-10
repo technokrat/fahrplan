@@ -83,7 +83,7 @@ if (Meteor.isClient) {
 
 		Meteor.setInterval(function(){
 			Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
-		}, 30000); // prrevent Raspberry Pi from setting wrong connection_count
+		}, 30000); // prevent Raspberry Pi from setting wrong connection_count
 		
 		Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
 
