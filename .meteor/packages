@@ -6,7 +6,6 @@
 
 insecure@1.0.7
 fourseven:scss
-coffeescript@1.11.1_4
 http@1.2.10
 jparker:crypto-sha256
 meteor-base
@@ -25,3 +24,4 @@ check
 standard-minifier-css
 standard-minifier-js
 shell-server
+coffeescript
