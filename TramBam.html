@@ -1,0 +1,61 @@
+<head>
+	<title>TramBam</title>
+
+	<meta name="google" content="notranslate" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+</head>
+
+<body>
+	{{#if failure}}
+		<div id="service_failure">
+			<img src="img/disconnected_white.svg" />
+			<h1>{{failure}}</h1>
+			<br><br>
+			<h2 class="station_name">{{{station_name}}}</h2>
+			<h2 class="time"></h2>
+		</div>
+	{{else}}
+		<div id="schedule">
+			<div class="body">
+				{{#each connections}}
+					{{> connection}}
+				{{/each}}
+			</div>
+			<div class="footer">
+				<p class="station_name">{{{station_name}}}</p>
+				<p class="time"></p>
+			</div>
+		</div>
+	{{/if}}
+</body>
+
+<template name="connection">
+	<div class="connection new {{hash}}">
+		{{#if hafas_raw.product.line}}
+			<div class="line {{#if is_long_line hafas_raw.product.line}}long{{/if}} {{#if is_bg_black hafas_raw.product.color.bg}}black_bg{{/if}}" style="color: #{{hafas_raw.product.color.fg}}; background-color: #{{hafas_raw.product.color.bg}};">{{hafas_raw.product.line}}</div>
+		{{else}}
+			<div class="line">⋅</div>
+		{{/if}}
+		<div class="countdown">
+			{{#if hafas_raw.mainLocation.realTime.hasRealTime}}
+				{{#if is_scheduled_countdown_near hafas_raw.mainLocation.realTime.countdown}}
+					{{hafas_raw.mainLocation.realTime.countdown}}<span class="realtime">'</span>
+				{{else}}
+					<span class="realtime">{{hafas_raw.mainLocation.realTime.time}}</span>
+				{{/if}}
+			{{else}}
+				<span class="not-realtime">
+					{{#if is_scheduled_countdown_near hafas_raw.mainLocation.countdown}}
+						{{hafas_raw.mainLocation.countdown}}'
+					{{else}}
+						{{hafas_raw.mainLocation.time}}
+					{{/if}}
+					<!--<img src="img/not_realtime_white.svg" />-->
+				</span>
+			{{/if}}
+		</div>
+		<div class="destination">{{{hafas_raw.product.direction}}}</div>
+	</div>
+</template>
