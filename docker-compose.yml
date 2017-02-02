@@ -1,0 +1,13 @@
+web:
+  image: trambam
+  ports:
+   - "80:80"
+  links:
+   - mongo
+  environment:
+   - MONGO_URL=mongodb://mongo/yourapp
+   - ROOT_URL=http://yourapp.com
+  restart: any
+mongo:
+  image: mongo:latest
+  restart: any

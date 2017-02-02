@@ -1,18 +1,8 @@
-FROM ubuntu:latest
+# Run only with run_in_docker.sh
 
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get -y install curl && \
-    curl https://install.meteor.com/ | sh
-
-RUN useradd -m user
-
-EXPOSE 8080
-
-WORKDIR /home/user/trambam/
-
-ADD . ./
-
-USER user
-
-CMD ["/usr/local/bin/meteor", "run", "-p", "8080"]
+FROM node:latest
+COPY . /bundle
+RUN (cd /bundle/programs/server && npm install && npm install meteor-deque babel-runtime)
+ENV PORT=80
+EXPOSE 80
+CMD node /bundle/main.js
