@@ -22,7 +22,6 @@ cd ./bundle
 docker build -t trambam .
 
 cd ..
-docker-compose up
-#docker run --restart unless-stopped -p 80:80 -e ROOT_URL=http://trambam.chatz.li trambam
+docker-compose up -d
 
 
