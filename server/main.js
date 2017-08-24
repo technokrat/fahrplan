@@ -1,11 +1,20 @@
-import '../imports/api/stations.js';
-import '../imports/api/connections.js';
-import '../imports/api/status.js';
-
 import {
     Meteor
-} from 'meteor/meteor'
+} from 'meteor/meteor';
 
+import {
+    Stations
+} from '../imports/api/stations.js';
+import {
+    Connections
+} from '../imports/api/connections.js';
+import {
+    Status
+} from '../imports/api/status.js';
+
+import {
+    UPDATE_PERIOD
+} from '../imports/init/parameters.js';
 
 const HAFAS_URL = "http://online.fahrplan.zvv.ch/bin/stboard.exe/dny";
 const HAFASQuery = {

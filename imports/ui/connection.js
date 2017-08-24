@@ -2,7 +2,7 @@ import {
     Template
 } from 'meteor/templating';
 
-import 'connection.html';
+import './connection.html';
 
 
 Template.connection.helpers({

@@ -1,11 +1,9 @@
 {
-    "name": "trambam",
-    "description": "Public transport service schedule view",
-    "repository": "https://github.com/bastli/TramBam",
-    "license": "UNLICENSED",
-
-    "dependencies": {
-        "babel-runtime": "latest",
-        "meteor-deque": "latest"
-    }
+  "name": "trambam",
+  "description": "Public transport service schedule view",
+  "repository": "https://github.com/bastli/TramBam",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "babel-runtime": "^6.26.0"
+  }
 }
