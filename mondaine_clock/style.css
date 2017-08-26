@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    background-color: black;
+}
+
+.clock {
+    box-sizing: border-box;
+    padding: 50px;
+    display: flex;
+    width: 25%;
+    height: 25%;
+    float: left;
+}
