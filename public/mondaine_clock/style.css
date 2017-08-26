@@ -1,3 +1,12 @@
+@keyframes turnaround {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 body {
     margin: 0;
     background-color: black;
@@ -5,7 +14,7 @@ body {
 
 .clock {
     box-sizing: border-box;
-    padding: 50px;
+    padding: 20px;
     display: flex;
     width: 25%;
     height: 25%;

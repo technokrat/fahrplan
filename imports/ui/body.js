@@ -23,8 +23,11 @@ import {
     Meteor
 } from 'meteor/meteor';
 
-import '../helpers/time.js';
-import '../helpers/helpers.js';
+
+
+import {
+    MondaineClock
+} from '../libs/mondaine_clock.js';
 import {
     UPDATE_PERIOD
 } from '../init/parameters.js';
@@ -33,6 +36,10 @@ import {
 import './connection.js';
 import './body.html';
 
+
+Template.body.onRendered(() => {
+    MondaineClock($("#clock")[0]);
+});
 
 Template.body.helpers({
     station_name: function () {
@@ -104,9 +111,6 @@ Meteor.startup(function () {
             Session.set('initialized', true);
         });
     });
-
-    Meteor.setInterval(updateClock, 1000);
-    updateClock();
 
     Meteor.setInterval(function () {
         Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), function (isIBNRLegit) {
