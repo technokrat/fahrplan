@@ -144,11 +144,11 @@ body {
         position: fixed;
         bottom: 0;
         width: 100%;
-        line-height: 1.8em;
-        height: 4em;
+        line-height: 1em;
+        height: 1.6em;
         /* Height of the footer */
         background: black;
-        font-size: 1.3em;
+        font-size: 1.6em;
         .station_name {
             color: white;
             margin: 0;
@@ -167,7 +167,6 @@ body {
             float: right;
             margin: 0;
             margin-right: 0.5em;
-            min-width: 3.6em;
             /* Fix Raspberry Pi not rendering number spacing consistent */
             opacity: 1;
             -webkit-transition: margin 0.5s, opacity 0.5s;
@@ -175,6 +174,18 @@ body {
             &.new {
                 margin-right: -0.5em !important;
                 opacity: 0 !important;
+            }
+            .time-digits {
+                float: right;
+                font-size: 0.5em;
+                min-width: 3.8em;
+                margin-right: 0.5em;
+            }
+            .clock {
+                float: right;
+                height: 1.6em;
+                width: 1.6em;
+                margin-top: -0.3em;
             }
         }
     }

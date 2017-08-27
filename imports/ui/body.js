@@ -119,6 +119,8 @@ Meteor.startup(function () {
     }, UPDATE_PERIOD);
 
     Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
+
+    Meteor.setInterval(updateClock, 100);
 });
 
 
@@ -179,11 +181,13 @@ const recalculateNumberOfConnectionsAndAdaptScreen = () => {
     return maxjourneys;
 }
 
-
+let lastSecond;
 const updateClock = () => {
     var date = new Date();
-    var timeString = formatTimeComponent(date.getHours()) + ":" + formatTimeComponent(date.getMinutes()) + ":" + formatTimeComponent(date.getSeconds());
-    $('.time').text(timeString);
+    if (lastSecond !== date.getSeconds()) {
+        var timeString = formatTimeComponent(date.getHours()) + ":" + formatTimeComponent(date.getMinutes()) + ":" + formatTimeComponent(date.getSeconds());
+        $('.time-digits').text(timeString);
+    }
 };
 
 const formatTimeComponent = (value) => {
