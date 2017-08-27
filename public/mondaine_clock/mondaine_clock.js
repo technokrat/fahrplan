@@ -6,14 +6,13 @@ var MondaineClock = function (target) {
     var group = this.paper.group();
     var clock;
 
-    Snap.load("mondaine_clock.svg", function (loadedFragment) {
+    Snap.load("mondaine_clock/mondaine_clock.svg", function (loadedFragment) {
         clock = loadedFragment;
         group.append(loadedFragment);
 
         this.clock = clock;
 
         this.second_hand = this.clock.select("#second_hand");
-        console.log(this.second_hand);
         this.minute_hand = this.clock.select("#minute_hand");
         this.hour_hand = this.clock.select("#hour_hand");
         this.bbox = this.paper.select("#clock_face").getBBox();

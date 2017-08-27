@@ -24,13 +24,13 @@ import {
 } from 'meteor/meteor';
 
 
-
-import {
-    MondaineClock
-} from '../libs/mondaine_clock.js';
 import {
     UPDATE_PERIOD
 } from '../init/parameters.js';
+
+
+import mondaine_clock from '../libs/mondaine_clock.js';
+
 
 
 import './connection.js';
@@ -38,7 +38,7 @@ import './body.html';
 
 
 Template.body.onRendered(() => {
-    MondaineClock($("#clock")[0]);
+    new mondaine_clock.MondaineClock($("#clock")[0]);
 });
 
 Template.body.helpers({

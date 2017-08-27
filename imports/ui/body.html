@@ -8,23 +8,22 @@
 </head>
 
 <body>
-    {{#if failure}}
-    <div id="service_failure">
-        <img src="img/disconnected_white.svg" />
-        <h1>{{failure}}</h1>
-        <br><br>
-        <h2 class="station_name">{{{station_name}}}</h2>
-        <h2 class="time"></h2>
-    </div>
-    {{else}}
     <div id="schedule">
         <div class="body">
             {{#each connections}} {{> connection}} {{/each}}
         </div>
         <div class="footer">
+            {{#if failure}}
+            <div id="service_failure">
+                <img src="img/disconnected_white.svg" />
+                <p>{{failure}}</p>
+                <h2 class="station_name">{{{station_name}}}</h2>
+                <h2 class="time"></h2>
+            </div>
+            {{else}}
             <p class="station_name">{{{station_name}}}</p>
+            {{/if}}
             <p class="time"><svg id="clock"></svg></p>
         </div>
     </div>
-    {{/if}}
 </body>
