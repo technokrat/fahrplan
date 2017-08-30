@@ -9,27 +9,6 @@
 }
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-html,
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: black;
-    min-height: 100%;
-    font-size: 1em;
-    cursor: none;
-    -webkit-transition: font-size 0.2s;
-}
-
-body {
-    font-family: ISOCP3, SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
-    -webkit-text-stroke-width: 1px;
-}
-
-::selection {
-    background-color: Magenta;
-}
-
 @-webkit-keyframes countdown-realtime {
     0% {
         opacity: 1;
@@ -54,15 +33,44 @@ body {
     }
 }
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    overflow: hidden;
+    background: black;
+    font-family: ISOCP3, SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
+    -webkit-text-stroke-width: 0.05em;
+    /*cursor: none;*/
+    font-size: 1.5vmin;
+    color: white;
+}
+
+::selection {
+    background-color: #ed1c24;
+}
+
 #schedule {
-    min-height: 100%;
+    height: 100%;
     position: relative;
-    font-size: 3em;
+    font-size: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     .body {
-        padding: 2em;
-        color: white;
-        margin: 0px auto;
-        max-width: 32em;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        flex-grow: 1;
+        align-self: flex-start;
+        padding: 1em;
         opacity: 1;
         -webkit-transform: scale(1);
         transform: scale(1);
@@ -73,82 +81,21 @@ body {
             -webkit-transform: scale(0.8) !important;
             transform: scale(0.8) !important;
         }
-        .connection {
-            z-index: 10;
+        #connection_board {
+            flex-grow: 1;
             width: 100%;
-            box-sizing: border-box;
-            padding-bottom: 0.2em;
-            overflow: hidden;
-            margin-left: 0;
-            margin-top: 0;
-            opacity: 1;
-            height: 1.8em;
-            -webkit-transition: margin ease-out 0.5s, opacity 0.5s, padding 0.5s, height ease-in 0.5s;
-            transition: margin ease-out 0.5s, opacity 0.5s, padding 0.5s, height ease-in 0.5s;
-            &.new {
-                margin-left: 80%;
-                opacity: 0;
-            }
-            &.old {
-                height: 0px !important;
-                padding-top: 0px !important;
-                padding-bottom: 0px !important;
-                border: none;
-            }
-            .line {
-                float: left;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-                width: 1.6em;
-                height: 1.6em;
-                margin-right: 6%;
-                font-family: 'Open Sans', sans-serif;
-                font-size: 1.0em;
-                padding-top: 0.3em;
-                line-height: 1.0em;
-                letter-spacing: -0.05em;
-                text-rendering: optimizeLegibility;
-                text-align: center;
-                &.long {
-                    font-size: 0.6em;
-                    line-height: 1em;
-                    padding-top: 0.833333333333333333em;
-                    width: 2.66666666666667em;
-                    height: 2.66666666666667em;
-                }
-                &.black_bg {
-                    border: 1px solid white;
-                }
-            }
-            .countdown {
-                float: right;
-                width: 2.5em;
-                .realtime {
-                    -webkit-animation-iteration-count: infinite;
-                    -webkit-animation-name: countdown-realtime;
-                    -webkit-animation-duration: 3s;
-                    animation-iteration-count: infinite;
-                    animation-name: countdown-realtime;
-                    animation-duration: 3s;
-                }
-                .not-realtime {
-                    font-size: 1em;
-                    img {
-                        height: 1em;
-                    }
-                }
-            }
+            height: 100%;
         }
     }
     .footer {
-        position: fixed;
-        bottom: 0;
+        box-sizing: border-box;
+        flex-grow: 0;
         width: 100%;
-        line-height: 1.1em;
-        height: 1.5em;
+        line-height: 1.2em;
+        height: 2em;
         /* Height of the footer */
         background: black;
-        font-size: 1.1em;
+        font-size: 1.2em;
         .station_name {
             color: white;
             margin: 0;
@@ -178,106 +125,16 @@ body {
             .time-digits {
                 float: right;
                 font-size: 0.5em;
+                line-height: 1em;
                 min-width: 3.8em;
                 margin-right: 0.5em;
             }
             .clock {
                 float: right;
-                height: 1.6em;
-                width: 1.6em;
-                margin-top: -0.3em;
+                height: 2em;
+                width: 2em;
+                margin-top: -0.5em;
             }
         }
-    }
-}
-
-@media (max-width: 1199px) {
-    body {
-        font-size: 0.90em;
-    }
-}
-
-@media (max-width: 979px),
-(max-device-width: 979px) {
-    body {
-        font-size: 0.80em;
-    }
-    #schedule {
-        .body {
-            padding: 1.5em;
-        }
-        .footer {
-            font-size: 1.1em;
-        }
-    }
-}
-
-@media (max-width: 767px),
-(max-device-width: 767px) {
-    body {
-        font-size: 0.60em;
-    }
-    #schedule {
-        .body {
-            padding: 0.5em;
-            .connection {
-                height: auto;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                padding-top: 0.25em;
-                padding-bottom: 0.25em;
-                line-height: 1.15em;
-                &:last-child {
-                    border-bottom: none;
-                }
-                .line {
-                    font-size: 1.5em;
-                    margin-right: 0.7em;
-                    &.long {
-                        font-size: 0.9em;
-                        padding-top: 0.833333333333333333em;
-                        width: 2.66666666666667em;
-                        height: 2.66666666666667em;
-                    }
-                }
-                .countdown {
-                    margin-left: 0.8em;
-                }
-            }
-        }
-        .footer {
-            height: auto;
-            line-height: normal;
-            font-size: 1.1em;
-            .time {
-                display: none;
-            }
-        }
-    }
-}
-
-@media (max-width: 480px),
-(max-device-width: 480px) {
-    body {
-        font-size: 0.5em;
-    }
-    #schedule .body {
-        padding: 0.4em;
-    }
-}
-
-#service_failure {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.95);
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    text-align: center;
-    padding: 20px 20px 20px 20px;
-    img {
-        height: 30%;
-        margin-bottom: 30px;
-        margin-top: 10%;
     }
 }

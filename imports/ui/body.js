@@ -30,7 +30,7 @@ import {
 
 
 import mondaine_clock from '../libs/mondaine_clock.js';
-
+import connection_board from '../libs/connection_board.js';
 
 
 import './connection.js';
@@ -39,6 +39,7 @@ import './body.html';
 
 Template.body.onRendered(() => {
     new mondaine_clock.MondaineClock($("#clock")[0]);
+    new connection_board.ConnectionBoard($("#connection_board")[0])
 });
 
 Template.body.helpers({
@@ -158,22 +159,15 @@ const recalculateNumberOfConnectionsAndAdaptScreen = () => {
 
     if ($(window).width() >= 1200) {
         maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 120) / 85);
-        bodyPadding = ($(window).height() / zoom - $('#schedule .footer').height() / zoom - maxjourneys * 85) / 2;
     } else if ($(window).width() < 1200 && $(window).width() >= 980) {
         maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 96) / 77.75);
-        bodyPadding = ($(window).height() / zoom - $('#schedule .footer').height() / zoom - maxjourneys * 77.75) / 2;
     } else if ($(window).width() < 980 && $(window).width() >= 768) {
         maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 96) / 69.25);
-        bodyPadding = ($(window).height() / zoom - $('#schedule .footer').height() / zoom - maxjourneys * 69.25) / 2;
     } else if ($(window).width() < 768 && $(window).width() > 480) {
         maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 28) / 85);
-        bodyPadding = "";
     } else if ($(window).width() <= 480) {
         maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 20) / 75);
-        bodyPadding = "";
-    } else {
-        bodyPadding = "";
-    }
+    } else {}
 
     $('#schedule .body').css('padding', bodyPadding);
     $('body').css('zoom', zoom);
@@ -182,18 +176,21 @@ const recalculateNumberOfConnectionsAndAdaptScreen = () => {
 }
 
 let lastSecond;
+
 const updateClock = () => {
     var date = new Date();
     if (lastSecond !== date.getSeconds()) {
-        var timeString = formatTimeComponent(date.getHours()) + ":" + formatTimeComponent(date.getMinutes()) + ":" + formatTimeComponent(date.getSeconds());
-        $('.time-digits').text(timeString);
-    }
-};
 
-const formatTimeComponent = (value) => {
-    if (value > 9) {
-        return "" + value;
-    } else {
-        return "0" + value;
+        var timeString = date.toLocaleTimeString('de-CH');
+        timeString += "<br><span style='font-size:0.9em;'>";
+        var options = {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+
+        }
+        timeString += date.toLocaleDateString('de-CH', options) + "</span>";
+        $('.time-digits').html(timeString);
     }
 };

@@ -10,19 +10,10 @@
 <body>
     <div id="schedule">
         <div class="body">
-            {{#each connections}} {{> connection}} {{/each}}
+            <svg id="connection_board"></svg>
         </div>
         <div class="footer">
-            {{#if failure}}
-            <div id="service_failure">
-                <img src="img/disconnected_white.svg" />
-                <p>{{failure}}</p>
-                <h2 class="station_name">{{{station_name}}}</h2>
-                <h2 class="time"></h2>
-            </div>
-            {{else}}
-            <p class="station_name">{{{station_name}}}</p>
-            {{/if}}
+            <p class="station_name">{{#if failure}}{{failure}}{{else}}{{{station_name}}}{{/if}}</p>
             <div class="time">
                 <svg class="clock" id="clock"></svg>
                 <div class="time-digits"></div>
