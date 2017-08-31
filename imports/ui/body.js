@@ -37,9 +37,24 @@ import './connection.js';
 import './body.html';
 
 
+var connectionBoard;
+
 Template.body.onRendered(() => {
     new mondaine_clock.MondaineClock($("#clock")[0]);
-    new connection_board.ConnectionBoard($("#connection_board")[0])
+    connectionBoard = new connection_board.ConnectionBoard($("#connection_board")[0]);
+
+    Tracker.autorun(() => {
+        var connections = Connections.find({
+            ibnr: Session.get('station_ibnr')
+        }, {
+            sort: {
+                countdown: 1
+            },
+            limit: Session.get('connection_count')
+        });
+
+        connectionBoard.updateConnections(connections.fetch());
+    });
 });
 
 Template.body.helpers({
@@ -69,16 +84,6 @@ Template.body.helpers({
         else
             return false;
 
-    },
-    connections: function () {
-        return Connections.find({
-            ibnr: Session.get('station_ibnr')
-        }, {
-            sort: {
-                countdown: 1
-            },
-            limit: Session.get('connection_count')
-        });
     }
 });
 
@@ -94,16 +99,7 @@ Meteor.startup(function () {
         station_ibnr = "8591123";
 
     Session.set('station_ibnr', station_ibnr);
-
-    $(window).resize(function () {
-        Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
-    });
-
-    Meteor.setInterval(function () {
-        Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
-    }, 30000); // prevent Raspberry Pi from setting wrong connection_count
-
-    Session.set('connection_count', recalculateNumberOfConnectionsAndAdaptScreen());
+    Session.set('connection_count', 30);
 
 
     Tracker.autorun(function () {
@@ -118,7 +114,6 @@ Meteor.startup(function () {
             return false;
         });
     }, UPDATE_PERIOD);
-
     Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 
     Meteor.setInterval(updateClock, 100);
@@ -148,31 +143,6 @@ const getQueryParams = (qs) => {
     }
 
     return params;
-}
-
-const recalculateNumberOfConnectionsAndAdaptScreen = () => {
-    var bodyPadding;
-    var maxjourneys;
-    var zoom = getQueryParams(document.location.search).zoom;
-    if (!zoom)
-        zoom = 1;
-
-    if ($(window).width() >= 1200) {
-        maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 120) / 85);
-    } else if ($(window).width() < 1200 && $(window).width() >= 980) {
-        maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 96) / 77.75);
-    } else if ($(window).width() < 980 && $(window).width() >= 768) {
-        maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 96) / 69.25);
-    } else if ($(window).width() < 768 && $(window).width() > 480) {
-        maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 28) / 85);
-    } else if ($(window).width() <= 480) {
-        maxjourneys = Math.floor(($(window).height() / zoom - $('#schedule .footer').height() / zoom - 20) / 75);
-    } else {}
-
-    $('#schedule .body').css('padding', bodyPadding);
-    $('body').css('zoom', zoom);
-
-    return maxjourneys;
 }
 
 let lastSecond;

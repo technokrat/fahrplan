@@ -46,9 +46,9 @@ body {
     overflow: hidden;
     background: black;
     font-family: ISOCP3, SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
-    -webkit-text-stroke-width: 0.05em;
+    -webkit-text-stroke-width: 0.025em;
     /*cursor: none;*/
-    font-size: 1.5vmin;
+    font-size: 3.6vmin;
     color: white;
 }
 
@@ -59,7 +59,6 @@ body {
 #schedule {
     height: 100%;
     position: relative;
-    font-size: 2em;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -127,7 +126,7 @@ body {
                 font-size: 0.5em;
                 line-height: 1em;
                 min-width: 3.8em;
-                margin-right: 0.5em;
+                margin-right: 1em;
             }
             .clock {
                 float: right;
