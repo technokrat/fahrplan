@@ -117,8 +117,8 @@ function updateStationSchedule(ibnr) {
 
                     var countdown;
 
-                    if (response.connections[key].mainLocation.realTime.hasRealTime)
-                        countdown = parseInt(response.connections[key].mainLocation.countdown);
+                    if (response.connections[key].mainLocation.realTime.hasRealTime && response.connections[key].mainLocation.realTime.countdown !== undefined)
+                        countdown = parseInt(response.connections[key].mainLocation.realTime.countdown);
                     else
                         countdown = parseInt(response.connections[key].mainLocation.countdown);
 

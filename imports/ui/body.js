@@ -66,7 +66,7 @@ Template.body.helpers({
                 ibnr: Session.get('station_ibnr')
             }).name;
         } else
-            return "Unknow Station";
+            return "Unknown Station";
     },
     failure: function () {
         if (!Session.get('initialized'))
