@@ -18,7 +18,7 @@ export const ConnectionBoard = function (target) {
     this.trackHeight = 90;
     this.trackCount = this.s.node.clientHeight / this.trackHeight / this.scale - 1;
 
-
+    this.lastTimestamp = 0;
 
     this.connectionItems = {};
 
@@ -61,17 +61,20 @@ ConnectionBoard.prototype.updateConnections = function (connections) {
 
 
 ConnectionBoard.prototype.drawLoop = function (timestamp) {
-    this.draw();
-
-    this.lastTimestamp = timestamp;
+    this.draw(timestamp);
     requestAnimationFrame(this.drawLoop.bind(this));
 }
 
 
-ConnectionBoard.prototype.draw = function () {
+ConnectionBoard.prototype.draw = function (timestamp) {
+    this.elapsedTime = (timestamp - this.lastTimestamp) / 1000;
+    this.lastTimestamp = timestamp;
+
     _.each(this.connectionItems, (connectionItem) => {
         connectionItem.draw();
     });
+
+    this.lastTimestamp = timestamp;
 };
 
 
@@ -204,8 +207,7 @@ ConnectionItem.prototype.draw = function () {
 
         if (this.state == "dismiss") {
             this.targetX = this.connectionBoard.trackWidth * 3;
-            this.velocity *= 1.1;
-            this.X += this.velocity;
+            this.X += this.connectionBoard.trackWidth * 0.2 * this.connectionBoard.elapsedTime;
 
             var transformation = Snap.matrix();
             transformation.scale(this.connectionBoard.scale);
@@ -224,8 +226,8 @@ ConnectionItem.prototype.draw = function () {
             this.targetX = this.connectionBoard.trackWidth * 0.6 * temp;
             this.targetY = this.connectionBoard.trackHeight * (this.track + 1) - this.vehicleHeight;
 
-            this.X = this.X + (this.targetX - this.X) * 0.05;
-            this.Y = this.Y + (this.targetY - this.Y) * 0.2;
+            this.X += (this.targetX - this.X) * 0.5 * this.connectionBoard.elapsedTime;
+            this.Y += (this.targetY - this.Y) * 1.0 * this.connectionBoard.elapsedTime;
 
             var transformation = Snap.matrix();
             transformation.scale(this.connectionBoard.scale);
