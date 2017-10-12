@@ -1,17 +1,16 @@
 import snap from './snap.svg-min.js';
 
 
-const train_path = 'img/train.svg';
-const s_bahn_path = 'img/s_bahn.svg';
-const tram_path = 'img/tram.svg';
-const bus_path = 'img/bus.svg';
+const train_path = 'train';
+const s_bahn_path = 's_bahn';
+const tram_path = 'tram';
+const bus_path = 'bus';
 
 
 export const ConnectionBoard = function (target) {
     this.svg = target;
     this.s = Snap(target);
     this.s.clear();
-    this.shadow = Snap();
 
     this.scale = 0.8;
     this.trackWidth = this.s.node.clientWidth;
@@ -22,8 +21,38 @@ export const ConnectionBoard = function (target) {
 
     this.connectionItems = {};
 
-    /* Setup draw loop */
-    requestAnimationFrame(this.drawLoop.bind(this));
+
+
+    this.initVehicleSymbols().then(() => {
+        /* Setup draw loop */
+        requestAnimationFrame(this.drawLoop.bind(this));
+    })
+};
+
+ConnectionBoard.prototype.initVehicleSymbols = function () {
+    var promise = Promise.all(
+        [
+            this.loadVehicleSymbol(train_path),
+            this.loadVehicleSymbol(s_bahn_path),
+            this.loadVehicleSymbol(tram_path),
+            this.loadVehicleSymbol(bus_path)
+        ]
+    );
+
+    return promise;
+};
+
+ConnectionBoard.prototype.loadVehicleSymbol = function (vehicle) {
+    var promise = new Promise((resolve, reject) => {
+        Snap.load("/img/" + vehicle + ".svg", ((fragment) => {
+            let path = fragment.select("g");
+            path.attr("id", vehicle);
+            this.s.select("defs").append(path);
+            resolve("Loaded " + vehicle);
+        }))
+    });
+
+    return promise;
 };
 
 ConnectionBoard.prototype.updateConnections = function (connections) {
@@ -53,10 +82,6 @@ ConnectionBoard.prototype.updateConnections = function (connections) {
             item.dismiss();
         }
     });
-
-
-
-
 };
 
 
@@ -86,10 +111,10 @@ const ConnectionItem = function (connection, connectionBoard, track) {
     this.ready = false;
     this.state = "new";
 
-    this.s = this.connectionBoard.shadow;
-    this.s.clear();
+    this.s = this.connectionBoard.s;
 
     this.svgGroup = this.s.group();
+    this.svgGroup.attr('id', this.connection._id);
     var vehicle_type = this.connection.hafas_raw.product.longName;
     var vehicle_path = "";
     switch (vehicle_type) {
@@ -108,76 +133,74 @@ const ConnectionItem = function (connection, connectionBoard, track) {
             break;
     }
 
-    Snap.load(vehicle_path, ((fragment) => {
-        this.vehicleWidth = fragment.select("#shape").getBBox().width;
-        this.vehicleHeight = fragment.select("#shape").getBBox().height;
-        this.svgGroup.append(fragment);
+    var instance = this.connectionBoard.s.select("#" + vehicle_path).clone();
+    this.svgGroup.append(instance);
+    this.vehicleWidth = this.svgGroup.getBBox().width;
+    this.vehicleHeight = this.svgGroup.getBBox().height;
 
-        if (this.connection.hafas_raw.product.color.bg.toLocaleLowerCase() == "ffffff" || this.connection.hafas_raw.product.color.bg == "000000") {
-            this.svgGroup.select("#shape").attr({
-                style: "stroke:white; fill:none;"
 
+    if (this.connection.hafas_raw.product.color.bg.toLocaleLowerCase() == "ffffff" || this.connection.hafas_raw.product.color.bg == "000000") {
+        this.svgGroup.select(".vehicle-shape").attr({
+            style: "stroke:white; fill:none;"
+        });
+
+        if (this.connection.hafas_raw.product.color.fg == "000000") {
+            this.svgGroup.select(".vehicle-text").attr({
+                x: 21,
+                text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
+                style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
             });
-
-            if (this.connection.hafas_raw.product.color.fg == "000000") {
-                this.svgGroup.select("text").attr({
-                    x: 21,
-                    text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                    style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
-                });
-            } else {
-                this.svgGroup.select("text").attr({
-                    x: 21,
-                    text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                    style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
-                });
-            }
-
-
         } else {
-            this.svgGroup.select("#shape").attr({
-                style: "stroke:none; fill:#" + this.connection.hafas_raw.product.color.bg + "; "
-            });
-
-            this.svgGroup.select("text").attr({
+            this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
                 style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
             });
         }
 
-        this.svgGroup.append(fragment);
 
-
-        var infoText = getInfoString(this.connection);
-        let info = this.svgGroup.text(this.vehicleWidth, this.vehicleHeight / 2, infoText).attr({
-            class: "info-text",
-            fill: "white",
-            fontSize: "32",
-            fontWeight: 500
-        }).selectAll("tspan").forEach((tspan, i) => {
-            tspan.attr({
-                x: this.vehicleWidth + 40,
-                y: 32 * (i + 1) + this.vehicleHeight / 2 - 32 / 2
-            });
+    } else {
+        this.svgGroup.select(".vehicle-shape").attr({
+            style: "stroke:none; fill:#" + this.connection.hafas_raw.product.color.bg + "; "
         });
 
-        this.targetX = -this.connectionBoard.trackWidth;
-        this.targetY = this.connectionBoard.trackHeight * (this.track + 1) - this.vehicleHeight;
-        this.X = this.targetX;
-        this.Y = this.targetY;
+        this.svgGroup.select(".vehicle-text").attr({
+            x: 21,
+            text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
+            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
+        });
+    }
 
-        var transformation = Snap.matrix();
-        transformation.scale(this.connectionBoard.scale);
-        transformation.translate(this.X, this.Y);
-        this.svgGroup.transform(transformation);
 
-        this.connectionBoard.s.append(this.svgGroup);
+    var infoText = getInfoString(this.connection);
+    let info = this.svgGroup.text(this.vehicleWidth, this.vehicleHeight / 2, infoText).attr({
+        class: "info-text",
+        fill: "white",
+        fontSize: "32",
+        fontWeight: 500
+    }).selectAll("tspan").forEach((tspan, i) => {
+        tspan.attr({
+            x: this.vehicleWidth + 40,
+            y: 32 * (i + 1) + this.vehicleHeight / 2 - 32 / 2
+        });
+    });
 
-        this.ready = true;
+    this.targetX = -this.connectionBoard.trackWidth;
+    this.targetY = this.connectionBoard.trackHeight * (this.track + 1) - this.vehicleHeight;
+    this.X = this.targetX;
+    this.Y = this.targetY;
 
-    }).bind(this));
-}
+    var transformation = Snap.matrix();
+    transformation.scale(this.connectionBoard.scale);
+    transformation.translate(this.X, this.Y);
+    this.svgGroup.transform(transformation);
+
+    this.connectionBoard.s.append(this.svgGroup);
+
+    this.ready = true;
+
+
+};
 
 
 ConnectionItem.prototype.update = function (connection, track) {
