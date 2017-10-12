@@ -12,14 +12,17 @@ export const ConnectionBoard = function (target) {
     this.s = Snap(target);
     this.s.clear();
 
-    this.scale = 0.8;
+    this.scale = 1.0;
     this.trackWidth = this.s.node.clientWidth;
-    this.trackHeight = 90;
-    this.trackCount = this.s.node.clientHeight / this.trackHeight / this.scale - 1;
+    this.trackHeight = 100 * this.scale;
+    this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
+    this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
 
     this.lastTimestamp = 0;
 
     this.connectionItems = {};
+
+    this.horizontalOffset = 0;
 
 
 
@@ -57,10 +60,13 @@ ConnectionBoard.prototype.loadVehicleSymbol = function (vehicle) {
 
 ConnectionBoard.prototype.updateConnections = function (connections) {
     this.connections = connections;
+    if (connections.length) {
+        let maxCountdown = Math.max(this.connections[Math.min(this.connections.length - 1, this.trackCount)].countdown, 5);
+        this.horizontalOffset = (Math.pow((60 - Math.min(maxCountdown, 60)) / 60, 3)) / 2 * this.trackWidth / this.scale;
+    }
+
 
     let updatedConnectionIDs = [];
-
-
 
 
     for (var i = 0; i < this.trackCount; i++) {
@@ -115,6 +121,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
 
     this.svgGroup = this.s.group();
     this.svgGroup.attr('id', this.connection._id);
+    this.svgGroup.attr('style', 'mix-blend-mode: screen;');
     var vehicle_type = this.connection.hafas_raw.product.longName;
     var vehicle_path = "";
     switch (vehicle_type) {
@@ -135,8 +142,8 @@ const ConnectionItem = function (connection, connectionBoard, track) {
 
     var instance = this.connectionBoard.s.select("#" + vehicle_path).clone();
     this.svgGroup.append(instance);
-    this.vehicleWidth = this.svgGroup.getBBox().width;
-    this.vehicleHeight = this.svgGroup.getBBox().height;
+    this.vehicleWidth = this.svgGroup.select(".vehicle-shape").getBBox().width;
+    this.vehicleHeight = this.svgGroup.select(".vehicle-shape").getBBox().height;
 
 
     if (this.connection.hafas_raw.product.color.bg.toLocaleLowerCase() == "ffffff" || this.connection.hafas_raw.product.color.bg == "000000") {
@@ -148,13 +155,13 @@ const ConnectionItem = function (connection, connectionBoard, track) {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
+                style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
             });
         } else {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
+                style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
             });
         }
 
@@ -167,7 +174,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
         this.svgGroup.select(".vehicle-text").attr({
             x: 21,
             text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;"
+            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
         });
     }
 
@@ -176,21 +183,32 @@ const ConnectionItem = function (connection, connectionBoard, track) {
     let info = this.svgGroup.text(this.vehicleWidth, this.vehicleHeight / 2, infoText).attr({
         class: "info-text",
         fill: "white",
-        fontSize: "32",
+        fontSize: "32pt",
         fontWeight: 500
     }).selectAll("tspan").forEach((tspan, i) => {
         tspan.attr({
             x: this.vehicleWidth + 40,
-            y: 32 * (i + 1) + this.vehicleHeight / 2 - 32 / 2
+            y: 32 * (i + 1) + (this.vehicleHeight - 64) / 2
         });
     });
 
-    this.targetX = -this.connectionBoard.trackWidth;
-    this.targetY = this.connectionBoard.trackHeight * (this.track + 1) - this.vehicleHeight;
+    if (this.connection.hafas_raw.mainLocation.realTime.hasRealTime) {
+        this.svgGroup.select(".vehicle-text").attr({
+            class: "real_time vehicle-text"
+        });
+    } else {
+        this.svgGroup.select(".vehicle-text").attr({
+            class: "vehicle-text"
+        });
+    }
+
+    this.targetX = -this.connectionBoard.trackWidth / 2;
+    this.targetY = this.connectionBoard.trackHeight / this.connectionBoard.scale * (this.track + 1) - this.vehicleHeight;
     this.X = this.targetX;
     this.Y = this.targetY;
 
     var transformation = Snap.matrix();
+
     transformation.scale(this.connectionBoard.scale);
     transformation.translate(this.X, this.Y);
     this.svgGroup.transform(transformation);
@@ -208,16 +226,25 @@ ConnectionItem.prototype.update = function (connection, track) {
     this.connection = connection;
 
     let infoText = getInfoString(this.connection);
-
     let infoChildren = this.svgGroup.select(".info-text").children();
 
     infoChildren[0].node.textContent = infoText[0];
     infoChildren[1].node.textContent = infoText[1];
+
+    if (this.connection.hafas_raw.mainLocation.realTime.hasRealTime) {
+        this.svgGroup.select(".vehicle-text").attr({
+            class: "real_time vehicle-text"
+        });
+    } else {
+        this.svgGroup.select(".vehicle-text").attr({
+            class: "vehicle-text"
+        });
+    }
 };
 
 ConnectionItem.prototype.dismiss = function () {
     if (this.state != "dismiss") {
-        this.velocity = 0.005 * this.connectionBoard.trackWidth;
+        this.velocity = 0.005 * this.connectionBoard.trackWidth / this.connectionBoard.scale;
         this.state = "dismiss";
     }
 };
@@ -246,8 +273,8 @@ ConnectionItem.prototype.draw = function () {
 
             let temp = Math.pow((60 - Math.min(this.connection.countdown, 60)) / 60, 3);
 
-            this.targetX = this.connectionBoard.trackWidth * 0.6 * temp;
-            this.targetY = this.connectionBoard.trackHeight * (this.track + 1) - this.vehicleHeight;
+            this.targetX = (this.connectionBoard.trackWidth / this.connectionBoard.scale - this.vehicleWidth) * temp - this.connectionBoard.horizontalOffset;
+            this.targetY = this.connectionBoard.trackHeight * (this.track + 1) / this.connectionBoard.scale - this.vehicleHeight + this.connectionBoard.trackCenterOffset / this.connectionBoard.scale;
 
             this.X += (this.targetX - this.X) * 0.5 * this.connectionBoard.elapsedTime;
             this.Y += (this.targetY - this.Y) * 1.0 * this.connectionBoard.elapsedTime;
@@ -256,6 +283,23 @@ ConnectionItem.prototype.draw = function () {
             transformation.scale(this.connectionBoard.scale);
             transformation.translate(this.X, this.Y);
             this.svgGroup.transform(transformation);
+        }
+
+        let info = this.svgGroup.select(".info-text");
+        if ((this.vehicleWidth / 2 + this.X) > (this.connectionBoard.trackWidth / this.connectionBoard.scale / 2)) {
+            let infoChildren = this.svgGroup.select(".info-text").selectAll("tspan").forEach((tspan, i) => {
+                tspan.attr({
+                    x: -40,
+                    textAnchor: "end"
+                })
+            });
+        } else {
+            let infoChildren = this.svgGroup.select(".info-text").selectAll("tspan").forEach((tspan, i) => {
+                tspan.attr({
+                    x: this.vehicleWidth + 40,
+                    textAnchor: "start"
+                });
+            });
         }
     }
 };
