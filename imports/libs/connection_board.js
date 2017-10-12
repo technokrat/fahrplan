@@ -12,7 +12,7 @@ export const ConnectionBoard = function (target) {
     this.s = Snap(target);
     this.s.clear();
 
-    this.scale = 1.0;
+    this.scale = 0.8;
     this.trackWidth = this.s.node.clientWidth;
     this.trackHeight = 100 * this.scale;
     this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
@@ -168,7 +168,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
 
     } else {
         this.svgGroup.select(".vehicle-shape").attr({
-            style: "stroke:none; fill:#" + this.connection.hafas_raw.product.color.bg + "; "
+            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.bg + "; "
         });
 
         this.svgGroup.select(".vehicle-text").attr({
@@ -190,7 +190,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
     this.tspans = this.infoText.selectAll("tspan").forEach((tspan, i) => {
         tspan.attr({
             x: this.vehicleWidth + 40,
-            y: 32 * (i + 1) + (this.vehicleHeight - 64) / 2
+            y: 42 * (i + 1) + (this.vehicleHeight - 84) / 2
         });
     });
 
