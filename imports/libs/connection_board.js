@@ -180,12 +180,14 @@ const ConnectionItem = function (connection, connectionBoard, track) {
 
 
     var infoText = getInfoString(this.connection);
-    let info = this.svgGroup.text(this.vehicleWidth, this.vehicleHeight / 2, infoText).attr({
+    this.infoText = this.svgGroup.text(this.vehicleWidth, this.vehicleHeight / 2, infoText).attr({
         class: "info-text",
         fill: "white",
         fontSize: "32pt",
         fontWeight: 500
-    }).selectAll("tspan").forEach((tspan, i) => {
+    });
+
+    this.tspans = this.infoText.selectAll("tspan").forEach((tspan, i) => {
         tspan.attr({
             x: this.vehicleWidth + 40,
             y: 32 * (i + 1) + (this.vehicleHeight - 64) / 2
@@ -240,6 +242,8 @@ ConnectionItem.prototype.update = function (connection, track) {
             class: "vehicle-text"
         });
     }
+
+    this.state = "update";
 };
 
 ConnectionItem.prototype.dismiss = function () {
@@ -285,16 +289,15 @@ ConnectionItem.prototype.draw = function () {
             this.svgGroup.transform(transformation);
         }
 
-        let info = this.svgGroup.select(".info-text");
         if ((this.vehicleWidth / 2 + this.X) > (this.connectionBoard.trackWidth / this.connectionBoard.scale / 2)) {
-            let infoChildren = this.svgGroup.select(".info-text").selectAll("tspan").forEach((tspan, i) => {
+            this.tspans.forEach((tspan, i) => {
                 tspan.attr({
                     x: -40,
                     textAnchor: "end"
                 })
             });
         } else {
-            let infoChildren = this.svgGroup.select(".info-text").selectAll("tspan").forEach((tspan, i) => {
+            this.tspans.forEach((tspan, i) => {
                 tspan.attr({
                     x: this.vehicleWidth + 40,
                     textAnchor: "start"
