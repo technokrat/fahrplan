@@ -10,10 +10,10 @@
 <body>
     <div id="schedule">
         <div class="body">
-            <svg id="connection_board"></svg>
+            <svg id="connection_board" onresize="$('#connection_board').trigger('connectionBoard.resize');"></svg>
         </div>
         <div class="footer">
-            <div class="station_name">{{#if failure}}{{failure}}{{else}}{{{station_name}}}{{/if}}</div>
+            <div class="station_name">{{{station_name}}}</div>
             <div class="time">
                 <svg class="clock" id="clock"></svg>
                 <div class="time-digits"></div>

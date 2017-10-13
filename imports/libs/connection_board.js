@@ -29,7 +29,9 @@ export const ConnectionBoard = function (target) {
     this.initVehicleSymbols().then(() => {
         /* Setup draw loop */
         requestAnimationFrame(this.drawLoop.bind(this));
-    })
+    });
+
+    $(target).on("connectionBoard.resize", this.resize.bind(this));
 };
 
 ConnectionBoard.prototype.initVehicleSymbols = function () {
@@ -58,7 +60,15 @@ ConnectionBoard.prototype.loadVehicleSymbol = function (vehicle) {
     return promise;
 };
 
-ConnectionBoard.prototype.updateConnections = function (connections) {
+ConnectionBoard.prototype.resize = function () {
+    this.trackWidth = this.s.node.clientWidth;
+    this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
+    this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
+
+    this.updateConnections(this.connections, true);
+};
+
+ConnectionBoard.prototype.updateConnections = function (connections, isImmediateDismissal) {
     this.connections = connections;
     if (connections.length) {
         let maxCountdown = Math.max(this.connections[Math.min(this.connections.length - 1, this.trackCount)].countdown, 5);
@@ -85,7 +95,7 @@ ConnectionBoard.prototype.updateConnections = function (connections) {
 
     _.each(this.connectionItems, (item) => {
         if (updatedConnectionIDs.indexOf(item.connection._id) == -1) {
-            item.dismiss();
+            item.dismiss(isImmediateDismissal);
         }
     });
 };
@@ -99,6 +109,9 @@ ConnectionBoard.prototype.drawLoop = function (timestamp) {
 
 ConnectionBoard.prototype.draw = function (timestamp) {
     this.elapsedTime = (timestamp - this.lastTimestamp) / 1000;
+    // If window was inactive do not animate with too large delta
+    if (this.elapsedTime > 1000)
+        this.elapsedTime = 0;
     this.lastTimestamp = timestamp;
 
     _.each(this.connectionItems, (connectionItem) => {
@@ -246,10 +259,23 @@ ConnectionItem.prototype.update = function (connection, track) {
     this.state = "update";
 };
 
-ConnectionItem.prototype.dismiss = function () {
-    if (this.state != "dismiss") {
-        this.velocity = 0.005 * this.connectionBoard.trackWidth / this.connectionBoard.scale;
-        this.state = "dismiss";
+ConnectionItem.prototype.dismiss = function (isImmediateDismissal) {
+    if (isImmediateDismissal) {
+        this.svgGroup.remove();
+        delete this.connectionBoard.connectionItems[this.connection._id];
+    } else {
+        if (this.state != "dismiss") {
+            this.velocity = 0.005 * this.connectionBoard.trackWidth / this.connectionBoard.scale;
+            this.state = "dismiss";
+
+            this.timeOfDismissal = this.connectionBoard.lastTimestamp;
+        } else {
+            // If animation did not end due to inactivity after a second update dismiss immediately
+            if ((this.lastTimestamp - this.timeOfDismissal) > 3000) {
+                this.svgGroup.remove();
+                delete this.connectionBoard.connectionItems[this.connection._id];
+            }
+        }
     }
 };
 

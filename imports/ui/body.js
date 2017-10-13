@@ -99,7 +99,7 @@ Meteor.startup(function () {
         station_ibnr = "8591123";
 
     Session.set('station_ibnr', station_ibnr);
-    Session.set('connection_count', 30);
+    Session.set('connection_count', 80);
 
 
     Tracker.autorun(function () {
