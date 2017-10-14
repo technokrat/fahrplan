@@ -27,3 +27,4 @@ coffeescript
 dynamic-import@0.1.3
 fourseven:scss
 ecmascript@0.8.3
+clinical:csv

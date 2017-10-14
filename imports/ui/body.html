@@ -8,6 +8,17 @@
 </head>
 
 <body>
+
+
+    <div class="container">
+        {{> search}}
+    </div>
+
+
+
+
+
+
     <div id="schedule">
         <div class="body">
             <svg id="connection_board"></svg>
@@ -21,3 +32,32 @@
         </div>
     </div>
 </body>
+
+
+<template name="search">
+  <div class="form-group">
+    <label for="search-query">Search:</label>
+    <input type="text" class="form-control search-query" id="search-query">
+  </div>
+  <h1>AvailableStations</h1>
+  {{> availablestations}}
+</template>
+
+<template name="availablestations">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>IBNR</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each searchResults.results}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{ibnr}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
