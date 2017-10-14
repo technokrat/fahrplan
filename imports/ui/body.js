@@ -11,6 +11,11 @@ import {
 } from '../api/stations.js';
 
 import {
+    AvailableStations
+} from '../api/availablestations.js';
+
+
+import {
     Connections
 } from '../api/connections.js';
 
@@ -38,6 +43,40 @@ import './body.html';
 
 
 var connectionBoard;
+
+
+Template.search.events({
+    'keyup input.search-query': function (evt) {
+        Session.set("search-query", evt.currentTarget.value);
+    },
+})
+
+Template.availablestations.helpers({
+    searchResults: function () {
+        var keyword = Session.get("search-query");
+        var query = new RegExp(keyword, 'i');
+
+        if (keyword.length > 0) {
+
+
+
+            var results = AvailableStations.find({
+                $or: [{
+                        'name': query
+            },
+                    {
+                        'ibnr': query
+            }]
+            });
+            return {
+                results: results
+            };
+        }
+    }
+});
+
+
+
 
 Template.body.onRendered(() => {
     new mondaine_clock.MondaineClock($("#clock")[0]);
@@ -93,6 +132,7 @@ Session.setDefault('connection_count', 8);
 
 Meteor.startup(function () {
     Meteor.subscribe('status');
+    Meteor.subscribe('availablestations');
 
     var station_ibnr = getQueryParams(document.location.search).ibnr;
     if (!station_ibnr)

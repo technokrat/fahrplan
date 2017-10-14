@@ -8,7 +8,31 @@
 </head>
 
 <body>
-    <div id="schedule">
+
+    {{#dropdownTrigger name="settingsDropdown"}}
+
+    <div class="settingspanel">
+
+        <img id="settingsicon" src="/img/settings.svg" alt="Settings">
+
+    </div>
+    {{/dropdownTrigger}} {{#dropdown name="settingsDropdown" persistent="true"}}
+    <h1>Settings</h1>
+    <div class="container">
+        {{> search}}
+    </div>
+
+
+
+    {{/dropdown}}
+
+
+
+
+
+
+
+    <div id="schedule" class="{{#if dropdownIsActive 'settingsDropdown'}}blur{{/if}}">
         <div class="body">
             <svg id="connection_board" onresize="$('#connection_board').trigger('connectionBoard.resize');"></svg>
         </div>
@@ -21,3 +45,34 @@
         </div>
     </div>
 </body>
+
+
+<template name="search">
+
+    <h2>Select Station</h2>
+  <div class="form-group">
+    <label for="search-query">Search:</label>
+    <input type="text" class="form-control search-query" id="search-query">
+  </div>
+  
+  {{> availablestations}}
+</template>
+
+<template name="availablestations">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>IBNR</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each searchResults.results}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{ibnr}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>

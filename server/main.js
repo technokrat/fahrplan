@@ -2,6 +2,11 @@ import {
     Meteor
 } from 'meteor/meteor';
 
+
+import {
+    AvailableStations
+} from '../imports/api/availablestations.js';
+
 import {
     Stations
 } from '../imports/api/stations.js';
@@ -15,6 +20,10 @@ import {
 import {
     UPDATE_PERIOD
 } from '../imports/init/parameters.js';
+
+import {
+    ibnr_list
+} from '../imports/init/ibnr_list.js';
 
 const HAFAS_URL = "http://online.fahrplan.zvv.ch/bin/stboard.exe/dny";
 const HAFASQuery = {
@@ -32,6 +41,12 @@ Meteor.publish("stations", function (ibnr) {
         ibnr: ibnr
     });
 });
+
+// server: publish the rooms collection, minus secret info.
+Meteor.publish("availablestations", function () {
+    return AvailableStations.find();
+});
+
 // server: publish the rooms collection, minus secret info.
 Meteor.publish("connections", function (ibnr) {
     return Connections.find({
@@ -45,6 +60,33 @@ Meteor.publish("status", function () {
 registeredIBNRs = {};
 
 Meteor.startup(function () {
+
+    if (AvailableStations.find().count() === 0) {
+
+        //        CSV.readCsvFileLineByLine(Assets.absoluteFilePath('DidokV30small.csv'), {
+        //            headers: true,
+        //            delimiter: ";",
+        //        }, Meteor.bindEnvironment(function (line, index, rawParsedLine) {
+        //            AvailableStations.insert({
+        //                ibnr: line.ibnr,
+        //                name: line.name
+        //            });
+        //        }));
+        //    }
+
+        AvailableStations.insert({
+            ibnr: "802551",
+            name: "Blafoo"
+        });
+
+        AvailableStations.insert({
+            ibnr: "841334",
+            name: "Testhof"
+        });
+    }
+
+    console.log(AvailableStations.find().fetch())
+
     Stations.remove({});
     Connections.remove({});
     Status.remove({});
