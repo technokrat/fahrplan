@@ -48,7 +48,6 @@ var connectionBoard;
 Template.search.events({
     'keyup input.search-query': function (evt) {
         Session.set("search-query", evt.currentTarget.value);
-        console.log(AvailableStations.find({}).fetch());
     },
 })
 
@@ -57,18 +56,22 @@ Template.availablestations.helpers({
         var keyword = Session.get("search-query");
         var query = new RegExp(keyword, 'i');
 
+        if (keyword.length > 0) {
 
-        var results = AvailableStations.find({
-            $or: [{
-                    'name': query
+
+
+            var results = AvailableStations.find({
+                $or: [{
+                        'name': query
             },
-                {
-                    'ibnr': query
+                    {
+                        'ibnr': query
             }]
-        });
-        return {
-            results: results
-        };
+            });
+            return {
+                results: results
+            };
+        }
     }
 });
 
