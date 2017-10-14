@@ -1,16 +1,17 @@
 import snap from './snap.svg-min.js';
 
-
 const train_path = 'train';
 const s_bahn_path = 's_bahn';
 const tram_path = 'tram';
 const bus_path = 'bus';
 
 
-export const ConnectionBoard = function (target) {
+export const ConnectionBoard = function (target, resizeCallback) {
     this.svg = target;
     this.s = Snap(target);
     this.s.clear();
+
+    this.resizeCallback = resizeCallback;
 
     this.scale = 0.8;
     this.height = this.s.node.clientHeight;
@@ -28,7 +29,7 @@ export const ConnectionBoard = function (target) {
     this.zeroMinuteLine = this.s.line(0, 0, 0, this.height).attr({
         id: "zero-minutes",
         stroke: "red",
-        strokeWidth: "1px",
+        strokeWidth: "2px",
         style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
     });
 
@@ -39,17 +40,16 @@ export const ConnectionBoard = function (target) {
         style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
     });
 
-    let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
-    let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
+
     this.zeroMinuteLine.attr({
-        "x1": zeroMinutePosition,
-        "x2": zeroMinutePosition,
+        "x1": -500,
+        "x2": -500,
         y2: this.height
     });
 
     this.tenMinuteLine.attr({
-        "x1": tenMinutePosition,
-        "x2": tenMinutePosition,
+        "x1": -500,
+        "x2": -500,
         y2: this.height
     });
 
@@ -59,6 +59,8 @@ export const ConnectionBoard = function (target) {
     });
 
     $(target).on("connectionBoard.resize", this.resize.bind(this));
+
+    this.resizeCallback(this.trackCount);
 };
 
 ConnectionBoard.prototype.initVehicleSymbols = function () {
@@ -94,12 +96,20 @@ ConnectionBoard.prototype.resize = function () {
     this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
 
     this.updateConnections(this.connections, true);
+
+    this.resizeCallback(this.trackCount);
 };
+
+ConnectionBoard.prototype.destroy = function () {
+    this.s.clear();
+    return;
+}
 
 ConnectionBoard.prototype.updateConnections = function (connections, isImmediateDismissal) {
     this.connections = connections;
-    if (connections.length) {
-        let maxCountdown = Math.max(this.connections[Math.min(this.connections.length - 1, this.trackCount)].countdown, 5);
+    let fetchedConnections = connections.fetch();
+    if (fetchedConnections.length) {
+        let maxCountdown = Math.max(fetchedConnections[Math.min(fetchedConnections.length - 1, this.trackCount - 1)].countdown, 5);
         this.horizontalOffset = (Math.pow((60 - Math.min(maxCountdown, 60)) / 60, 3)) / 2 * this.trackWidth / this.scale;
     }
 
@@ -108,7 +118,7 @@ ConnectionBoard.prototype.updateConnections = function (connections, isImmediate
 
 
     for (var i = 0; i < this.trackCount; i++) {
-        var connection = this.connections[i];
+        var connection = fetchedConnections[i];
 
         if (connection) {
             updatedConnectionIDs.push(connection._id);
@@ -127,19 +137,38 @@ ConnectionBoard.prototype.updateConnections = function (connections, isImmediate
         }
     });
 
-    let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
-    let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
-    this.zeroMinuteLine.attr({
-        "x1": zeroMinutePosition,
-        "x2": zeroMinutePosition,
-        y2: this.height
-    });
+    if (this.connections.count() === 0) {
+        this.zeroMinuteLine.attr({
+            "x1": -500,
+            "x2": -500,
+            y2: this.height
+        });
 
-    this.tenMinuteLine.attr({
-        "x1": tenMinutePosition,
-        "x2": tenMinutePosition,
-        y2: this.height
-    });
+        this.tenMinuteLine.attr({
+            "x1": -500,
+            "x2": -500,
+            y2: this.height
+        });
+
+    } else {
+
+        let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
+        let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
+        this.zeroMinuteLine.attr({
+            "x1": zeroMinutePosition,
+            "x2": zeroMinutePosition,
+            y2: this.height
+        });
+
+        this.tenMinuteLine.attr({
+            "x1": tenMinutePosition,
+            "x2": tenMinutePosition,
+            y2: this.height
+        });
+
+    }
+
+
 };
 
 
@@ -260,7 +289,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
     }
 
     this.targetX = -this.connectionBoard.trackWidth / 2;
-    this.targetY = this.connectionBoard.trackHeight / this.connectionBoard.scale * (this.track + 1) - this.vehicleHeight;
+    this.targetY = this.connectionBoard.trackHeight * (this.track + 1) / this.connectionBoard.scale - this.vehicleHeight + this.connectionBoard.trackCenterOffset / this.connectionBoard.scale;
     this.X = this.targetX;
     this.Y = this.targetY;
 

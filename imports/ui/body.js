@@ -58,8 +58,6 @@ Template.availablestations.helpers({
 
         if (keyword.length > 0) {
 
-
-
             var results = AvailableStations.find({
                 $or: [{
                         'name': query
@@ -79,8 +77,13 @@ Template.availablestations.helpers({
 
 
 Template.body.onRendered(() => {
+
+    let resized = (count) => {
+        Session.set('connection_count', count);
+    }
+
     new mondaine_clock.MondaineClock($("#clock")[0]);
-    connectionBoard = new connection_board.ConnectionBoard($("#connection_board")[0]);
+    connectionBoard = new connection_board.ConnectionBoard($("#connection_board")[0], resized);
 
     Tracker.autorun(() => {
         var connections = Connections.find({
@@ -92,7 +95,7 @@ Template.body.onRendered(() => {
             limit: Session.get('connection_count')
         });
 
-        connectionBoard.updateConnections(connections.fetch());
+        connectionBoard.updateConnections(connections);
     });
 });
 
@@ -127,7 +130,7 @@ Template.body.helpers({
 });
 
 Session.setDefault('initialized', false);
-Session.setDefault('connection_count', 8);
+Session.setDefault('connection_count', 16);
 
 
 Meteor.startup(function () {
@@ -139,8 +142,6 @@ Meteor.startup(function () {
         station_ibnr = "8591123";
 
     Session.set('station_ibnr', station_ibnr);
-    Session.set('connection_count', 80);
-
 
     Tracker.autorun(function () {
         Meteor.subscribe("stations", Session.get('station_ibnr'));
