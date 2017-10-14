@@ -13,6 +13,7 @@ export const ConnectionBoard = function (target) {
     this.s.clear();
 
     this.scale = 0.8;
+    this.height = this.s.node.clientHeight;
     this.trackWidth = this.s.node.clientWidth;
     this.trackHeight = 100 * this.scale;
     this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
@@ -24,7 +25,33 @@ export const ConnectionBoard = function (target) {
 
     this.horizontalOffset = 0;
 
+    this.zeroMinuteLine = this.s.line(0, 0, 0, this.height).attr({
+        id: "zero-minutes",
+        stroke: "red",
+        strokeWidth: "1px",
+        style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
+    });
 
+    this.tenMinuteLine = this.s.line(0, 0, 0, this.height).attr({
+        id: "ten-minutes",
+        stroke: "darkgray",
+        strokeWidth: "1px",
+        style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
+    });
+
+    let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
+    let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
+    this.zeroMinuteLine.attr({
+        "x1": zeroMinutePosition,
+        "x2": zeroMinutePosition,
+        y2: this.height
+    });
+
+    this.tenMinuteLine.attr({
+        "x1": tenMinutePosition,
+        "x2": tenMinutePosition,
+        y2: this.height
+    });
 
     this.initVehicleSymbols().then(() => {
         /* Setup draw loop */
@@ -61,6 +88,7 @@ ConnectionBoard.prototype.loadVehicleSymbol = function (vehicle) {
 };
 
 ConnectionBoard.prototype.resize = function () {
+    this.height = this.s.node.clientHeight;
     this.trackWidth = this.s.node.clientWidth;
     this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
     this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
@@ -97,6 +125,20 @@ ConnectionBoard.prototype.updateConnections = function (connections, isImmediate
         if (updatedConnectionIDs.indexOf(item.connection._id) == -1) {
             item.dismiss(isImmediateDismissal);
         }
+    });
+
+    let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
+    let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
+    this.zeroMinuteLine.attr({
+        "x1": zeroMinutePosition,
+        "x2": zeroMinutePosition,
+        y2: this.height
+    });
+
+    this.tenMinuteLine.attr({
+        "x1": tenMinutePosition,
+        "x2": tenMinutePosition,
+        y2: this.height
     });
 };
 
@@ -265,7 +307,6 @@ ConnectionItem.prototype.dismiss = function (isImmediateDismissal) {
         delete this.connectionBoard.connectionItems[this.connection._id];
     } else {
         if (this.state != "dismiss") {
-            this.velocity = 0.005 * this.connectionBoard.trackWidth / this.connectionBoard.scale;
             this.state = "dismiss";
 
             this.timeOfDismissal = this.connectionBoard.lastTimestamp;
@@ -286,8 +327,8 @@ ConnectionItem.prototype.draw = function () {
     if (this.ready) {
 
         if (this.state == "dismiss") {
-            this.targetX = this.connectionBoard.trackWidth * 3;
-            this.X += this.connectionBoard.trackWidth * 0.2 * this.connectionBoard.elapsedTime;
+            this.targetX = this.connectionBoard.trackWidth * 2;
+            this.X += this.connectionBoard.trackWidth / this.connectionBoard.scale * 0.4 * this.connectionBoard.elapsedTime;
 
             var transformation = Snap.matrix();
             transformation.scale(this.connectionBoard.scale);
@@ -303,10 +344,10 @@ ConnectionItem.prototype.draw = function () {
 
             let temp = Math.pow((60 - Math.min(this.connection.countdown, 60)) / 60, 3);
 
-            this.targetX = (this.connectionBoard.trackWidth / this.connectionBoard.scale - this.vehicleWidth) * temp - this.connectionBoard.horizontalOffset;
+            this.targetX = (this.connectionBoard.trackWidth / this.connectionBoard.scale) * temp - this.vehicleWidth - this.connectionBoard.horizontalOffset;
             this.targetY = this.connectionBoard.trackHeight * (this.track + 1) / this.connectionBoard.scale - this.vehicleHeight + this.connectionBoard.trackCenterOffset / this.connectionBoard.scale;
 
-            this.X += (this.targetX - this.X) * 0.5 * this.connectionBoard.elapsedTime;
+            this.X += (this.targetX - this.X) * 0.45 * this.connectionBoard.elapsedTime;
             this.Y += (this.targetY - this.Y) * 1.0 * this.connectionBoard.elapsedTime;
 
             var transformation = Snap.matrix();
