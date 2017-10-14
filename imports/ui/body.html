@@ -9,23 +9,30 @@
 
 <body>
 
+    {{#dropdownTrigger name="settingsDropdown"}}
+
     <div class="settingspanel">
 
         <img id="settingsicon" src="/img/settings.svg" alt="Settings">
 
     </div>
-
-
+    {{/dropdownTrigger}} {{#dropdown name="settingsDropdown" persistent="true"}}
+    <h1>Settings</h1>
     <div class="container">
         {{> search}}
     </div>
 
 
 
+    {{/dropdown}}
 
 
 
-    <div id="schedule">
+
+
+
+
+    <div id="schedule" class="{{#if dropdownIsActive 'settingsDropdown'}}blur{{/if}}">
         <div class="body">
             <svg id="connection_board"></svg>
         </div>
@@ -41,11 +48,13 @@
 
 
 <template name="search">
+
+    <h2>Select Station</h2>
   <div class="form-group">
     <label for="search-query">Search:</label>
     <input type="text" class="form-control search-query" id="search-query">
   </div>
-  <h1>AvailableStations</h1>
+  
   {{> availablestations}}
 </template>
 

@@ -45,6 +45,19 @@ body {
     background-color: #ed1c24;
 }
 
+.blur {
+    /*   width: 100%;
+    height: 100%;
+    position: absolute;*/
+    filter: blur(4px) grayscale(0.5) brightness(0.5);
+}
+
+#settings-dropdown {
+
+    z-index: 999;
+
+}
+
 #schedule {
     height: 100%;
     position: relative;
