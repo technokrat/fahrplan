@@ -52,19 +52,6 @@ body {
     filter: blur(4px) grayscale(0.5) brightness(0.5);
 }
 
-#settings-dropdown {
-
-    z-index: 999;
-
-}
-
-.settingspanel {
-    position: fixed;
-    top: 10;
-    left: 10;
-    width: auto;
-}
-
 #schedule {
     height: 100%;
     position: relative;
