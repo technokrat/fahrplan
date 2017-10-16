@@ -148,12 +148,11 @@ Meteor.startup(function () {
         Meteor.subscribe("connections", Session.get('station_ibnr'), function () {
             Session.set('initialized', true);
         });
+        Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
     });
 
     Meteor.setInterval(function () {
-        Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), function (isIBNRLegit) {
-            return false;
-        });
+        Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), false);
     }, UPDATE_PERIOD);
     Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 
