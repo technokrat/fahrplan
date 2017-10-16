@@ -236,12 +236,14 @@ const ConnectionItem = function (connection, connectionBoard, track) {
         if (this.connection.hafas_raw.product.color.fg == "000000") {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
+                y: 3,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
                 style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
             });
         } else {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
+                y: 3,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
                 style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
             });
@@ -255,6 +257,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
 
         this.svgGroup.select(".vehicle-text").attr({
             x: 21,
+            y: 3,
             text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
             style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
         });
@@ -356,17 +359,36 @@ ConnectionItem.prototype.draw = function () {
     if (this.ready) {
 
         if (this.state == "dismiss") {
-            this.targetX = this.connectionBoard.trackWidth * 2;
-            this.X += this.connectionBoard.trackWidth / this.connectionBoard.scale * 0.4 * this.connectionBoard.elapsedTime;
 
-            var transformation = Snap.matrix();
-            transformation.scale(this.connectionBoard.scale);
-            transformation.translate(this.X, this.Y);
-            this.svgGroup.transform(transformation);
+            if (this.connection.countdown <= 2) {
 
-            if (this.X >= this.targetX) {
-                this.svgGroup.remove();
-                delete this.connectionBoard.connectionItems[this.connection._id];
+
+                this.targetX = this.connectionBoard.trackWidth * 2;
+                this.X += this.connectionBoard.trackWidth / this.connectionBoard.scale * 0.4 * this.connectionBoard.elapsedTime;
+
+                var transformation = Snap.matrix();
+                transformation.scale(this.connectionBoard.scale);
+                transformation.translate(this.X, this.Y);
+                this.svgGroup.transform(transformation);
+
+                if (this.X >= this.targetX) {
+                    this.svgGroup.remove();
+                    delete this.connectionBoard.connectionItems[this.connection._id];
+                }
+
+            } else {
+                this.targetX = -this.connectionBoard.trackWidth;
+                this.X -= this.connectionBoard.trackWidth / this.connectionBoard.scale * 0.4 * this.connectionBoard.elapsedTime;
+
+                var transformation = Snap.matrix();
+                transformation.scale(this.connectionBoard.scale);
+                transformation.translate(this.X, this.Y);
+                this.svgGroup.transform(transformation);
+
+                if (this.X <= this.targetX) {
+                    this.svgGroup.remove();
+                    delete this.connectionBoard.connectionItems[this.connection._id];
+                }
             }
 
         } else {
