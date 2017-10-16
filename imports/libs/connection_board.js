@@ -28,16 +28,14 @@ export const ConnectionBoard = function (target, resizeCallback) {
 
     this.zeroMinuteLine = this.s.line(0, 0, 0, this.height).attr({
         id: "zero-minutes",
-        stroke: "red",
-        strokeWidth: "2px",
-        style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
+        stroke: "crimson",
+        style: 'stroke-width: 5px; mix-blend-mode: screen; stroke-dasharray: 2;'
     });
 
     this.tenMinuteLine = this.s.line(0, 0, 0, this.height).attr({
         id: "ten-minutes",
-        stroke: "darkgray",
-        strokeWidth: "1px",
-        style: 'mix-blend-mode: screen; stroke-dasharray: 2;'
+        stroke: "SlateGrey ",
+        style: 'stroke-width: 3px; mix-blend-mode: screen; stroke-dasharray: 2;'
     });
 
 
@@ -152,8 +150,8 @@ ConnectionBoard.prototype.updateConnections = function (connections, isImmediate
 
     } else {
 
-        let zeroMinutePosition = this.trackWidth - this.horizontalOffset * this.scale;
-        let tenMinutePosition = this.trackWidth * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale;
+        let zeroMinutePosition = (this.trackWidth) - this.horizontalOffset * this.scale;
+        let tenMinutePosition = (this.trackWidth - 400 * this.scale) * Math.pow(50 / 60, 3) - this.horizontalOffset * this.scale + 400 * this.scale;
         this.zeroMinuteLine.attr({
             "x1": zeroMinutePosition,
             "x2": zeroMinutePosition,
@@ -239,13 +237,13 @@ const ConnectionItem = function (connection, connectionBoard, track) {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
+                style: "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
             });
         } else {
             this.svgGroup.select(".vehicle-text").attr({
                 x: 21,
                 text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-                style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
+                style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
             });
         }
 
@@ -258,7 +256,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
         this.svgGroup.select(".vehicle-text").attr({
             x: 21,
             text: this.connection.hafas_raw.product.line ? this.connection.hafas_raw.product.line : this.connection.hafas_raw.product.name,
-            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:32pt;"
+            style: "stroke:none;fill:#" + this.connection.hafas_raw.product.color.fg + ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
         });
     }
 
@@ -278,6 +276,7 @@ const ConnectionItem = function (connection, connectionBoard, track) {
         });
     });
 
+    /*
     if (this.connection.hafas_raw.mainLocation.realTime.hasRealTime) {
         this.svgGroup.select(".vehicle-text").attr({
             class: "real_time vehicle-text"
@@ -287,8 +286,9 @@ const ConnectionItem = function (connection, connectionBoard, track) {
             class: "vehicle-text"
         });
     }
+    */
 
-    this.targetX = -this.connectionBoard.trackWidth / 2;
+    this.targetX = -this.connectionBoard.trackWidth;
     this.targetY = this.connectionBoard.trackHeight * (this.track + 1) / this.connectionBoard.scale - this.vehicleHeight + this.connectionBoard.trackCenterOffset / this.connectionBoard.scale;
     this.X = this.targetX;
     this.Y = this.targetY;
@@ -371,9 +371,9 @@ ConnectionItem.prototype.draw = function () {
 
         } else {
 
-            let temp = Math.pow((60 - Math.min(this.connection.countdown, 60)) / 60, 3);
+            let temp = Math.pow((60 - Math.min(this.connection.countdown, 60)) / 60, 3) * (this.connectionBoard.trackWidth - 400 * this.connectionBoard.scale) / this.connectionBoard.trackWidth;
 
-            this.targetX = (this.connectionBoard.trackWidth / this.connectionBoard.scale) * temp - this.vehicleWidth - this.connectionBoard.horizontalOffset;
+            this.targetX = (this.connectionBoard.trackWidth / this.connectionBoard.scale) * temp - this.vehicleWidth - this.connectionBoard.horizontalOffset + 400;
             this.targetY = this.connectionBoard.trackHeight * (this.track + 1) / this.connectionBoard.scale - this.vehicleHeight + this.connectionBoard.trackCenterOffset / this.connectionBoard.scale;
 
             this.X += (this.targetX - this.X) * 0.45 * this.connectionBoard.elapsedTime;
@@ -422,6 +422,8 @@ function getInfoString(connection) {
             countdown += ", ";
             countdown += htmlDecode("Pl. " + connection.hafas_raw.mainLocation.realTime.platform);
         }
+
+        countdown += "*";
 
     } else {
         countdown += connection.countdown + "' (" + connection.hafas_raw.mainLocation.time + ")";

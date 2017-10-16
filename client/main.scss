@@ -88,9 +88,6 @@ body {
             text {
                 opacity: 1.0;
 
-                &.real_time {
-                    animation: countdown-realtime 2s infinite;
-                }
             }
 
             .info-text {
