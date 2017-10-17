@@ -99,6 +99,19 @@ Template.body.onRendered(() => {
     });
 });
 
+Template.body.events({
+    // Fires when any element is clicked
+    'click #schedule' (event) {
+        Session.set("route", "overlay");
+    },
+    // Fires when any element is clicked
+    'click #overlay .close' (event) {
+        event.preventDefault();
+        Session.set("route", "");
+    }
+
+});
+
 Template.body.helpers({
     station_name: function () {
         if (Stations.findOne({
@@ -108,7 +121,7 @@ Template.body.helpers({
                 ibnr: Session.get('station_ibnr')
             }).name;
         } else
-            return "Unknown Station";
+            return "";
     },
     failure: function () {
         if (!Session.get('initialized'))
@@ -118,7 +131,7 @@ Template.body.helpers({
         else if (!Status.findOne({
                 status: "lastHAFASOnline"
             }).date >= (Date.now() - 60000))
-            return "HAFAS is probably offline";
+            return "No updates from HAFAS!";
         else if (!Stations.findOne({
                 ibnr: Session.get('station_ibnr')
             }))
@@ -126,6 +139,30 @@ Template.body.helpers({
         else
             return false;
 
+    },
+    overlay: function () {
+        if (Session.get("route") === "overlay") {
+            return true;
+        }
+
+        if (Session.get("route") === "overlay") {
+            return true;
+        }
+
+        if (!Session.get('initialized'))
+            return false;
+        else if (!Meteor.status().connected)
+            return true;
+        else if (!Status.findOne({
+                status: "lastHAFASOnline"
+            }).date >= (Date.now() - 60000))
+            return true;
+        else if (!Stations.findOne({
+                ibnr: Session.get('station_ibnr')
+            }))
+            return true;
+        else
+            return false;
     }
 });
 

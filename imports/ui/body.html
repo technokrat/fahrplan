@@ -7,8 +7,9 @@
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 </head>
 
+
 <body>
-    <div id="schedule" class="{{#if dropdownIsActive 'settingsDropdown'}}blur{{/if}}">
+    <div id="schedule" class="{{#if overlay}}blur{{/if}}">
         <div class="body">
             <svg id="connection_board" onresize="$('#connection_board').trigger('connectionBoard.resize');"></svg>
         </div>
@@ -20,22 +21,38 @@
             </div>
         </div>
     </div>
+    {{#if overlay}}
+    <div id="overlay">
+        <div class="container">
+            {{> search}}
+        </div>
+        {{#if failure}}
+        <div class="failure">
+            <p>Houston, we have a problem&hellip;</p>
+            <p><samp>{{failure}}</samp></p>
+
+        </div>
+        {{/if}} {{#unless failure}}
+        <div class="close">
+            <a href="">╳</a>
+        </div>
+        {{/unless}}
+    </div> {{/if}}
 </body>
 
 
 <template name="search">
-
-    <h2>Select Station</h2>
-  <div class="form-group">
+ <h2>Select Station</h2>
+  <div>
     <label for="search-query">Search:</label>
-    <input type="text" class="form-control search-query" id="search-query">
+    <input type="text" class="form-control search-query" placeholder="8503000, Zurich HB, &hellip;" id="search-query">
   </div>
-  
+  <br>
   {{> availablestations}}
 </template>
 
 <template name="availablestations">
-  <table class="table">
+  <table class="">
     <thead>
       <tr>
         <th>Name</th>
