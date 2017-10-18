@@ -66,17 +66,6 @@ Meteor.startup(function () {
 
     if (AvailableStations.find().count() === 0) {
 
-        //        CSV.readCsvFileLineByLine(Assets.absoluteFilePath('DidokV30small.csv'), {
-        //            headers: true,
-        //            delimiter: ";",
-        //        }, Meteor.bindEnvironment(function (line, index, rawParsedLine) {
-        //            AvailableStations.insert({
-        //                ibnr: line.ibnr,
-        //                name: line.name
-        //            });
-        //        }));
-        //    }
-
         _.each(ibnr_list, (value, key) => {
             AvailableStations.insert({
                 ibnr: key,

@@ -117,8 +117,13 @@ Template.station_entry.events({
 
 
 Template.body.onRendered(() => {
-
     $("#window").removeClass("new");
+    $(document).on('keydown', (e) => {
+        if (e.keyCode == 27)
+            Session.set("route", "");
+        else
+            Session.set("route", "overlay");
+    });
 
     let resized = (count) => {
         Session.set('connection_count', count);
@@ -151,7 +156,6 @@ Template.body.events({
         event.preventDefault();
         Session.set("route", "");
     }
-
 });
 
 Template.overlay.helpers({
