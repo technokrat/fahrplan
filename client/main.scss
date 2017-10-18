@@ -176,7 +176,13 @@ body {
             color: white;
         }
 
+        .search-results {
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
         table {
+
             width: 100%;
             text-align: left;
 
@@ -187,6 +193,10 @@ body {
 
             tbody tr:nth-child(odd) {
                 background-color: rgba(#dc143c, 0.5);
+            }
+
+            tbody tr {
+                cursor: pointer;
             }
         }
     }

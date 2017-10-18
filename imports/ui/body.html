@@ -30,28 +30,32 @@
         <div class="failure">
             <p>Houston, we have a problem&hellip;</p>
             <p><samp>{{failure}}</samp></p>
-
         </div>
         {{/if}} {{#unless failure}}
         <div class="close">
             <a href="">╳</a>
         </div>
         {{/unless}}
-    </div> {{/if}}
+    </div>
+    {{/if}}
 </body>
 
 
 <template name="search">
+ 
  <h2>Select Station</h2>
   <div>
     <label for="search-query">Search:</label>
-    <input type="text" class="form-control search-query" placeholder="8503000, Zurich HB, &hellip;" id="search-query">
+    <input type="text" class="form-control search-query" placeholder="8503000, Zurich HB, &hellip;" id="search-query" autofocus>
   </div>
   <br>
+  <div class="search-results">
   {{> availablestations}}
+  </div>
 </template>
 
 <template name="availablestations">
+  {{#if searchResults.results}}
   <table class="">
     <thead>
       <tr>
@@ -60,12 +64,26 @@
       </tr>
     </thead>
     <tbody>
+      {{#if searchResults.results.count}}
       {{#each searchResults.results}}
-      <tr>
-        <td>{{name}}</td>
-        <td>{{ibnr}}</td>
-      </tr>
+      {{> station_entry}}
       {{/each}}
+      {{else}}
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          no entries
+        </td>
+      </tr>
+      {{/if}}
     </tbody>
   </table>
+  {{/if}}
+</template>
+
+
+<template name="station_entry">
+  <tr class="station-entry">
+    <td>{{name}}</td>
+    <td>{{ibnr}}</td>
+  </tr>
 </template>

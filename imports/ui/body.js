@@ -61,15 +61,24 @@ Template.availablestations.helpers({
             var results = AvailableStations.find({
                 $or: [{
                         'name': query
-            },
-                    {
-                        'ibnr': query
-            }]
-            });
+                },
+                        {
+                            'ibnr': query
+                }]
+            }, {limit: 20});
             return {
                 results: results
             };
         }
+    }
+});
+
+
+Template.station_entry.events({
+    'click .station-entry': function (event) {
+        event.preventDefault();
+        Session.set('station_ibnr', this.ibnr);
+        localStorage.setItem("station_ibnr", this.ibnr);
     }
 });
 
@@ -124,9 +133,8 @@ Template.body.helpers({
             return "";
     },
     failure: function () {
-        if (!Session.get('initialized'))
-            return false;
-        else if (!Meteor.status().connected)
+
+        if (!Meteor.status().connected)
             return "Bad connection to webserver";
         else if (!Status.findOne({
                 status: "lastHAFASOnline"
@@ -149,9 +157,7 @@ Template.body.helpers({
             return true;
         }
 
-        if (!Session.get('initialized'))
-            return false;
-        else if (!Meteor.status().connected)
+        if (!Meteor.status().connected)
             return true;
         else if (!Status.findOne({
                 status: "lastHAFASOnline"
@@ -166,7 +172,7 @@ Template.body.helpers({
     }
 });
 
-Session.setDefault('initialized', false);
+
 Session.setDefault('connection_count', 16);
 
 
@@ -176,15 +182,16 @@ Meteor.startup(function () {
 
     var station_ibnr = getQueryParams(document.location.search).ibnr;
     if (!station_ibnr)
+        station_ibnr = localStorage.getItem("station_ibnr");
+    if (!station_ibnr)
         station_ibnr = "8591123";
 
     Session.set('station_ibnr', station_ibnr);
+    localStorage.setItem("station_ibnr", station_ibnr);
 
     Tracker.autorun(function () {
         Meteor.subscribe("stations", Session.get('station_ibnr'));
-        Meteor.subscribe("connections", Session.get('station_ibnr'), function () {
-            Session.set('initialized', true);
-        });
+        Meteor.subscribe("connections", Session.get('station_ibnr'));
         Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
     });
 

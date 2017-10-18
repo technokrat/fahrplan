@@ -74,18 +74,13 @@ Meteor.startup(function () {
         //        }));
         //    }
 
-        AvailableStations.insert({
-            ibnr: "802551",
-            name: "Blafoo"
-        });
-
-        AvailableStations.insert({
-            ibnr: "841334",
-            name: "Testhof"
+        _.each(ibnr_list, (value, key) => {
+            AvailableStations.insert({
+                ibnr: key,
+                name: value
+            });
         });
     }
-
-    console.log(AvailableStations.find().fetch())
 
     Stations.remove({});
     Connections.remove({});
