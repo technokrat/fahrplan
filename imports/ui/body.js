@@ -102,11 +102,10 @@ Template.station_entry.events({
         event.preventDefault();
 
         Meteor.call('register_for_update', this.ibnr, Session.get('connection_count'), true, (error, result) => {
-            if (result)
-
-            {
+            if (result) {
                 Session.set("station_ibnr", this.ibnr);
                 localStorage.setItem("station_ibnr", this.ibnr);
+                Session.set("route", "");
             }
 
         });
