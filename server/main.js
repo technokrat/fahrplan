@@ -57,7 +57,7 @@ Meteor.publish("status", function () {
     return Status.find();
 });
 
-registeredIBNRs = {};
+let registeredIBNRs = {};
 
 Meteor.startup(function () {
 
@@ -105,10 +105,25 @@ Meteor.methods({
 
 
             if (instant_update == true) {
-                if (updateStationSchedule(ibnr))
+                let result = updateStationSchedule(ibnr)
+                if (result) {
+                    AvailableStations.upsert({
+                        ibnr: ibnr
+                    }, {
+                        $set: {
+                            ibnr: ibnr,
+                            name: result
+                        }
+                    });
                     return true;
-                else
-                    return false
+                } else {
+                    AvailableStations.remove({
+                        ibnr: ibnr
+                    });
+                    return false;
+                }
+
+
             } else
                 return false;
         } else
@@ -186,7 +201,7 @@ function updateStationSchedule(ibnr) {
                     }
                 });
 
-                return true;
+                return response.station.name;
             } else
                 return false;
         } else {

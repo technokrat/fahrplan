@@ -42,11 +42,12 @@
 
 
 <template name="search">
- 
- <h2>Select Station</h2>
-  <div>
-    <label for="search-query">Search:</label>
-    <input type="text" class="form-control search-query" placeholder="8503000, Zurich HB, &hellip;" id="search-query" autofocus>
+<div class="search-header">
+  <h2>Select Station</h2>
+  <div class="control-group">
+      <label for="search-query">Search:</label>
+      <input type="text" class="search-query" placeholder="8503000, Zürich HB, &hellip;" id="search-query" autofocus>
+    </div>
   </div>
   <br>
   <div class="search-results">
@@ -83,7 +84,7 @@
 
 <template name="station_entry">
   <tr class="station-entry">
-    <td>{{name}}</td>
+    <td>{{{name}}}</td>
     <td>{{ibnr}}</td>
   </tr>
 </template>

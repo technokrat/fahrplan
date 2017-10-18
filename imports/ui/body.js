@@ -47,25 +47,35 @@ var connectionBoard;
 
 Template.search.events({
     'keyup input.search-query': function (evt) {
-        Session.set("search-query", evt.currentTarget.value);
+        if (evt.keyCode == 13) {
+            Session.set("station_ibnr", evt.currentTarget.value);
+        } else {
+            Session.set("search-query", evt.currentTarget.value);
+        }
     },
 })
+
+Template.search.onRendered(() => {
+    Session.set("search-query", "");
+});
 
 Template.availablestations.helpers({
     searchResults: function () {
         var keyword = Session.get("search-query");
         var query = new RegExp(keyword, 'i');
 
-        if (keyword.length > 0) {
+        if (keyword && keyword.length > 0) {
 
             var results = AvailableStations.find({
                 $or: [{
                         'name': query
                 },
-                        {
-                            'ibnr': query
+                    {
+                        'ibnr': query
                 }]
-            }, {limit: 20});
+            }, {
+                limit: 20
+            });
             return {
                 results: results
             };
@@ -133,12 +143,13 @@ Template.body.helpers({
             return "";
     },
     failure: function () {
+        let status = Status.findOne({
+            status: "lastHAFASOnline"
+        });
 
         if (!Meteor.status().connected)
             return "Bad connection to webserver";
-        else if (!Status.findOne({
-                status: "lastHAFASOnline"
-            }).date >= (Date.now() - 60000))
+        else if (status && status.date && (status.date <= (Date.now() - 60000)))
             return "No updates from HAFAS!";
         else if (!Stations.findOne({
                 ibnr: Session.get('station_ibnr')
@@ -153,15 +164,13 @@ Template.body.helpers({
             return true;
         }
 
-        if (Session.get("route") === "overlay") {
-            return true;
-        }
+        let status = Status.findOne({
+            status: "lastHAFASOnline"
+        });
 
         if (!Meteor.status().connected)
             return true;
-        else if (!Status.findOne({
-                status: "lastHAFASOnline"
-            }).date >= (Date.now() - 60000))
+        else if (status && status.date && (status.date <= (Date.now() - 60000)))
             return true;
         else if (!Stations.findOne({
                 ibnr: Session.get('station_ibnr')
@@ -192,13 +201,11 @@ Meteor.startup(function () {
     Tracker.autorun(function () {
         Meteor.subscribe("stations", Session.get('station_ibnr'));
         Meteor.subscribe("connections", Session.get('station_ibnr'));
+        Meteor.setInterval(function () {
+            Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), false);
+        }, UPDATE_PERIOD);
         Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
     });
-
-    Meteor.setInterval(function () {
-        Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), false);
-    }, UPDATE_PERIOD);
-    Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
 
     Meteor.setInterval(updateClock, 100);
 });

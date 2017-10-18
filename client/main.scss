@@ -138,6 +138,8 @@ body {
 }
 
 #overlay {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     top: 0;
     left: 0;
@@ -159,57 +161,85 @@ body {
     }
 
     .container {
-        margin: 0 auto;
-        max-width: 800px;
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
 
-        h1,
-        h2 {
-            text-align: center;
+        margin: 100px auto;
+        max-width: 700px;
+
+        .search-header {
+            flex-grow: 0;
+
+            h2 {
+                text-align: center;
+                margin-top: 0px;
+            }
+
+            .control-group {
+                display: flex;
+                flex-direction: row;
+
+
+                label {
+                    display: block;
+                    margin-right: 15px;
+                }
+
+                input {
+                    flex-grow: 1;
+                    display: block;
+                    width: auto;
+                    background: none;
+                    border: 2px white solid;
+                    font-size: 1em;
+                    border-radius: 5px;
+                    padding: 4px;
+                    color: white;
+                }
+            }
         }
 
-        input {
-            background: none;
-            border: 2px white solid;
-            font-size: 1em;
-            border-radius: 5px;
-            padding: 4px;
-            color: white;
-        }
+
 
         .search-results {
-            max-height: 50vh;
+            flex-grow: 0;
+
             overflow-y: auto;
-        }
 
-        table {
+            table {
+                width: 100%;
+                text-align: left;
 
-            width: 100%;
-            text-align: left;
+                td,
+                th {
+                    padding: 10px;
+                }
 
-            td,
-            th {
-                padding: 10px;
-            }
+                tbody tr:nth-child(odd) {
+                    background-color: rgba(#dc143c, 0.5);
+                }
 
-            tbody tr:nth-child(odd) {
-                background-color: rgba(#dc143c, 0.5);
-            }
-
-            tbody tr {
-                cursor: pointer;
+                tbody tr {
+                    cursor: pointer;
+                }
             }
         }
     }
 
+
+
     .failure {
-        position: fixed;
+        flex-grow: 0;
         width: 100%;
         text-align: center;
-        bottom: 15px;
         font-size: 0.9em;
 
         samp {
             font-size: 1.6em;
         }
     }
+
+
+
 }
