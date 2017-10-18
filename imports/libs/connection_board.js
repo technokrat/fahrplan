@@ -4,6 +4,7 @@ const train_path = 'train';
 const s_bahn_path = 's_bahn';
 const tram_path = 'tram';
 const bus_path = 'bus';
+const ship_path = 'ship';
 
 
 export const ConnectionBoard = function (target, resizeCallback) {
@@ -67,7 +68,8 @@ ConnectionBoard.prototype.initVehicleSymbols = function () {
             this.loadVehicleSymbol(train_path),
             this.loadVehicleSymbol(s_bahn_path),
             this.loadVehicleSymbol(tram_path),
-            this.loadVehicleSymbol(bus_path)
+            this.loadVehicleSymbol(bus_path),
+            this.loadVehicleSymbol(ship_path)
         ]
     );
 
@@ -215,6 +217,9 @@ const ConnectionItem = function (connection, connectionBoard, track) {
             break;
         case "S-Bahn":
             vehicle_path = s_bahn_path;
+            break;
+        case "Schiff":
+            vehicle_path = ship_path;
             break;
 
         default:
