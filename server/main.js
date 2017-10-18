@@ -36,7 +36,8 @@ const HAFASQuery = {
 };
 
 // server: publish the rooms collection, minus secret info.
-Meteor.publish("stations", function (ibnr) {
+Meteor.publish("stations", function (ibnr, count) {
+    registerForUpdate(ibnr, count, true);
     return Stations.find({
         ibnr: ibnr
     });
@@ -48,9 +49,11 @@ Meteor.publish("availablestations", function () {
 });
 
 // server: publish the rooms collection, minus secret info.
-Meteor.publish("connections", function (ibnr) {
+Meteor.publish("connections", function (ibnr, count) {
     return Connections.find({
         ibnr: ibnr
+    }, {
+        $limit: count
     });
 });
 Meteor.publish("status", function () {
@@ -90,46 +93,47 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-    register_for_update: function (ibnr, connection_count, instant_update) {
-        if (ibnr) {
-            if (!registeredIBNRs[ibnr])
-                registeredIBNRs[ibnr] = {
-                    date: Date.now(),
-                    connection_count: connection_count
-                };
-            else if (registeredIBNRs[ibnr].connection_count < connection_count)
-                registeredIBNRs[ibnr] = {
-                    date: Date.now(),
-                    connection_count: connection_count
-                };
+    register_for_update: registerForUpdate
+});
 
+function registerForUpdate(ibnr, connection_count, instant_update) {
+    if (ibnr) {
+        if (!registeredIBNRs[ibnr])
+            registeredIBNRs[ibnr] = {
+                date: Date.now(),
+                connection_count: connection_count
+            };
+        else if (registeredIBNRs[ibnr].connection_count < connection_count)
+            registeredIBNRs[ibnr] = {
+                date: Date.now(),
+                connection_count: connection_count
+            };
 
-            if (instant_update == true) {
-                let result = updateStationSchedule(ibnr)
-                if (result) {
-                    AvailableStations.upsert({
-                        ibnr: ibnr
-                    }, {
-                        $set: {
-                            ibnr: ibnr,
-                            name: result
-                        }
-                    });
-                    return true;
-                } else {
-                    AvailableStations.remove({
-                        ibnr: ibnr
-                    });
-                    return false;
-                }
-
-
-            } else
+        if (instant_update == true) {
+            let result = updateStationSchedule(ibnr)
+            if (result) {
+                AvailableStations.upsert({
+                    ibnr: ibnr
+                }, {
+                    $set: {
+                        ibnr: ibnr,
+                        name: result
+                    }
+                });
+                return true;
+            } else {
+                AvailableStations.remove({
+                    ibnr: ibnr
+                });
                 return false;
+            }
+
+
         } else
             return false;
-    }
-});
+    } else
+        return false;
+}
 
 function updateFullSchedule() {
     for (var ibnr in registeredIBNRs) {

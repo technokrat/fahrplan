@@ -48,15 +48,28 @@ var connectionBoard;
 Template.search.events({
     'keyup input.search-query': function (evt) {
         if (evt.keyCode == 13) {
-            Session.set("station_ibnr", evt.currentTarget.value);
+            Meteor.call('register_for_update', evt.currentTarget.value, Session.get('connection_count'), true, (error, result) => {
+                if (result)
+
+                {
+                    Session.set("station_ibnr", evt.currentTarget.value);
+                    localStorage.setItem("station_ibnr", evt.currentTarget.value);
+                }
+
+            });
+
+
+
         } else {
             Session.set("search-query", evt.currentTarget.value);
         }
+
     },
 })
 
 Template.search.onRendered(() => {
     Session.set("search-query", "");
+    $("#search-query").focus();
 });
 
 Template.availablestations.helpers({
@@ -87,8 +100,16 @@ Template.availablestations.helpers({
 Template.station_entry.events({
     'click .station-entry': function (event) {
         event.preventDefault();
-        Session.set('station_ibnr', this.ibnr);
-        localStorage.setItem("station_ibnr", this.ibnr);
+
+        Meteor.call('register_for_update', this.ibnr, Session.get('connection_count'), true, (error, result) => {
+            if (result)
+
+            {
+                Session.set("station_ibnr", this.ibnr);
+                localStorage.setItem("station_ibnr", this.ibnr);
+            }
+
+        });
     }
 });
 
@@ -151,7 +172,7 @@ Template.body.helpers({
             return "Bad connection to webserver";
         else if (status && status.date && (status.date <= (Date.now() - 60000)))
             return "No updates from HAFAS!";
-        else if (!Stations.findOne({
+        else if (stationSubscription.ready() && !Stations.findOne({
                 ibnr: Session.get('station_ibnr')
             }))
             return "IBNR does not exist"
@@ -172,7 +193,7 @@ Template.body.helpers({
             return true;
         else if (status && status.date && (status.date <= (Date.now() - 60000)))
             return true;
-        else if (!Stations.findOne({
+        else if (stationSubscription.ready() && !Stations.findOne({
                 ibnr: Session.get('station_ibnr')
             }))
             return true;
@@ -184,8 +205,9 @@ Template.body.helpers({
 
 Session.setDefault('connection_count', 16);
 
+let stationSubscription;
 
-Meteor.startup(function () {
+Template.body.onCreated(function () {
     Meteor.subscribe('status');
     Meteor.subscribe('availablestations');
 
@@ -199,12 +221,11 @@ Meteor.startup(function () {
     localStorage.setItem("station_ibnr", station_ibnr);
 
     Tracker.autorun(function () {
-        Meteor.subscribe("stations", Session.get('station_ibnr'));
-        Meteor.subscribe("connections", Session.get('station_ibnr'));
+        stationSubscription = Meteor.subscribe("stations", Session.get('station_ibnr'), Session.get('connection_count'));
+        Meteor.subscribe("connections", Session.get('station_ibnr'), Session.get('connection_count'));
         Meteor.setInterval(function () {
             Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), false);
         }, UPDATE_PERIOD);
-        Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), true);
     });
 
     Meteor.setInterval(updateClock, 100);

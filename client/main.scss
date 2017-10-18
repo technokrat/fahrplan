@@ -177,9 +177,9 @@ body {
             }
 
             .control-group {
+                justify-content: center;
                 display: flex;
                 flex-direction: row;
-
 
                 label {
                     display: block;
@@ -189,7 +189,6 @@ body {
                 input {
                     flex-grow: 1;
                     display: block;
-                    width: auto;
                     background: none;
                     border: 2px white solid;
                     font-size: 1em;
@@ -204,8 +203,24 @@ body {
 
         .search-results {
             flex-grow: 0;
-
             overflow-y: auto;
+
+
+            &::-webkit-scrollbar-track {
+                background-color: transparent;
+                border: 1px crimson solid;
+            }
+
+            &::-webkit-scrollbar {
+                background-color: transparent;
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: crimson;
+                border: 1px rgba(#dc143c, 0.5) solid;
+            }
+
 
             table {
                 width: 100%;
@@ -225,6 +240,8 @@ body {
                 }
             }
         }
+
+
     }
 
 
