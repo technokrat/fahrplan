@@ -118,6 +118,8 @@ Template.station_entry.events({
 
 Template.body.onRendered(() => {
 
+    $("#window").removeClass("new");
+
     let resized = (count) => {
         Session.set('connection_count', count);
     }
@@ -152,17 +154,7 @@ Template.body.events({
 
 });
 
-Template.body.helpers({
-    station_name: function () {
-        if (Stations.findOne({
-                ibnr: Session.get('station_ibnr')
-            })) {
-            return Stations.findOne({
-                ibnr: Session.get('station_ibnr')
-            }).name;
-        } else
-            return "";
-    },
+Template.overlay.helpers({
     failure: function () {
         let status = Status.findOne({
             status: "lastHAFASOnline"
@@ -179,8 +171,26 @@ Template.body.helpers({
         else
             return false;
 
+    }
+});
+
+Template.overlay.onRendered(() => {
+    $('#overlay').removeClass("new");
+});
+
+Template.body.helpers({
+    station_name: function () {
+        if (Stations.findOne({
+                ibnr: Session.get('station_ibnr')
+            })) {
+            return Stations.findOne({
+                ibnr: Session.get('station_ibnr')
+            }).name;
+        } else
+            return "";
     },
-    overlay: function () {
+
+    isOverlay: function () {
         if (Session.get("route") === "overlay") {
             return true;
         }
@@ -208,6 +218,7 @@ Session.setDefault('connection_count', 16);
 let stationSubscription;
 
 Template.body.onCreated(function () {
+
     Meteor.subscribe('status');
     Meteor.subscribe('availablestations');
 

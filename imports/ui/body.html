@@ -9,20 +9,25 @@
 
 
 <body>
-    <div id="schedule" class="{{#if overlay}}blur{{/if}}">
-        <div class="body">
-            <svg id="connection_board" onresize="$('#connection_board').trigger('connectionBoard.resize');"></svg>
-        </div>
-        <div class="footer">
-            <div class="station_name">{{{station_name}}}</div>
-            <div class="time">
-                <svg class="clock" id="clock"></svg>
-                <div class="time-digits"></div>
+    <div id="window" class="new">
+        <div id="schedule" class="{{#if isOverlay}}blur{{/if}}">
+            <div class="body">
+                <svg id="connection_board" onresize="$('#connection_board').trigger('connectionBoard.resize');"></svg>
+            </div>
+            <div class="footer">
+                <div class="station_name">{{{station_name}}}</div>
+                <div class="time">
+                    <svg class="clock" id="clock"></svg>
+                    <div class="time-digits"></div>
+                </div>
             </div>
         </div>
+        {{#if isOverlay}} {{> overlay}} {{/if}}
     </div>
-    {{#if overlay}}
-    <div id="overlay">
+</body>
+
+<template name="overlay">
+    <div id="overlay" class="new">
         <div class="container">
             {{> search}}
         </div>
@@ -37,8 +42,7 @@
         </div>
         {{/unless}}
     </div>
-    {{/if}}
-</body>
+</template>
 
 
 <template name="search">
@@ -49,7 +53,6 @@
       <input type="text" class="search-query" placeholder="8503000, Zürich HB, &hellip;" id="search-query" autofocus>
     </div>
   </div>
-  <br>
   <div class="search-results">
   {{> availablestations}}
   </div>
