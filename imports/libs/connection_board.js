@@ -14,11 +14,11 @@ export const ConnectionBoard = function (target, resizeCallback) {
     this.resizeCallback = resizeCallback;
 
     this.scale = 0.8;
-    this.height = this.s.node.clientHeight;
-    this.trackWidth = this.s.node.clientWidth;
+    this.height = this.s.node.getBoundingClientRect().height;
+    this.trackWidth = this.s.node.getBoundingClientRect().width;
     this.trackHeight = 100 * this.scale;
-    this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
-    this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
+    this.trackCount = Math.floor(this.height / this.trackHeight);
+    this.trackCenterOffset = (this.height % this.trackHeight) / 2;
 
     this.lastTimestamp = 0;
 
@@ -88,10 +88,10 @@ ConnectionBoard.prototype.loadVehicleSymbol = function (vehicle) {
 };
 
 ConnectionBoard.prototype.resize = function () {
-    this.height = this.s.node.clientHeight;
-    this.trackWidth = this.s.node.clientWidth;
-    this.trackCount = Math.floor(this.s.node.clientHeight / this.trackHeight);
-    this.trackCenterOffset = (this.s.node.clientHeight % this.trackHeight) / 2;
+    this.height = this.s.node.getBoundingClientRect().height;
+    this.trackWidth = this.s.node.getBoundingClientRect().width;
+    this.trackCount = Math.floor(this.height / this.trackHeight);
+    this.trackCenterOffset = (this.height % this.trackHeight) / 2;
 
     this.updateConnections(this.connections, true);
 
