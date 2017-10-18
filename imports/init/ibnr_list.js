@@ -1,4 +1,5 @@
 export const ibnr_list = {
+    "8591123": "Zürich, ETH/Universitätsspital",
     "8500006": "Oberhelfenschwil, Metzwil",
     "8500007": "Geneve-Eaux-Vives-Rieu",
     "8500010": "Basel SBB",
