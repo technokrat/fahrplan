@@ -44,8 +44,28 @@ Meteor.publish("stations", function (ibnr, count) {
 });
 
 // server: publish the rooms collection, minus secret info.
-Meteor.publish("availablestations", function () {
-    return AvailableStations.find();
+Meteor.publish("availablestations", function (query) {
+    if (!query) {
+        return this.ready();
+    }
+    return AvailableStations.find({
+        $text: {
+            $search: query,
+            $diacriticSensitive: false
+        }
+    }, {
+        limit: 20,
+        fields: {
+            score: {
+                $meta: "textScore"
+            }
+        },
+        sort: {
+            score: {
+                $meta: "textScore"
+            }
+        }
+    });
 });
 
 // server: publish the rooms collection, minus secret info.
