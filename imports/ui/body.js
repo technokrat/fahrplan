@@ -75,19 +75,10 @@ Template.search.onRendered(() => {
 Template.availablestations.helpers({
     searchResults: function () {
         var keyword = Session.get("search-query");
-        var query = new RegExp(keyword, 'i');
 
         if (keyword && keyword.length > 0) {
-
-            var results = AvailableStations.find({
-                $or: [{
-                        'name': query
-                },
-                    {
-                        'ibnr': query
-                }]
-            }, {
-                limit: 20
+            var results = AvailableStations.find({}, {
+                sort: [["score", "desc"]]
             });
             return {
                 results: results
@@ -223,7 +214,6 @@ let stationSubscription;
 Template.body.onCreated(function () {
 
     Meteor.subscribe('status');
-    Meteor.subscribe('availablestations');
 
     var station_ibnr = getQueryParams(document.location.search).ibnr;
     if (!station_ibnr)
@@ -240,6 +230,10 @@ Template.body.onCreated(function () {
         Meteor.setInterval(function () {
             Meteor.call('register_for_update', Session.get('station_ibnr'), Session.get('connection_count'), false);
         }, UPDATE_PERIOD);
+    });
+
+    Tracker.autorun(() => {
+        Meteor.subscribe('availablestations', Session.get('search-query'));
     });
 
     Meteor.setInterval(updateClock, 100);
