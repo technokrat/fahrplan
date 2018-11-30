@@ -4,6 +4,7 @@
   "repository": "https://github.com/bastli/TramBam",
   "license": "UNLICENSED",
   "dependencies": {
+    "@babel/runtime": "^7.1.5",
     "babel-runtime": "^6.26.0",
     "es6": "0.0.7",
     "eve": "^0.5.4"

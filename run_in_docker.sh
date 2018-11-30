@@ -15,9 +15,9 @@ curl https://install.meteor.com/ | sh
 fi
 
 rm -rf ./bundle
-meteor build --directory .
-cp Dockerfile ./bundle
-cd ./bundle
+meteor build ./docker_image --directory --server-only
+cp Dockerfile ./docker_image/
+cd ./docker_image
 
 docker build -t trambam .
 
