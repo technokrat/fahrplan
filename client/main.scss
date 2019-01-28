@@ -69,8 +69,7 @@ body {
         flex-direction: column;
         justify-content: flex-end;
         cursor: none;
-
-
+        pointer-events: none;
 
         &.blur {
             filter: blur(5px) grayscale(0) brightness(0.5);
