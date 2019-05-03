@@ -14,14 +14,17 @@ then
 curl https://install.meteor.com/ | sh
 fi
 
-rm -rf ./docker_image
-meteor build ./docker_image --directory --server-only
-cp Dockerfile ./docker_image/
-cd ./docker_image
+rm -rf ./tmp
+mkdir ./tmp
+meteor build ./tmp --directory --server-only --allow-superuser
+cp Dockerfile ./tmp/
+cd ./tmp
 
 docker build -t trambam .
 
 cd ..
+rm -r ./tmp
+
 docker-compose up -d
 
 
