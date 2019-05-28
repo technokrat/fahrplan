@@ -1,4 +1,6 @@
+<p align="center">
 <img src="./doc/logo.png" width="400" />
+</p>
 
 # fahrplan by Technokrat GmbH
 `fahrplan` is a dynamic, visual station departure schedule (aka *Fahrplan*) for **Swiss public transport service** (SBB, Postauto, etc.) based on [Meteor.js 1.8.1](https://www.meteor.com/)
