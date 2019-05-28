@@ -6,7 +6,7 @@ web:
    - mongo
   environment:
    - MONGO_URL=mongodb://mongo/fahrplan
-   - ROOT_URL=https://<your.domain>
+   - ROOT_URL=localhost
   restart: always
 mongo:
   image: mongo:latest
