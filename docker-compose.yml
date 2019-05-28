@@ -1,12 +1,12 @@
 web:
-  image: trambam
+  image: fahrplan
   ports:
    - "3000:80"
   links:
    - mongo
   environment:
-   - MONGO_URL=mongodb://mongo/trambam
-   - ROOT_URL=http://trambam.chatz.li
+   - MONGO_URL=mongodb://mongo/fahrplan
+   - ROOT_URL=https://<your.domain>
   restart: always
 mongo:
   image: mongo:latest
