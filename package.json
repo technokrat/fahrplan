@@ -1,6 +1,6 @@
 {
   "name": "fahrplan",
-  "description": "Public transport service schedule view",
+  "description": "A dynamic, visual station departure schedule (aka *Fahrplan*) for Swiss public transport service based on Meteor.js",
   "repository": "https://github.com/technokrat-llc/fahrplan",
   "license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License",
   "dependencies": {
