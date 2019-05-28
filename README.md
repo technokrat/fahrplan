@@ -1,7 +1,7 @@
 # fahrplan by Technokrat GmbH
 `fahrplan` is a dynamic, visual station departure schedule (aka *Fahrplan*) for **Swiss public transport service** (SBB, Postauto, etc.) based on [Meteor.js 1.8.1](https://www.meteor.com/)
 
-We developed `fahrplan` in our free time during our study years and installed a signage monitor in our living community.
+We developed `fahrplan` in our free time during our study years and installed a signage monitor in our living community. Currently we are offering our consulting and engineering services at [https://technokrat.ch](https://technokrat.ch). Please visit us if you need fast & reliable full-stack engineering services in electrical engineering, rapid prototyping, MVPs or feasibility research, in a one-stop way.
 
 See [**https://fahrplan.chatz.li**](https://fahrplan.chatz.li) for a live demonstration.
 
