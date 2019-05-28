@@ -13,7 +13,7 @@ To select a station:
 If no station is found, just hit enter once again also crawl through the public database.
 2. Select the station on the list with a click
 
-Alternatively use the URL GET parameter `?ibnr=12345678`, which will set the IBNR directly.
+Alternatively use the URL GET parameter `?ibnr=12345678`, which will set the IBNR directly. This is especially useful for kiosk mode operation.
 
 ## Self-Hosting
 You might host your own `fahrplan` instance for non-commercial purposes.
@@ -27,7 +27,7 @@ cd fahrplan
 ./run_in_docker.sh
 ```
 
-Your fahrplan instance should then be running under http://localhost:3000
+Your `fahrplan` instance should then be running under http://localhost:3000
 
 Requirements such as Docker and Meteor.js are automatically downloaded by the script.
 
