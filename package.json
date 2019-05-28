@@ -1,7 +1,7 @@
 {
-  "name": "trambam",
+  "name": "fahrplan",
   "description": "Public transport service schedule view",
-  "repository": "https://github.com/bastli/TramBam",
+  "repository": "https://github.com/technokrat-llc/fahrplan",
   "license": "UNLICENSED",
   "dependencies": {
     "@babel/runtime": "^7.1.5",
