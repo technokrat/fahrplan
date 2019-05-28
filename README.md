@@ -8,7 +8,9 @@ We developed `fahrplan` in our free time during our study years and installed a 
 
 See [**https://fahrplan.chatz.li**](https://fahrplan.chatz.li) for a live demonstration.
 
-<img src="./doc/screenshot.png" width="800" />
+<a href="https://fahrplan.chatz.li">
+  <img src="./doc/screenshot.png" width="800" />
+</a>
 
 ## Usage
 
