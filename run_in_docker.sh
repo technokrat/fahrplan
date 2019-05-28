@@ -20,7 +20,7 @@ meteor build ./tmp --directory --server-only --allow-superuser
 cp Dockerfile ./tmp/
 cd ./tmp
 
-docker build -t trambam .
+docker build -t fahrplan .
 
 cd ..
 rm -r ./tmp
