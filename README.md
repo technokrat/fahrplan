@@ -36,7 +36,7 @@ Your `fahrplan` instance should then be running under http://localhost:3000
 
 Requirements such as Docker and Meteor.js are automatically downloaded by the script.
 
-### Development
+## Development
 `fahrplan` is supported on all machines that can run [Meteor.js](https://www.meteor.com/), 
 a Node.js based distributed-reactivity web framework, and [MongoDB](https://www.mongodb.com/).
 
@@ -49,7 +49,7 @@ meteor run
 inside the cloned repository.
 
 
-#### VirtualHost and Proxy
+## VirtualHost and Proxy
 You can configure a webserver such as Nginx to proxy traffic to your instance.
 Take the following configuration as an example:
 
@@ -89,10 +89,10 @@ server {
 }
 ```
 
-### Useful Links
+## Useful Links
 * [Setup Kiosk mode on RPi3 Raspbian Stretch](https://itrig.de/index.php?/archives/2309-Raspberry-Pi-3-Kiosk-Chromium-Autostart-im-Vollbildmodus-einrichten.html)
 
-### Contact
+## Contact
 Please don't hesitate if you encounter a bug or want to contribute.
 
 You reach us through GitHub, our website https://technokrat.ch and by email at contact@technokrat.ch
@@ -100,5 +100,5 @@ You reach us through GitHub, our website https://technokrat.ch and by email at c
 Apropos: We are always searching for multi-talents in the field of electrical engineering, 
 IoT, product development, mechatronics, etc. Just send us your resumé or visit https://technokrat.ch/jobs
 
-### License
+## License
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
