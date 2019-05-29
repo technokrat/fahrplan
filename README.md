@@ -2,6 +2,8 @@
 <img src="./doc/logo.png" width="400" />
 </p>
 
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
 `fahrplan` is a dynamic, visual station departure schedule for **Swiss public transport service** (SBB, Postauto, etc.) based on [Meteor.js 1.8.1](https://www.meteor.com/)
 
 We developed `fahrplan` in our free time during our study years and installed a signage monitor in our living community. Currently we are offering our consulting and engineering services at [**Technokrat GmbH**](https://technokrat.ch). Please visit us if you need fast & reliable full-stack engineering services in electrical engineering, rapid prototyping, MVPs or feasibility research in a one-stop experience.
@@ -101,6 +103,3 @@ You reach us through GitHub, our website https://technokrat.ch and by email at c
 
 Apropos: We are always searching for multi-talents in the field of electrical engineering, 
 IoT, product development, mechatronics, etc. Just send us your resumé or visit https://technokrat.ch/jobs
-
-## License
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
