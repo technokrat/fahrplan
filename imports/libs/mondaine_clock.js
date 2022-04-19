@@ -1,32 +1,22 @@
-import snap from './snap.svg-min.js';
+import { SVG } from '@svgdotjs/svg.js'
+
+const mondaine_clock = require('@/public/mondaine_clock/mondaine_clock.svg');
 
 export const MondaineClock = function (target) {
     this.bounceTime = 0.5;
+    this.draw = SVG().addTo(target);
 
-    this.paper = Snap(target);
+    this.clock = this.draw.svg(mondaine_clock);
+    this.second_hand = this.clock.findOne("#second_hand");
+    this.minute_hand = this.clock.findOne("#minute_hand");
+    this.hour_hand = this.clock.findOne("#hour_hand");
+    this.bbox = this.svg.findOne("#clock_face").getBBox();
+    this.center = [this.bbox.width / 2, this.bbox.height / 2];
 
-    var group = this.paper.group();
-    var clock;
+    this.update();
 
-    Snap.load("mondaine_clock/mondaine_clock.svg", function (loadedFragment) {
-        clock = loadedFragment;
-        group.append(loadedFragment);
-
-        this.clock = clock;
-
-        this.second_hand = this.clock.select("#second_hand");
-        this.minute_hand = this.clock.select("#minute_hand");
-        this.hour_hand = this.clock.select("#hour_hand");
-        this.bbox = this.paper.select("#clock_face").getBBox();
-        this.center = [this.bbox.width / 2, this.bbox.height / 2];
-
-        this.update();
-
-        this.animate = true;
-        requestAnimationFrame(this.drawLoop.bind(this));
-    }.bind(this));
-
-
+    this.animate = true;
+    requestAnimationFrame(this.drawLoop.bind(this));
 }
 
 MondaineClock.prototype.drawLoop = function (timestamp) {
@@ -42,40 +32,21 @@ MondaineClock.prototype.update = function () {
 }
 
 MondaineClock.prototype.updateSecondHand = function (seconds) {
-
     var rotation = Math.min(seconds / 59, 1.0) * 360.0;
-
-    var matrix = Snap.matrix();
-    matrix.rotate(rotation, this.center[0], this.center[1]);
-    /*if (this.animate) {
-        this.second_hand.animate({
-            transform: matrix
-        }, 1000 / this.refreshRate);
-    } else {
-        this.second_hand.transform(matrix);
-    }*/
-
-    this.second_hand.transform(matrix);
-
+    this.second_hand.rotate(rotation, this.center[0], this.center[1]);
 }
 
 MondaineClock.prototype.updateMinuteHand = function (minutes, seconds) {
     if (seconds >= 0 && seconds < this.bounceTime) {
         var rotation = (-1 + mina.elastic(seconds / this.bounceTime) + minutes) / 60.0 * 360.0;
-        var matrix = Snap.matrix();
-        matrix.rotate(rotation, this.center[0], this.center[1]);
-        this.minute_hand.transform(matrix);
+        this.minute_hand.rotate(rotation, this.center[0], this.center[1]);
     } else if (this.lastMinute !== minutes) {
         var rotation = minutes / 60.0 * 360.0;
-        var matrix = Snap.matrix();
-        matrix.rotate(rotation, this.center[0], this.center[1]);
-        this.minute_hand.transform(matrix);
+        this.minute_hand.rotate(rotation, this.center[0], this.center[1]);
     }
 }
 
 MondaineClock.prototype.updateHourHand = function (hours) {
     var rotation = hours / 12.0 * 360.0;
-    var matrix = Snap.matrix();
-    matrix.rotate(rotation, this.center[0], this.center[1]);
-    this.hour_hand.transform(matrix);
+    this.hour_hand.rotate(rotation, this.center[0], this.center[1]);
 }

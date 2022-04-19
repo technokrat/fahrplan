@@ -1,10 +1,10 @@
-import snap from './snap.svg-min.js';
+import { SVG } from '@svgdotjs/svg.js'
 
-const train_path = 'train';
-const s_bahn_path = 's_bahn';
-const tram_path = 'tram';
-const bus_path = 'bus';
-const ship_path = 'ship';
+const train = require('@/public/img/train.svg');
+const s_bahn = require('@/public/img/s_bahn.svg');
+const tram = require('@/public/img/tram.svg');
+const bus = require('@/public/img/bus.svg');
+const ship = require('@/public/img/ship.svg');
 
 
 export const ConnectionBoard = function (target, resizeCallback) {
