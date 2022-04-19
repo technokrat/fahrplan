@@ -1,8 +1,12 @@
-# Run only with run_in_docker.sh
+# syntax=docker/dockerfile:1
+
+FROM node:latest AS builder
+RUN ./build.sh
+
 
 FROM node:latest
-COPY bundle /bundle
-RUN (cd /bundle/programs/server && npm install && npm install meteor-deque babel-runtime)
+COPY --from=builder /build ./
+RUN (cd ./bundle/programs/server && npm install)
 ENV PORT=80
 EXPOSE 80
-CMD node /bundle/main.js
+CMD node ./bundle/main.js
