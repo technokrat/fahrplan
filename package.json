@@ -4,7 +4,6 @@
   "repository": "https://github.com/technokrat-llc/fahrplan",
   "license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License",
   "dependencies": {
-    "@babel/runtime": "^7.17.9",
-    "eve": "^0.5.4"
+    "@babel/runtime": "^7.17.9"
   }
 }

@@ -1,8 +1,10 @@
 # syntax=docker/dockerfile:1
 
 FROM node:latest AS builder
-COPY . /
-RUN /build.sh
+RUN curl https://install.meteor.com/ | sh
+COPY . /app
+WORKDIR /app
+RUN meteor build ../build --directory --server-only --allow-superuser
 
 
 FROM node:latest
