@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1
 
 FROM node:latest AS builder
-RUN ./build.sh
+COPY . /
+RUN /build.sh
 
 
 FROM node:latest
