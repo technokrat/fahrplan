@@ -4,6 +4,7 @@ FROM node:latest AS builder
 RUN curl https://install.meteor.com/ | sh
 COPY . /app
 WORKDIR /app
+RUN meteor npm install
 RUN meteor build ../build --directory --server-only --allow-superuser
 
 
