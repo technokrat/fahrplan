@@ -28,17 +28,17 @@ export class ConnectionBoard {
     this.zeroMinuteLine = this.draw.line(-500, 0, -500, this.height).attr({
       id: 'zero-minutes',
       stroke: 'crimson',
-      style: 'stroke-width: 5px; mix-blend-mode: screen; stroke-dasharray: 2;'
+      style: 'stroke-width: 5px; mix-blend-mode: screen; stroke-dasharray: 2;',
     })
 
     this.tenMinuteLine = this.draw.line(-500, 0, -500, this.height).attr({
       id: 'ten-minutes',
       stroke: 'SlateGrey ',
-      style: 'stroke-width: 3px; mix-blend-mode: screen; stroke-dasharray: 2;'
+      style: 'stroke-width: 3px; mix-blend-mode: screen; stroke-dasharray: 2;',
     })
 
     this.initVehicleSymbols().then(() => {
-      requestAnimationFrame(this.drawLoop.bind(this))
+      this.drawBoard()
     })
 
     $(target).on('connectionBoard.resize', this.resize.bind(this))
@@ -51,7 +51,7 @@ export class ConnectionBoard {
       this.loadVehicleSymbol(s_bahn_name),
       this.loadVehicleSymbol(tram_name),
       this.loadVehicleSymbol(bus_name),
-      this.loadVehicleSymbol(ship_name)
+      this.loadVehicleSymbol(ship_name),
     ])
   }
 
@@ -85,7 +85,7 @@ export class ConnectionBoard {
   calculateXPosition (countdown) {
     let normalized = countdown / this.maxCountdown
     //let offset = Math.pow(normalized, 1 / 3)
-    let offset = normalized;
+    let offset = normalized
 
     let xPosition =
       this.trackWidth *
@@ -115,7 +115,6 @@ export class ConnectionBoard {
 
     for (var i = 0; i < this.trackCount; i++) {
       var connection = fetchedConnections[i]
-
       if (connection) {
         updatedConnectionIDs.push(connection._id)
         if (!this.connectionItems[connection._id]) {
@@ -142,13 +141,13 @@ export class ConnectionBoard {
       this.zeroMinuteLine.attr({
         x1: -500,
         x2: -500,
-        y2: this.height
+        y2: this.height,
       })
 
       this.tenMinuteLine.attr({
         x1: -500,
         x2: -500,
-        y2: this.height
+        y2: this.height,
       })
     } else {
       let zeroMinutePosition = this.calculateXPosition(0)
@@ -156,31 +155,24 @@ export class ConnectionBoard {
       this.zeroMinuteLine.attr({
         x1: zeroMinutePosition,
         x2: zeroMinutePosition,
-        y2: this.height
+        y2: this.height,
       })
 
       this.tenMinuteLine.attr({
         x1: tenMinutePosition,
         x2: tenMinutePosition,
-        y2: this.height
+        y2: this.height,
       })
     }
-  }
-  drawLoop (timestamp) {
-    this.drawBoard(timestamp)
-    requestAnimationFrame(this.drawLoop.bind(this))
-  }
-  drawBoard (timestamp) {
-    this.elapsedTime = (timestamp - this.lastTimestamp) / 1000
-    // If window was inactive do not animate with too large delta
-    if (this.elapsedTime > 1000) this.elapsedTime = 0
-    this.lastTimestamp = timestamp
 
+    setTimeout(() => {
+      this.drawBoard()
+    }, 200)
+  }
+  drawBoard () {
     _.each(this.connectionItems, connectionItem => {
       connectionItem.draw()
     })
-
-    this.lastTimestamp = timestamp
   }
 }
 
@@ -226,10 +218,12 @@ class ConnectionItem {
     this.vehicleHeight = this.svgGroup.findOne('.vehicle-shape').bbox().height
 
     let vehicle_text = this.svgGroup.findOne('.vehicle-text')
-    vehicle_text.plain(this.connection.hafas_raw.product.line
-      ? this.connection.hafas_raw.product.line
-      : this.connection.hafas_raw.product.name)
-    
+    vehicle_text.plain(
+      this.connection.hafas_raw.product.line
+        ? this.connection.hafas_raw.product.line
+        : this.connection.hafas_raw.product.name
+    )
+
     vehicle_text.attr({
       x: 21,
       y: 3,
@@ -241,21 +235,20 @@ class ConnectionItem {
       this.connection.hafas_raw.product.color.bg == '000000'
     ) {
       this.svgGroup.findOne('.vehicle-shape').attr({
-        style: 'stroke:white; fill:none;'
+        style: 'stroke:white; fill:none;',
       })
-
 
       if (this.connection.hafas_raw.product.color.fg == '000000') {
         vehicle_text.attr({
           style:
-            "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
+            "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;",
         })
       } else {
         vehicle_text.attr({
           style:
             'stroke:none;fill:#' +
             this.connection.hafas_raw.product.color.fg +
-            ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
+            ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;",
         })
       }
     } else {
@@ -263,14 +256,14 @@ class ConnectionItem {
         style:
           'stroke:none;fill:#' +
           this.connection.hafas_raw.product.color.bg +
-          '; '
+          '; ',
       })
 
       vehicle_text.attr({
         style:
           'stroke:none;fill:#' +
           this.connection.hafas_raw.product.color.fg +
-          ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
+          ";text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;",
       })
     }
 
@@ -287,7 +280,7 @@ class ConnectionItem {
       'font-size': '28pt',
       'font-weight': 500,
       x: this.vehicleWidth + 40,
-      y: this.vehicleHeight / 2
+      y: this.vehicleHeight / 2,
     })
 
     this.targetX = -this.connectionBoard.trackWidth
@@ -295,16 +288,15 @@ class ConnectionItem {
       this.connectionBoard.trackHeight * (this.track + 1) -
       this.vehicleHeight +
       this.connectionBoard.trackCenterOffset
-    this.X = this.targetX
-    this.Y = this.targetY
 
     this.svgGroup.transform({
       scale: this.connectionBoard.scale,
-      translate: [
-        this.X - this.vehicleWidth,
-        this.Y
-      ],
-      origin: [this.vehicleWidth, 0]
+      translate: [this.targetX - this.vehicleWidth, this.targetY],
+      origin: [this.vehicleWidth, 0],
+    })
+
+    this.svgGroup.attr({
+      style: 'transition: transform 2s',
     })
 
     this.connectionBoard.draw.add(this.svgGroup)
@@ -324,11 +316,11 @@ class ConnectionItem {
 
     if (this.connection.hafas_raw.mainLocation.realTime.hasRealTime) {
       this.svgGroup.findOne('.vehicle-text').attr({
-        class: 'real_time vehicle-text'
+        class: 'real_time vehicle-text',
       })
     } else {
       this.svgGroup.findOne('.vehicle-text').attr({
-        class: 'vehicle-text'
+        class: 'vehicle-text',
       })
     }
 
@@ -357,44 +349,34 @@ class ConnectionItem {
       if (this.state == 'dismiss') {
         if (this.connection.countdown <= 2) {
           this.targetX = this.connectionBoard.trackWidth * 2
-          this.X +=
-            this.connectionBoard.trackWidth *
-            0.4 *
-            this.connectionBoard.elapsedTime
 
           this.svgGroup.transform({
             scale: this.connectionBoard.scale,
-            translate: [
-              this.X - this.vehicleWidth,
-              this.Y
-            ],
-            origin: [this.vehicleWidth, 0]
+            translate: [this.targetX - this.vehicleWidth, this.targetY],
+            origin: [this.vehicleWidth, 0],
           })
 
-          if (this.X >= this.targetX) {
-            this.svgGroup.remove()
-            delete this.connectionBoard.connectionItems[this.connection._id]
-          }
+          setTimeout(() => {
+            if (this.targetX >= this.connectionBoard.trackWidth) {
+              this.svgGroup.remove()
+              delete this.connectionBoard.connectionItems[this.connection._id]
+            }
+          }, 3000)
         } else {
           this.targetX = -this.connectionBoard.trackWidth
-          this.X -=
-            this.connectionBoard.trackWidth *
-            0.4 *
-            this.connectionBoard.elapsedTime
 
           this.svgGroup.transform({
             scale: this.connectionBoard.scale,
-            translate: [
-              this.X - this.vehicleWidth,
-              this.Y
-            ],
-            origin: [this.vehicleWidth, 0]
+            translate: [this.targetX - this.vehicleWidth, this.targetY],
+            origin: [this.vehicleWidth, 0],
           })
 
-          if (this.X <= this.targetX) {
-            this.svgGroup.remove()
-            delete this.connectionBoard.connectionItems[this.connection._id]
-          }
+          setTimeout(() => {
+            if (this.targetX <= 0) {
+              this.svgGroup.remove()
+              delete this.connectionBoard.connectionItems[this.connection._id]
+            }
+          }, 3000)
         }
       } else {
         this.targetX = this.connectionBoard.calculateXPosition(
@@ -405,36 +387,28 @@ class ConnectionItem {
           this.vehicleHeight +
           this.connectionBoard.trackCenterOffset
 
-        this.X +=
-          (this.targetX - this.X) * 0.45 * this.connectionBoard.elapsedTime
-        this.Y +=
-          (this.targetY - this.Y) * 1.0 * this.connectionBoard.elapsedTime
-
         this.svgGroup.transform({
           scale: this.connectionBoard.scale,
-          translate: [
-            this.X - this.vehicleWidth,
-            this.Y
-          ],
-          origin: [this.vehicleWidth, 0]
+          translate: [this.targetX - this.vehicleWidth, this.targetY],
+          origin: [this.vehicleWidth, 0],
         })
       }
 
       if (
-        this.X - (this.vehicleWidth * this.connectionBoard.scale) / 2 >
+        this.targetX - (this.vehicleWidth * this.connectionBoard.scale) / 2 >
         this.connectionBoard.trackWidth / 2
       ) {
         this.infoText.children().forEach(span =>
           span.attr({
             x: -40,
-            'text-anchor': 'end'
+            'text-anchor': 'end',
           })
         )
       } else {
         this.infoText.children().forEach(span =>
           span.attr({
             x: this.vehicleWidth + 40,
-            'text-anchor': 'start'
+            'text-anchor': 'start',
           })
         )
       }
