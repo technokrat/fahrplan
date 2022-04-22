@@ -83,7 +83,6 @@ export class ConnectionBoard {
   }
 
   calculateXPosition (countdown) {
-    console.log(this.maxCountdown)
     let normalized = countdown / this.maxCountdown
     //let offset = Math.pow(normalized, 1 / 3)
     let offset = normalized;
@@ -226,6 +225,16 @@ class ConnectionItem {
     this.vehicleWidth = this.svgGroup.findOne('.vehicle-shape').bbox().width
     this.vehicleHeight = this.svgGroup.findOne('.vehicle-shape').bbox().height
 
+    let vehicle_text = this.svgGroup.findOne('.vehicle-text')
+    vehicle_text.plain(this.connection.hafas_raw.product.line
+      ? this.connection.hafas_raw.product.line
+      : this.connection.hafas_raw.product.name)
+    
+    vehicle_text.attr({
+      x: 21,
+      y: 3,
+    })
+
     if (
       this.connection.hafas_raw.product.color.bg.toLocaleLowerCase() ==
         'ffffff' ||
@@ -235,23 +244,14 @@ class ConnectionItem {
         style: 'stroke:white; fill:none;'
       })
 
+
       if (this.connection.hafas_raw.product.color.fg == '000000') {
-        this.svgGroup.findOne('.vehicle-text').attr({
-          x: 21,
-          y: 3,
-          text: this.connection.hafas_raw.product.line
-            ? this.connection.hafas_raw.product.line
-            : this.connection.hafas_raw.product.name,
+        vehicle_text.attr({
           style:
             "stroke:none;fill:white;text-anchor:middle;font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;letter-spacing:-3px;font-size:38pt;"
         })
       } else {
-        this.svgGroup.findOne('.vehicle-text').attr({
-          x: 21,
-          y: 3,
-          text: this.connection.hafas_raw.product.line
-            ? this.connection.hafas_raw.product.line
-            : this.connection.hafas_raw.product.name,
+        vehicle_text.attr({
           style:
             'stroke:none;fill:#' +
             this.connection.hafas_raw.product.color.fg +
@@ -266,12 +266,7 @@ class ConnectionItem {
           '; '
       })
 
-      this.svgGroup.findOne('.vehicle-text').attr({
-        x: 21,
-        y: 3,
-        text: this.connection.hafas_raw.product.line
-          ? this.connection.hafas_raw.product.line
-          : this.connection.hafas_raw.product.name,
+      vehicle_text.attr({
         style:
           'stroke:none;fill:#' +
           this.connection.hafas_raw.product.color.fg +
