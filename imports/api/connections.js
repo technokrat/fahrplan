@@ -1,5 +1,3 @@
-import {
-    Mongo
-} from 'meteor/mongo';
+import { Mongo } from 'meteor/mongo'
 
-export const Connections = new Mongo.Collection("connections");
+export const Connections = new Mongo.Collection('connections')

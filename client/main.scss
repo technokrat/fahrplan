@@ -1,288 +1,275 @@
 @font-face {
-    font-family: SegoeLi;
-    src: url(/fonts/segoeuil.ttf);
+  font-family: SegoeLi;
+  src: url(/fonts/segoeuil.ttf);
 }
 
 @font-face {
-    font-family: ISOCP3;
-    src: url(/fonts/isocp3.ttf);
+  font-family: ISOCP3;
+  src: url(/fonts/isocp3.ttf);
 }
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-
 @keyframes countdown-realtime {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-
-
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-    overflow: hidden;
-    background: black;
-    font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
-    /*cursor: none;*/
-    font-size: 3em;
-    color: white;
+  overflow: hidden;
+  background: black;
+  font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans',
+    'Helvetica Neue', Helvetica, sans-serif;
+  /*cursor: none;*/
+  font-size: 3em;
+  color: white;
 }
 
 ::selection {
-    background-color: #ed1c24;
+  background-color: #ed1c24;
 }
 
 #window {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 
-    transition: filter 1s;
+  transition: filter 1s;
+  filter: none;
+
+  &.new {
+    filter: blur(5px) brightness(0);
+  }
+
+  #schedule {
+    transition: filter 0.2s;
     filter: none;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: none;
+    pointer-events: none;
+    user-select: none;
 
-    &.new {
-        filter: blur(5px) brightness(0);
+    &.blur {
+      filter: blur(5px) grayscale(0) brightness(0.5);
     }
 
-
-    #schedule {
-        transition: filter 0.2s;
-        filter: none;
-        height: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        cursor: none;
-        pointer-events: none;
-        user-select: none;
-
-        &.blur {
-            filter: blur(5px) grayscale(0) brightness(0.5);
-        }
-
-        .body {
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            width: 100%;
-            flex-grow: 1;
-            align-self: flex-start;
-            padding: 0.5em;
-            #connection_board {
-                display: block;
-                flex-grow: 1;
-                width: 100%;
-                height: 100%;
-                overflow: visible;
-
-                text {
-                    opacity: 1.0;
-
-                }
-
-                .info-text {
-                    font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
-                }
-            }
-        }
-        .footer {
-            box-sizing: border-box;
-            flex-grow: 0;
-            width: 100%;
-            line-height: 1.2em;
-            /* Height of the footer */
-            font-size: 1.2em;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            .station_name {
-                flex-grow: 1;
-                color: white;
-                margin: 0;
-                margin-left: 0.5em;
-                float: left;
-                opacity: 1;
-                -webkit-transition: margin 0.5s, opacity 0.5s;
-                transition: margin 0.5s, opacity 0.5s;
-                &.new {
-                    margin-left: -0.5em !important;
-                    opacity: 0 !important;
-                }
-            }
-            .time {
-                color: white;
-                margin: 0.5em;
-                /* Fix Raspberry Pi not rendering number spacing consistent */
-                opacity: 1;
-                -webkit-transition: margin 0.5s, opacity 0.5s;
-                transition: margin 0.5s, opacity 0.5s;
-                &.new {
-                    margin-right: -0.5em !important;
-                    opacity: 0 !important;
-                }
-                .time-digits {
-                    float: right;
-                    font-size: 0.8em;
-                    line-height: 1em;
-                    min-width: 3.8em;
-                    margin-right: 1em;
-                    margin-top: 0.675em;
-                }
-                .clock {
-                    float: right;
-                    height: 3em;
-                    width: 3em;
-                }
-            }
-        }
-    }
-
-    #overlay {
-        transition: filter 0.6s, transform 0.6s;
-        filter: blur(0px) brightness(1);
-        transform: scale(1);
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0;
-        left: 0;
+    .body {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      width: 100%;
+      flex-grow: 1;
+      align-self: flex-start;
+      padding: 0.5em;
+      #connection_board {
+        display: block;
+        flex-grow: 1;
         width: 100%;
         height: 100%;
+        overflow: visible;
 
-        &.new {
-            filter: blur(5px) brightness(0);
-            transform: scale(1.1);
+        text {
+          opacity: 1;
         }
 
-        .close {
-            position: fixed;
-            top: 15px;
-            right: 30px;
-            width: auto;
-            height: auto;
-            font-size: 0.8em;
-
-            a {
-                color: inherit;
-                text-decoration: none;
-            }
+        .info-text {
+          font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans',
+            'Helvetica Neue', Helvetica, sans-serif;
         }
-
-        .container {
-            display: flex;
-            flex-grow: 1;
-            flex-direction: column;
-
-            margin: 100px auto;
-            max-width: 700px;
-
-            .search-header {
-                flex-grow: 0;
-
-                h2 {
-                    text-align: center;
-                    margin-top: 0px;
-                }
-
-                .control-group {
-                    justify-content: center;
-                    display: flex;
-                    flex-direction: row;
-
-                    label {
-                        display: block;
-                        margin-right: 15px;
-                    }
-
-                    input {
-                        flex-grow: 1;
-                        display: block;
-                        background: none;
-                        border: 2px white solid;
-                        font-size: 1em;
-                        border-radius: 5px;
-                        padding: 4px;
-                        color: white;
-                    }
-                }
-            }
-
-
-
-            .search-results {
-                margin-top: 5px;
-                flex-grow: 1;
-                overflow-y: auto;
-
-
-                &::-webkit-scrollbar-track {
-                    background-color: transparent;
-                    border: 1px crimson solid;
-                }
-
-                &::-webkit-scrollbar {
-                    background-color: transparent;
-                    width: 6px;
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    background-color: crimson;
-                    border: 1px rgba(#dc143c, 0.5) solid;
-                }
-
-
-                table {
-                    width: 100%;
-                    text-align: left;
-
-                    td,
-                    th {
-                        padding: 10px;
-                    }
-
-                    tbody tr:nth-child(odd) {
-                        background-color: rgba(#dc143c, 0.5);
-                    }
-
-                    tbody tr {
-                        cursor: pointer;
-                    }
-                }
-            }
-
-
-        }
-
-
-
-        .failure {
-            flex-grow: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 0.9em;
-
-            samp {
-                font-size: 1.6em;
-            }
-        }
-
-
+      }
     }
+    .footer {
+      box-sizing: border-box;
+      flex-grow: 0;
+      width: 100%;
+      line-height: 1.2em;
+      /* Height of the footer */
+      font-size: 1.2em;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      .station_name {
+        flex-grow: 1;
+        color: white;
+        margin: 0;
+        margin-left: 0.5em;
+        float: left;
+        opacity: 1;
+        -webkit-transition: margin 0.5s, opacity 0.5s;
+        transition: margin 0.5s, opacity 0.5s;
+        &.new {
+          margin-left: -0.5em !important;
+          opacity: 0 !important;
+        }
+      }
+      .time {
+        color: white;
+        margin: 0.5em;
+        /* Fix Raspberry Pi not rendering number spacing consistent */
+        opacity: 1;
+        -webkit-transition: margin 0.5s, opacity 0.5s;
+        transition: margin 0.5s, opacity 0.5s;
+        &.new {
+          margin-right: -0.5em !important;
+          opacity: 0 !important;
+        }
+        .time-digits {
+          float: right;
+          font-size: 0.8em;
+          line-height: 1em;
+          min-width: 3.8em;
+          margin-right: 1em;
+          margin-top: 0.675em;
+        }
+        .clock {
+          float: right;
+          height: 3em;
+          width: 3em;
+        }
+      }
+    }
+  }
+
+  #overlay {
+    transition: filter 0.6s, transform 0.6s;
+    filter: blur(0px) brightness(1);
+    transform: scale(1);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &.new {
+      filter: blur(5px) brightness(0);
+      transform: scale(1.1);
+    }
+
+    .close {
+      position: fixed;
+      top: 15px;
+      right: 30px;
+      width: auto;
+      height: auto;
+      font-size: 0.8em;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+
+    .container {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+
+      margin: 100px auto;
+      max-width: 700px;
+
+      .search-header {
+        flex-grow: 0;
+
+        h2 {
+          text-align: center;
+          margin-top: 0px;
+        }
+
+        .control-group {
+          justify-content: center;
+          display: flex;
+          flex-direction: row;
+
+          label {
+            display: block;
+            margin-right: 15px;
+          }
+
+          input {
+            flex-grow: 1;
+            display: block;
+            background: none;
+            border: 2px white solid;
+            font-size: 1em;
+            border-radius: 5px;
+            padding: 4px;
+            color: white;
+          }
+        }
+      }
+
+      .search-results {
+        margin-top: 5px;
+        flex-grow: 1;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar-track {
+          background-color: transparent;
+          border: 1px crimson solid;
+        }
+
+        &::-webkit-scrollbar {
+          background-color: transparent;
+          width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: crimson;
+          border: 1px rgba(#dc143c, 0.5) solid;
+        }
+
+        table {
+          width: 100%;
+          text-align: left;
+
+          td,
+          th {
+            padding: 10px;
+          }
+
+          tbody tr:nth-child(odd) {
+            background-color: rgba(#dc143c, 0.5);
+          }
+
+          tbody tr {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .failure {
+      flex-grow: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+
+      samp {
+        font-size: 1.6em;
+      }
+    }
+  }
 }
