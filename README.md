@@ -4,7 +4,7 @@
 
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
-`fahrplan` is a dynamic, visual station departure schedule for **Swiss public transport service** (SBB, Postauto, etc.) based on [Meteor.js 1.8.1](https://www.meteor.com/)
+`fahrplan` is a dynamic, visual station departure schedule for **Swiss public transport service** (SBB, Postauto, etc.) based on [Meteor.js 2.7.1](https://www.meteor.com/)
 
 We developed `fahrplan` in our free time during our study years and installed a signage monitor in our living community. Currently we are offering our consulting and engineering services at [**Technokrat GmbH**](https://technokrat.ch). Please visit us if you need fast & reliable full-stack engineering services in electrical engineering, rapid prototyping, MVPs or feasibility research in a one-stop experience.
 
@@ -28,7 +28,7 @@ Alternatively use the URL GET parameter `?ibnr=12345678`, which will set the IBN
 You might host your own `fahrplan` instance for non-commercial purposes.
 
 ### Quickstart
-For a quickstart, build the Docker image and run docker-compose. This can simply be done with:
+For a quickstart, first install Docker. Then build the Docker image and run docker-compose. This can simply be done with:
 
 ```sh
 git clone https://github.com/technokrat-llc/fahrplan.git

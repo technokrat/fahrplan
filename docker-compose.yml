@@ -2,8 +2,6 @@ web:
   image: fahrplan
   ports:
    - "3000:80"
-  links:
-   - mongo
   environment:
    - MONGO_URL=mongodb://mongo/fahrplan
    - ROOT_URL=localhost
