@@ -8,9 +8,9 @@
 
 We developed `fahrplan` in our free time during our study years and installed a signage monitor in our living community. Currently we are offering our consulting and engineering services at [**Technokrat GmbH**](https://technokrat.ch). Please visit us if you need fast & reliable full-stack engineering services in electrical engineering, rapid prototyping, MVPs or feasibility research in a one-stop experience.
 
-See [**https://fahrplan.chatz.li**](https://fahrplan.chatz.li) for a live demonstration.
+See [**https://fahrplan.technokrat.ch**](https://fahrplan.technokrat.ch) for a live demonstration.
 
-<a href="https://fahrplan.chatz.li">
+<a href="https://fahrplan.technokrat.ch">
   <img src="./doc/screenshot.png" width="800" />
 </a>
 
@@ -62,7 +62,7 @@ server {
   listen [::]:80;
   listen 80;
 
-  server_name fahrplan.chatz.li;
+  server_name fahrplan.technokrat.ch;
 
   return 301 https://$server_name$request_uri;
 }
@@ -71,11 +71,11 @@ server {
   listen [::]:443 ssl http2;
   listen 443 ssl http2;
 
-  server_name fahrplan.chatz.li;
+  server_name fahrplan.technokrat.ch;
 
   ssl on;
-  ssl_certificate /etc/letsencrypt/live/chatz.li/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/chatz.li/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/technokrat.ch/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/technokrat.ch/privkey.pem;
   add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; ";
 
   location ^~ /.well-known {
