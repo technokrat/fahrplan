@@ -87,6 +87,10 @@ Template.body.onRendered(() => {
     else Session.set('route', 'overlay')
   })
 
+  $('#selected_station').on('click', e => {
+    Session.set('route', 'overlay')
+  })
+
   let resized = count => {
     Session.set('connection_count', count)
   }
