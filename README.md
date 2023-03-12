@@ -53,6 +53,40 @@ meteor run
 inside the cloned repository.
 
 
+## Docker Compose + Traefik
+```yml
+version: '3.8'
+
+networks:
+  traefik-public:
+    external: true
+
+services:
+  fahrplan:
+    image: ghcr.io/technokrat/fahrplan/fahrplan:latest
+    restart: unless-stopped
+    environment:
+      - MONGO_URL=mongodb://mongo/fahrplan
+      - ROOT_URL=https://fahrplan.technokrat.ch
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.fahrplan.rule=Host(`fahrplan.technokrat.ch`)"
+      - "traefik.http.routers.fahrplan.tls.certresolver=leresolver"
+      - "traefik.http.routers.fahrplan.entrypoints=websecure"
+      - "traefik.http.routers.fahrplan.service=fahrplan"
+      - "traefik.http.services.fahrplan.loadbalancer.server.port=80"
+    networks:
+      - default
+      - traefik-public
+      
+  mongo:
+    image: mongo:latest
+    restart: always
+    networks:
+      - default
+```
+
 ## VirtualHost and Proxy
 You can configure a webserver such as Nginx to proxy traffic to your instance.
 Take the following configuration as an example:
