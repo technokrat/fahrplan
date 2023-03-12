@@ -4,7 +4,7 @@
   "repository": "https://github.com/technokrat-llc/fahrplan",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
-    "@babel/runtime": "^7.17.9",
+    "@babel/runtime": "^7.21.0",
     "@svgdotjs/svg.js": "^3.1.2"
   },
   "prettier": {

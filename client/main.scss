@@ -3,13 +3,6 @@
   src: url(/fonts/segoeuil.ttf);
 }
 
-@font-face {
-  font-family: ISOCP3;
-  src: url(/fonts/isocp3.ttf);
-}
-
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-
 @keyframes countdown-realtime {
   0% {
     opacity: 1;
@@ -33,10 +26,8 @@ body {
 body {
   overflow: hidden;
   background: black;
-  font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans',
-    'Helvetica Neue', Helvetica, sans-serif;
-  /*cursor: none;*/
-  font-size: 3em;
+  font-family: 'SegoeLi', Helvetica, sans-serif;
+  font-size: 1.8rem;
   color: white;
 }
 
@@ -64,10 +55,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     cursor: none;
-    pointer-events: none;
-    user-select: none;
 
     &.blur {
       filter: blur(5px) grayscale(0) brightness(0.5);
@@ -76,35 +64,36 @@ body {
     .body {
       display: flex;
       flex-direction: column;
-      box-sizing: border-box;
       width: 100%;
       flex-grow: 1;
       align-self: flex-start;
-      padding: 0.5em;
+      overflow: visible;
+
       #connection_board {
         display: block;
+
         flex-grow: 1;
         width: 100%;
         height: 100%;
-        overflow: visible;
 
-        text {
-          opacity: 1;
+        * {
+          mix-blend-mode: light;
         }
-
+        
         .info-text {
           font-family: SegoeLi, 'Segoe UI Light', 'Segoe UI', 'Open Sans',
             'Helvetica Neue', Helvetica, sans-serif;
         }
       }
     }
+    
     .footer {
       box-sizing: border-box;
       flex-grow: 0;
       width: 100%;
-      line-height: 1.2em;
+      line-height: 1em;
       /* Height of the footer */
-      font-size: 1.2em;
+      font-size: 1em;
       background: rgba(0, 0, 0, 0.9);
       z-index: 5;
       display: flex;
@@ -113,25 +102,25 @@ body {
         flex-grow: 1;
         color: white;
         margin: 0;
-        margin-left: 0.5em;
+        margin-left: 16px;
         float: left;
         opacity: 1;
         -webkit-transition: margin 0.5s, opacity 0.5s;
         transition: margin 0.5s, opacity 0.5s;
         &.new {
-          margin-left: -0.5em !important;
+          margin-left: -16px !important;
           opacity: 0 !important;
         }
       }
       .time {
         color: white;
-        margin: 0.5em;
+        margin: 16px;
         /* Fix Raspberry Pi not rendering number spacing consistent */
         opacity: 1;
         -webkit-transition: margin 0.5s, opacity 0.5s;
         transition: margin 0.5s, opacity 0.5s;
         &.new {
-          margin-right: -0.5em !important;
+          margin-right: -16px !important;
           opacity: 0 !important;
         }
         .time-digits {
@@ -154,10 +143,13 @@ body {
   #overlay {
     transition: filter 0.6s, transform 0.6s;
     filter: blur(0px) brightness(1);
+    font-size: 1.4rem;
     transform: scale(1);
     display: flex;
     flex-direction: column;
     position: fixed;
+    align-items: center;
+
     top: 0;
     left: 0;
     width: 100%;
@@ -170,11 +162,11 @@ body {
 
     .close {
       position: fixed;
-      top: 15px;
-      right: 30px;
+      top: 16px;
+      right: 16px;
       width: auto;
       height: auto;
-      font-size: 0.8em;
+      font-size: 1.4rem;
 
       a {
         color: inherit;
@@ -183,38 +175,39 @@ body {
     }
 
     .container {
+      max-height: 100%;
+      max-width: 100%;
+      width: 700px;
       display: flex;
-      flex-grow: 1;
       flex-direction: column;
 
-      margin: 100px auto;
-      max-width: 700px;
-
       .search-header {
+        margin-top: 16px;
         flex-grow: 0;
 
-        h2 {
+        h4 {
           text-align: center;
-          margin-top: 0px;
+          margin: 16px;
         }
 
         .control-group {
-          justify-content: center;
           display: flex;
           flex-direction: row;
+          align-items: center;
 
           label {
             display: block;
-            margin-right: 15px;
+            margin-right: 16px;
           }
 
           input {
             flex-grow: 1;
             display: block;
             background: none;
-            border: 2px white solid;
-            font-size: 1em;
-            border-radius: 5px;
+            border: 2px rgba(white, 0.75) solid;
+            font-size: 1.0em;
+            font-family: 'SegoeLi', Helvetica, sans-serif;
+            border-radius: 8px;
             padding: 4px;
             color: white;
           }
@@ -222,7 +215,7 @@ body {
       }
 
       .search-results {
-        margin-top: 5px;
+        margin-top: 6px;
         flex-grow: 1;
         overflow-y: auto;
 
@@ -233,7 +226,7 @@ body {
 
         &::-webkit-scrollbar {
           background-color: transparent;
-          width: 6px;
+          width: 8px;
         }
 
         &::-webkit-scrollbar-thumb {
@@ -247,7 +240,7 @@ body {
 
           td,
           th {
-            padding: 10px;
+            padding: 8px;
           }
 
           tbody tr:nth-child(odd) {
@@ -265,10 +258,11 @@ body {
       flex-grow: 0;
       width: 100%;
       text-align: center;
-      font-size: 0.9em;
+      font-size: 1.0rem;
+      justify-self: center;
 
       samp {
-        font-size: 1.6em;
+        font-size: 1.6rem;
       }
     }
   }

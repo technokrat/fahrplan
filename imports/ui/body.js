@@ -121,6 +121,7 @@ Template.body.onRendered(() => {
 Template.body.events({
   // Fires when any element is clicked
   'click #schedule' (event) {
+    event.preventDefault()
     Session.set('route', 'overlay')
   },
   // Fires when any element is clicked
